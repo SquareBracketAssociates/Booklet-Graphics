@@ -1,0 +1,298 @@
+% -*- mode: latex; -*- mustache tags:  
+\documentclass[10pt,twoside,english]{_support/latex/sbabook/sbabook}
+\let\wholebook=\relax
+
+\usepackage{import}
+\subimport{_support/latex/}{common.tex}
+
+%=================================================================
+% Debug packages for page layout and overfull lines
+% Remove the showtrims document option before printing
+\ifshowtrims
+  \usepackage{showframe}
+  \usepackage[color=magenta,width=5mm]{_support/latex/overcolored}
+\fi
+
+
+% =================================================================
+\title{Pharo Graphics}
+\author{The Pillar team}
+\series{Square Bracket tutorials}
+
+\hypersetup{
+  pdftitle = {Pharo Graphics},
+  pdfauthor = {The Pillar team},
+  pdfkeywords = {graphics, canvas}
+}
+
+
+% =================================================================
+\begin{document}
+
+% Title page and colophon on verso
+\maketitle
+\pagestyle{titlingpage}
+\thispagestyle{titlingpage} % \pagestyle does not work on the first one…
+
+\cleartoverso
+{\small
+
+  Copyright 2017 by The Pillar team.
+
+  The contents of this book are protected under the Creative Commons
+  Attribution-ShareAlike 3.0 Unported license.
+
+  You are \textbf{free}:
+  \begin{itemize}
+  \item to \textbf{Share}: to copy, distribute and transmit the work,
+  \item to \textbf{Remix}: to adapt the work,
+  \end{itemize}
+
+  Under the following conditions:
+  \begin{description}
+  \item[Attribution.] You must attribute the work in the manner specified by the
+    author or licensor (but not in any way that suggests that they endorse you
+    or your use of the work).
+  \item[Share Alike.] If you alter, transform, or build upon this work, you may
+    distribute the resulting work only under the same, similar or a compatible
+    license.
+  \end{description}
+
+  For any reuse or distribution, you must make clear to others the
+  license terms of this work. The best way to do this is with a link to
+  this web page: \\
+  \url{http://creativecommons.org/licenses/by-sa/3.0/}
+
+  Any of the above conditions can be waived if you get permission from
+  the copyright holder. Nothing in this license impairs or restricts the
+  author's moral rights.
+
+  \begin{center}
+    \includegraphics[width=0.2\textwidth]{_support/latex/sbabook/CreativeCommons-BY-SA.pdf}
+  \end{center}
+
+  Your fair dealing and other rights are in no way affected by the
+  above. This is a human-readable summary of the Legal Code (the full
+  license): \\
+  \url{http://creativecommons.org/licenses/by-sa/3.0/legalcode}
+
+  \vfill
+
+  % Publication info would go here (publisher, ISBN, cover design…)
+  Layout and typography based on the \textcode{sbabook} \LaTeX{} class by Damien
+  Pollet.
+}
+
+
+\frontmatter
+\pagestyle{plain}
+
+\tableofcontents*
+\clearpage\listoffigures
+
+\mainmatter
+
+
+\chapter{Vector graphics in Athens}
+There are two different computer graphics: vector and raster graphics.
+Raster graphics represents images as a collection of pixels. Vector graphics
+is the use of geometric primitives such as points, lines, curves, or polygons
+to represent images. These primitives are created using mathematical equations.
+
+Both types of computer graphics have advantages and disadvantages.
+The advantages of vector graphics over raster are:
+
+\begin{itemize}
+    \item smaller size,
+    \item ability to zoom indefinitely,
+    \item moving, scaling, filling, and rotating do not degrade the quality of an image.
+\end{itemize}
+
+Ultimately, picture on a computer are displayed on a screen with a specific
+display dimension. However, while raster graphic doesn't scale very well when
+the resolution differ too much from the picture resolution, vector graphics
+are rasterized to fit the display they will appear on. Rasterization is the
+technique of taking an image described in a vector graphics format and
+transform it into a set of pixels for output on a screen.
+
+Morphic is the way to do graphics with Pharo.
+However, most existing canvas are pixel based, and not vector based.
+This can be an issue with current IT ecosystems, where the resolution can differ from machine to machine (desktop, tablet, phones, etc...)
+
+Enter Athens, a vector based graphic API. Under the scene, it can either use
+balloon Canvas, or the cairo graphic library for the rasterization phase.
+
+\section{Example}
+Here it would be nice to have an example
+
+\section{Athens details}
+\textcode{AthensSurface} and its subclass \textcode{AthensCairoSurface} instances represent a surface.
+A surface is the area in pixel where your drawing will be rendered.
+You  never draw directly on the surface.
+Instead, you specify what you want to display on the canvas, and Athens will render it on the area specified by the surface.
+
+The class \textcode{AthensCanvas} is the central object used to perform drawing on an \textcode{AthensSurface}
+A canvas is not directly instanciated but used through a message such as:\textcode{surface drawDuring: {[}:canvas \textbar{} .... {]}}
+
+The Athens drawing model relies on a three layer model. Any drawing process
+takes place in three steps:
+
+\begin{itemize}
+    \item First a \textcode{path} is created, which includes one or more vector primitives , i.e., circles, lines, TrueType fonts, B\'{e}zier curves, etc...
+    \item Then painting must be defined, which may be a color, a color gradient, a bitmap or some vector graphics
+    \item Finally the result is drawn to the Athens surface, which is provided by the back-end for the output.
+\end{itemize}
+
+\section{Path}
+Athens has always an active path.
+Use \textcode{AthensPathBuilder} or \textcode{AthensSimplePathBuilder} to build a path.
+They will assemble path segments for you.
+
+The method \textcode{createPath:} exists in all important Athens class: \textcode{AthensCanvas},\textcode{AthensSurface}, and  \textcode{AthensPathBuilder}.
+The message \textcode{createPath: aPath}
+
+Using it returns a new path:
+\begin{displaycode}{smalltalk}
+surface createPath: [ :builder |
+ builder
+  absolute;
+  moveTo: 100@100;
+  lineTo: 100@300;
+  lineTo: 300@300;
+  lineTo: 300@100;
+  close ].
+\end{displaycode}
+
+Here are some helper messages in \textcode{AthensSimplePathBuilder}:
+
+\begin{itemize}
+    \item \textcode{pathStart}
+    \item \textcode{pathBounds} gives the limit of the bounds associated to the path
+\end{itemize}
+
+If you want to build path using only straight line, you can use the class \textcode{AthensPolygon}.
+
+\begin{fullwidthtabular}{lll}
+\toprule
+path builder Messages & Object Segment & comment \\
+\bottomrule
+\end{fullwidthtabular}
+
+-
+
+\begin{fullwidthtabular}{lll}
+\toprule
+ccwArcTo: angle: & AthensCCWArcSegment & counter clock wise segment \\
+cwArcTo:angle: & AthensCWArcSegment & clock wise segment \\
+lineTo: & AthensLineSegment & straight line \\
+moveTo: & AthensMoveSegment & start a new contour \\
+curveVia: to: & AthensQuadSegment & quadric bezier curve \\
+curveVia: and: to: & AthensCubicSegment & Cubic bezier curve \\
+reflectedCurveVia: to: & AthensCubicSegment & Reflected cubic bezier curve \\
+string: font: &  & specific to cairo \\
+close & AthensCloseSegment & close the current contour \\
+\bottomrule
+\end{fullwidthtabular}
+
+\section{Coordinate class: \textbf{Absolute} or \textbf{Relative}}
+absolute: absolute coordinate from surface coordinate.
+This will draw a square in a surface which extent is 400@400 using absolute move.
+\begin{displaycode}{smalltalk}
+builder absolute;
+ moveTo: 100@100;
+ lineTo: 100@300;
+ lineTo: 300@300;
+ lineTo: 300@100;
+ close
+\end{displaycode}
+
+relative: each new move is relative to the previous one.
+This will draw a square in a surface which extent is 400@400 using relative move.
+\begin{displaycode}{smalltalk}
+ builder relative ;
+  moveTo: 100@100;
+  lineTo: 200@0;
+  lineTo: 0@200;
+  lineTo: -200@0;
+  close
+\end{displaycode}
+
+cwArcTo:angle: and ccwArcTo: angle: will draw circular arc, connecting
+previous segment endpoint and current endpoint of given angle, passing in
+clockwise or counter clockwise direction. The angle must be specified in Radian.
+
+\subsection{curveVia: to: and \textbar{}curveVia: and: to:}
+This call is related to bezier curve. A B\'{e}zier curve consists of two or more
+control points, which define the size and shape of the line. The first and
+last points mark the beginning and end of the path, while the intermediate
+points define the path's curvature.
+
+More detail on Bezier curve on available at: https://pomax.github.io/bezierinfo/
+
+\subsection{path transformation.}
+A path can be rotated, translated and scaled so you can adapt it to your need.
+For example, you can define a path in your own coordinate system, and then
+scale it to match the size of your surface extent.
+
+\section{The different type of painting.}
+Paints can be created either from the surface or directly from a class that will
+do the call to the surface for you.
+
+any object can be treated as paint:
+- \textcode{athensFillPath: aPath on: aCanvas}
+- \textcode{athensFillRectangle: aRectangle on: aCanvas}
+- \textcode{asStrokePaint}
+
+\begin{fullwidthtabular}{ll}
+\toprule
+surface message & comment \\
+\sout{}\sout{\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}- & \sout{}\sout{\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}} \\
+createFormPaint: & create paint from a Form \\
+createLinearGradient: start: stop: & linear gradient paint \\
+createRadialGradient: center: radius: & Radial gradient paint \\
+createRadialGradient: center: radius: focalPoint: & Radial gradient paint \\
+createShadowPaint: & ??? \\
+createSolidColorPaint: & fill paint \\
+createStrokePaintFor: & stroke paint \\
+\bottomrule
+\end{fullwidthtabular}
+
+a Canvas define its paint method we will see in detail below:
+
+\begin{itemize}
+    \item setPaint:
+    \item setStrokePaint:
+\end{itemize}
+
+\section{Stroke paint (a pen that goes around the path)}
+The \textcode{createStrokePaintFor:} operation takes a virtual pen along the path. It allows the source
+to transfer through the mask in a thin (or thick) line around the path
+
+\textcode{AthensStrokePaint} represents a stroke paint.
+
+\section{Solid paint (a pen that fill the path)}
+The \textcode{createSolidColorPaint} operation instead uses the path like the lines of a coloring book,
+and allows the source through the mask within the hole whose boundaries are the
+path. For complex paths (paths with multiple closed sub-paths—like a donut—or
+paths that self-intersect) this is influenced by the fill rule
+
+SD: We need examples
+
+\section{Gradient}
+Gradient will let you create gradient of color, either linear, or radial.
+
+The color ramp is a collection of associations with keys - floating point values
+between 0 and 1 and values with Colors, for example:
+
+
+
+\bibliographystyle{alpha}
+\bibliography{book.bib}
+
+% lulu requires an empty page at the end. That's why I'm using
+% \backmatter here.
+\backmatter
+
+% Index would go here
+
+\end{document}

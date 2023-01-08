@@ -30,6 +30,11 @@ balloon Canvas, or the cairo graphic library for the rasterization phase.
 
 Here it would be nice to have an example
 
+### Practicing Athens drawing.
+
+To help you practice your Athens drawing, you can use Athens sketch, migrated from SmalltalkHub that is available at 
+[Athens Sketch: https://github.com/rvillemeur/AthensSketch](https://github.com/rvillemeur/AthensSketch)
+
 
 ###  Athens details
 
@@ -80,7 +85,6 @@ Here are some helper messages in `AthensSimplePathBuilder`:
 If you want to build path using only straight line, you can use the class `AthensPolygon`.
 
 | path builder Messages | Object Segment | comment |
--
 |ccwArcTo: angle:       |AthensCCWArcSegment|counter clock wise segment  |
 |cwArcTo:angle:         |AthensCWArcSegment |clock wise segment          |
 |lineTo:                |AthensLineSegment  |straight line               |
@@ -92,9 +96,10 @@ If you want to build path using only straight line, you can use the class `Athen
 |close                  |AthensCloseSegment |close the current contour   |
 
 
-### Coordinate class: **Absolute** or **Relative**
+### Absolute or relative coordinates
+Athens supports two kinds of coordinates: 
 
-absolute: absolute coordinate from surface coordinate.
+###### Absolute: absolute coordinate from surface coordinate.
 This will draw a square in a surface which extent is 400@400 using absolute move.
 
 ```language=smalltalk
@@ -107,8 +112,9 @@ builder absolute;
 ```
 
 
-relative: each new move is relative to the previous one.
+##### Relative: each new move is relative to the previous one.
 This will draw a square in a surface which extent is 400@400 using relative move.
+
 ```language=smalltalk
 	builder relative ;
 		moveTo: 100@100;
@@ -118,18 +124,16 @@ This will draw a square in a surface which extent is 400@400 using relative move
 		close
 ```
 
-cwArcTo:angle: and ccwArcTo: angle: will draw circular arc, connecting  
+The messages `cwArcTo:angle:` and `ccwArcTo: angle:` draw circular arc, connecting  
 previous segment endpoint and current endpoint of given angle, passing in 
 clockwise or counter clockwise direction. The angle must be specified in Radian.
 
-% Please remember that the circumference of a circle is equal to 2 Pi  R.
-% If R = 1, half of the circumference is equal to PI, which is the value of half
-% a circle.
+Please remember that the circumference of a circle is equal to 2 Pi  R.
+If R = 1, half of the circumference is equal to PI, which is the value of half a circle.
 
-#### curveVia: to: and |curveVia: and: to:
-This call is related to bezier curve. A Bézier curve consists of two or more
- control points, which define the size and shape of the line. The first and 
- last points mark the beginning and end of the path, while the intermediate 
+### Beziers
+The two messages`curveVia:to:` and `curveVia:and:to:` are linked to bezier curves.
+A Bézier curve consists of two or more control points, which define the size and shape of the line. The first and  last points mark the beginning and end of the path, while the intermediate
  points define the path's curvature.
  
  More detail on Bezier curve on available at: https://pomax.github.io/bezierinfo/
@@ -150,12 +154,11 @@ any object can be treated as paint:
  - `athensFillRectangle: aRectangle on: aCanvas`
  - `asStrokePaint`
 
-|surface message                                  |  comment               |
-|~~~~~~~~~~~~~~~~~~~~~~~~-|~~~~~~~~~~~~|
-|createFormPaint:                                 |create paint from a Form|
-|createLinearGradient: start: stop:               |linear gradient paint   |
-|createRadialGradient: center: radius:            |Radial gradient paint   |
-|createRadialGradient: center: radius: focalPoint:|Radial gradient paint   |
+| surface message | comment |
+| `createFormPaint:`| create paint from a Form |
+|createLinearGradient: start: stop:               | linear gradient paint |
+|createRadialGradient: center: radius:            | Radial gradient paint |
+|createRadialGradient: center: radius: focalPoint:| Radial gradient paint |
 |createShadowPaint:                               |???                     |
 |createSolidColorPaint:                           |fill paint              |
 |createStrokePaintFor:                            |stroke paint            |
@@ -196,6 +199,7 @@ surface createLinearGradient: {0 -> Color blue .0.5 -> Color white. 1 -> Color r
 ```
 or
 ```language=smalltalk
+????
 ```
 
 
@@ -215,7 +219,7 @@ canvas
     canvas drawShape: \(0@200 extent: 300@400\).
 ```
 
-create a horizontal gradient:
+The following creates a horizontal gradient:
 ```language=smalltalk
 canvas
     setPaint:
@@ -246,30 +250,29 @@ canvas
 
 ### Drawing
 
-Either you set the shape first and then you call **draw**, or you call the 
-convenient method **drawShape:** directly with the path to draw as argument
+Either you set the shape first and then you send the message `draw`, or you send the 
+convenient message `drawShape:` directly with the path to draw as argument
 
 ### Some example:
 
 ```language=smalltalk
-"canvas pathTransform loadIdentity.  font1 getPreciseAscent. font getPreciseHeight"
-			surface clear.
-			canvas
-				setPaint:
-					((LinearGradientPaint from: 0 @ 0 to: self extent)
-						colorRamp:
-							{(0 -> Color white).
-							(1 -> Color black)}).
-			canvas drawShape: (0 @ 0 extent: self extent).
-			canvas
-				setPaint:
-					(canvas surface
-						createLinearGradient:
-							{(0 -> Color blue).
-							(0.5 -> Color white).
-							(1 -> Color red)}
-						start: 0@200
-						stop: 0@400). "change to 200 to get an horizontal gradient"
+	surface clear.
+	canvas
+		setPaint:	
+		((LinearGradientPaint from: 0 @ 0 to: self extent)
+			colorRamp:
+				{(0 -> Color white).
+				(1 -> Color black)}).
+	canvas drawShape: (0 @ 0 extent: self extent).
+	canvas
+		setPaint:
+			(canvas surface
+				createLinearGradient:
+					{(0 -> Color blue).
+					(0.5 -> Color white).
+					(1 -> Color red)}
+				start: 0@200
+				stop: 0@400). "change to 200 to get an horizontal gradient"
 			canvas drawShape: (0@200 extent: 300@400).
 			canvas setFont: font.
 			canvas
@@ -331,7 +334,3 @@ renderAthens
 ```
 
                 
-### practicing Athens drawing.
-
-To help you practice your Athens drawing, you can use Athens sketch, migrated from SmalltalkHub that is available at 
-[Athens Sketch: https://github.com/rvillemeur/AthensSketch](https://github.com/rvillemeur/AthensSketch)

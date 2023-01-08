@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.15.0 (TeX Live 2022)  (format=lualatex 2022.5.29)  6 JAN 2023 21:47
+This is LuaHBTeX, Version 1.15.0 (TeX Live 2022)  (format=lualatex 2022.5.29)  7 JAN 2023 10:57
  restricted system commands enabled.
 **index.tex
 (./index.tex
@@ -2436,7 +2436,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <9> on input line 64.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 64.
-<_support/latex/sbabook/CreativeCommons-BY-SA.pdf, id=65, 120.45pt x 42.1575pt>
+<_support/latex/sbabook/CreativeCommons-BY-SA.pdf, id=73, 120.45pt x 42.1575pt>
 
 File: _support/latex/sbabook/CreativeCommons-BY-SA.pdf Graphic file (type pdf)
 <use _support/latex/sbabook/CreativeCommons-BY-SA.pdf>
@@ -2604,45 +2604,45 @@ warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 
 
 ]
+LaTeX Font Info:    Font shape `TU/OpenSans(0)/m/n' will be
+(Font)              scaled to size 6.78833pt on input line 129.
+
+Overfull \hbox (41.04004pt too wide) in paragraph at lines 129--130
+\TU/GentiumBookBasic(0)/m/n/10 grated from SmalltalkHub that is avail-able at[]
+Athens Sketch: https://github.com/rville- 
+ []
+
 LaTeX Font Info:    Font shape `TU/FiraMono(4)/m/n' will be
-(Font)              scaled to size 8.63312pt on input line 129.
+(Font)              scaled to size 6.9065pt on input line 132.
 \tcb@out=\write6
 
 \openout6 = index.listing
- (./index.listing)
+(./index.listing)
 warning  (pdf backend): ignoring duplicate destination with the name 'page.2'
 [2]
-Overfull \hbox (3.75989pt too wide) in paragraph at lines 173--174
-[]\TU/GentiumBookBasic(0)/m/n/10 If you want to build path us-ing only straight line, you can use the class \TU/FiraMono(4)/m/n/10 Athen- 
- []
-
-
-Underfull \hbox (badness 10000) in alignment at lines 175--179
+Underfull \hbox (badness 10000) in alignment at lines 178--191
 [][][]
  []
 
-
-Overfull \hbox (9.76665pt too wide) in alignment at lines 183--195
-[][][]
- []
-
-
-\openout6 = index.listing
-(./index.listing)
-Overfull \hbox (5.0293pt too wide) in paragraph at lines 198--207
-\TU/GentiumBookBasic(0)/m/n/10 ab-so-lute: ab-so-lute co-or-di-nate from sur-fac
-e co-or-di-nate. This will draw a square 
- []
-
+LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
+(Font)              scaled to size 6.65466pt on input line 197.
 
 \openout6 = index.listing
 (./index.listing)
 LaTeX Font Info:    Font shape `TU/OpenSans(0)/m/n' will be
-(Font)              scaled to size 10.1825pt on input line 224.
+(Font)              scaled to size 10.1825pt on input line 207.
+
+
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 207.
+
+
+\openout6 = index.listing
+(./index.listing) [3]
 LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
-(Font)              scaled to size 9.982pt on input line 224.
- [3]
-Overfull \hbox (480.65726pt too wide) in alignment at lines 246--258
+(Font)              scaled to size 9.982pt on input line 232.
+
+Underfull \hbox (badness 10000) in alignment at lines 246--257
 [][]
  []
 
@@ -2700,32 +2700,32 @@ braces):
 LaTeX Info: Redefining \rmfamily on input line 21.
 LaTeX Info: Redefining \sffamily on input line 21.
 LaTeX Info: Redefining \ttfamily on input line 21.
-luaotfload | aux : font no 53 (nil) defines no feature for script latn with lang
+luaotfload | aux : font no 67 (nil) defines no feature for script latn with lang
 uage eng)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `index.out' has not changed.
-(rerunfilecheck)             Checksum: 44BE7977F8C54C4A9472667AF7B0E9AC;2253.
+(rerunfilecheck)             Checksum: FB5C640FADB332A29385D20B97DA1B81;2609.
 )
 
 Here is how much of LuaTeX's memory you used:
- 34642 strings out of 477785
+ 34650 strings out of 477785
  100000,1373583 words of node,token memory allocated
- 1225 words of node memory still in use:
-   3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 6 attribute, 209 glue_spec
-, 6 attribute_list, 3 write nodes
-   avail lists: 1:1,2:1374,3:375,4:40,5:710,6:62,7:4824,8:57,9:1977,10:8,11:315
- 53823 multiletter control sequences out of 65536+600000
- 131 fonts using 16622631 bytes
- 103i,12n,135p,2898b,1137s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 1230 words of node memory still in use:
+   3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 7 attribute, 208 glue_spec
+, 7 attribute_list, 3 write, 1 pdf_action nodes
+   avail lists: 1:1,2:1389,3:403,4:40,5:714,6:67,7:5307,8:57,9:1983,10:8,11:349
+ 53828 multiletter control sequences out of 65536+600000
+ 133 fonts using 16923447 bytes
+ 103i,13n,135p,428b,1139s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/ducasse/Library/Fonts/OpenSans-Bold.ttf></Users/ducasse/Library/Fonts/Fi
 raMono-Regular.otf></usr/local/texlive/2022/texmf-dist/fonts/truetype/public/gen
 tium-tug/GenBkBasB.ttf></usr/local/texlive/2022/texmf-dist/fonts/truetype/public
 /gentium-tug/GenBkBasR.ttf></Users/ducasse/Library/Fonts/OpenSans-Regular.ttf>
-Output written on index.pdf (12 pages, 96474 bytes).
+Output written on index.pdf (12 pages, 99317 bytes).
 
-PDF statistics: 190 PDF objects out of 1000 (max. 8388607)
- 48 named destinations out of 1000 (max. 131072)
- 120 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 205 PDF objects out of 1000 (max. 8388607)
+ 51 named destinations out of 1000 (max. 131072)
+ 136 words of extra memory for PDF output out of 10000 (max. 100000000)
 

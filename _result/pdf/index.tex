@@ -125,6 +125,9 @@ balloon Canvas, or the cairo graphic library for the rasterization phase.
 \section{Example}
 Here it would be nice to have an example
 
+\section{Practicing Athens drawing.}
+To help you practice your Athens drawing, you can use Athens sketch, migrated from SmalltalkHub that is available at\href{https://github.com/rvillemeur/AthensSketch}{Athens Sketch: https://github.com/rvillemeur/AthensSketch}\footnotesize{\url{https://github.com/rvillemeur/AthensSketch}}
+
 \section{Athens details}
 \textcode{AthensSurface} and its subclass \textcode{AthensCairoSurface} instances represent a surface.
 A surface is the area in pixel where your drawing will be rendered.
@@ -175,13 +178,6 @@ If you want to build path using only straight line, you can use the class \textc
 \begin{fullwidthtabular}{lll}
 \toprule
 path builder Messages & Object Segment & comment \\
-\bottomrule
-\end{fullwidthtabular}
-
--
-
-\begin{fullwidthtabular}{lll}
-\toprule
 ccwArcTo: angle: & AthensCCWArcSegment & counter clock wise segment \\
 cwArcTo:angle: & AthensCWArcSegment & clock wise segment \\
 lineTo: & AthensLineSegment & straight line \\
@@ -194,8 +190,10 @@ close & AthensCloseSegment & close the current contour \\
 \bottomrule
 \end{fullwidthtabular}
 
-\section{Coordinate class: \textbf{Absolute} or \textbf{Relative}}
-absolute: absolute coordinate from surface coordinate.
+\section{Absolute or relative coordinates}
+Athens supports two kinds of coordinates:
+
+\paragraph{Absolute: absolute coordinate from surface coordinate.}
 This will draw a square in a surface which extent is 400@400 using absolute move.
 \begin{displaycode}{smalltalk}
 builder absolute;
@@ -206,7 +204,7 @@ builder absolute;
  close
 \end{displaycode}
 
-relative: each new move is relative to the previous one.
+\subsubsection{Relative: each new move is relative to the previous one.}
 This will draw a square in a surface which extent is 400@400 using relative move.
 \begin{displaycode}{smalltalk}
  builder relative ;
@@ -217,14 +215,16 @@ This will draw a square in a surface which extent is 400@400 using relative move
   close
 \end{displaycode}
 
-cwArcTo:angle: and ccwArcTo: angle: will draw circular arc, connecting
+The messages \textcode{cwArcTo:angle:} and \textcode{ccwArcTo: angle:} draw circular arc, connecting
 previous segment endpoint and current endpoint of given angle, passing in
 clockwise or counter clockwise direction. The angle must be specified in Radian.
 
-\subsection{curveVia: to: and \textbar{}curveVia: and: to:}
-This call is related to bezier curve. A B\'{e}zier curve consists of two or more
-control points, which define the size and shape of the line. The first and
-last points mark the beginning and end of the path, while the intermediate
+Please remember that the circumference of a circle is equal to 2 Pi  R.
+If R = 1, half of the circumference is equal to PI, which is the value of half a circle.
+
+\section{Beziers}
+The two messages\textcode{curveVia:to:} and \textcode{curveVia:and:to:} are linked to bezier curves.
+A B\'{e}zier curve consists of two or more control points, which define the size and shape of the line. The first and  last points mark the beginning and end of the path, while the intermediate
 points define the path's curvature.
 
 More detail on Bezier curve on available at: https://pomax.github.io/bezierinfo/
@@ -246,8 +246,7 @@ any object can be treated as paint:
 \begin{fullwidthtabular}{ll}
 \toprule
 surface message & comment \\
-\sout{}\sout{\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}- & \sout{}\sout{\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}}\sout{\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}\textasciitilde{}} \\
-createFormPaint: & create paint from a Form \\
+\textcode{createFormPaint:} & create paint from a Form \\
 createLinearGradient: start: stop: & linear gradient paint \\
 createRadialGradient: center: radius: & Radial gradient paint \\
 createRadialGradient: center: radius: focalPoint: & Radial gradient paint \\

@@ -150,26 +150,35 @@ between 0 and 1 and values with Colors, for example:
 
 full example with all paints:
 
+Paint bitmap need to be moved to the place you want to have them drawn. Otherwise, they will stay in the top left corner of the surface area. LoadIdentity in necessary for the next paint as the previous paintTransform will continue to apply to the new paint definition.
+
+We can use the same paint definiton with stroke paint move. However, in this situation, the paint will only appear in the thickness of the stroke line.
+
 ```language=smalltalk
 |surface|
 surface := AthensCairoSurface extent: 200@200.
 
 surface drawDuring: [ :canvas |
-"Bitmap fill"
-    canvas setPaint: (PolymorphSystemSettings pharoLogoForm asAthensPaintOn: canvas ).
+surface clear: (Color purple alpha: 0.3).
+"linear gradient fill"
+    canvas setPaint:  ((LinearGradientPaint from: 0@0  to: 100@100) colorRamp: {  0 -> Color white. 1 -> Color black }).
     canvas drawShape: (0@0 extent: 100@100).
 
 "plain color fill"
     canvas setPaint:  (Color yellow alpha: 0.9).
     canvas drawShape: (100@0 extent: 200@100).
 
-"linear gradient fill"
-    canvas setPaint:  ((LinearGradientPaint from: 0@100  to: 100@200) colorRamp: {  0 -> Color white. 1 -> Color black }).
+"Bitmap fill"
+    canvas setPaint: (PolymorphSystemSettings pharoLogoForm asAthensPaintOn: canvas ).
+    canvas paintTransform translateX: 0 Y: 135.
+    canvas paintTransform scaleBy: 0.25.
     canvas drawShape: (0@100 extent: 100@200).
 
 "Radial gradient fill"
+    canvas paintTransform loadIdentity.
     canvas setPaint: ((RadialGradientPaint new) colorRamp: { 0 -> Color white. 1 -> Color black }; center: 150@150; radius: 50; focalPoint: 180@180).
     canvas drawShape: (100@100 extent: 200@200).
+
  ].
 surface asForm 
 ```
@@ -385,7 +394,6 @@ canvas setPaint: Color pink.
 canvas pathTransform translateX: 20 Y: 20 + (font getPreciseAscent); scaleBy: 2; rotateByDegrees: 25.
 canvas drawString: 'Hello Athens in Pharo'
 
-
 ## drawing using mask
 
 ## Mask
@@ -394,8 +402,7 @@ Athens mask will paint the canvas. It fills the area with the current fill patte
 
 Here, the mask the the Pharo
 
-
-*Note RDV: this API is part of *AthensCairoPatternPaint* but is not in the standard messages of Athens API. I'm wondering if we should include it.*
+*Note RDV: this API is part of*AthensCairoPatternPaint*but is not in the standard messages of Athens API. I'm wondering if we should include it.*
 
 ```smalltalk
 |surface|

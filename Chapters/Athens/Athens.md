@@ -290,12 +290,31 @@ This will draw a square in a surface which extent is 400@400 using relative move
   close
 ]]]
 
+#### moving
+
+- moveTo: -> move path to a specific point to *initiate* drawing.
+
+#### straight line
+
+- lineTo: line path from previous point to target point.
+
+#### arcs
+
+- ccwArcTo: endPt angle: rot -> "Add a counter-clockwise arc segment, starting from current path endpoint and ending at andPt. Angle should be specified in radians "
+- cwArcTo: endPt angle: rot ->  "Add a clockwise arc segment, starting from current path endpoint and ending at andPt. Angle should be specified in radians "
+
 cwArcTo:angle: and ccwArcTo: angle: will draw circular arc, connecting  
 previous segment endpoint and current endpoint of given angle, passing in
 clockwise or counter clockwise direction. The angle must be specified in Radian.
 
 Please remember that the circumference of a circle is equal to 2 Pi  R.
 If R = 1, half of the circumference is equal to PI, which is the value of half a circle.
+
+#### curves
+
+- curveVia: cp1 and: cp2 to: aPoint ->  "Add a cubic bezier curve starting from current path endpoint, using control points cp1, cp2 and ending at aPoint "
+- curveVia: cp1 to: aPoint -> "Add a quadric bezier curve, starting from current path endpoint, using control point cp1, and ending at aPoint "
+- reflectedCurveVia: cp2 to: aPoint ->  "Add a reflected cubic bezier curve, starting from current path endpoint and ending at aPoint. The first control point is calculated as a reflection from the current point, if the last command was also a cubic bezier curve.Otherwise, the first control point is the current point. The second control point is cp2."
 
 #### curveVia: to: and |curveVia: and: to
 
@@ -306,18 +325,100 @@ This call is related to bezier curve. A Bézier curve consists of two or more
 
  More detail on Bezier curve on available at: <https://pomax.github.io/bezierinfo/>
 
+
+#### close the path
+
+- close -> Close the path countour, between initial point, and last reached point.
+
+
+
+
+full example with all familly of path
+
+```language=smalltalk
+|surface|
+surface := AthensCairoSurface extent: 100@100.
+
+surface drawDuring: [ :canvas |
+ surface clear: Color white.
+   canvas setStrokePaint: Color red.
+ canvas paint width: 5.
+   canvas drawShape: (
+  canvas createPath: [ :builder | 
+       builder
+        absolute;
+      moveTo: 25@25;
+      lineTo: 50@37.5;
+   relative;
+      lineTo: 25@(-12.5);
+   absolute;
+   cwArcTo: 75 @ 75 angle: 90 degreesToRadians;
+   curveVia: 50@60 and: 50@90 to: 25@75;
+      close
+  ]
+ ).
+].
+surface asForm 
+```
+
 #### path transformation
 
 A path can be rotated, translated and scaled so you can adapt it to your need.
 For example, you can define a path in your own coordinate system, and then
 scale it to match the size of your surface extent.
 
-
+can pathTransform loadIdentity.
+can pathTransform translateX: 30 Y: 30.
+can pathTransform rotateByDegrees: 30.
+can pathTransform scaleBy: 1.2.
 
 ## drawing
 
 Either you set the shape first and then you call **draw**, or you call the
 convenient method **drawShape:** directly with the path to draw as argument
+
+## drawing text
+
+font := LogicalFont familyName: 'Arial' pointSize: 10.
+canvas setFont: font.
+canvas setPaint: Color pink.
+canvas pathTransform translateX: 20 Y: 20 + (font getPreciseAscent); scaleBy: 2; rotateByDegrees: 25.
+canvas drawString: 'Hello Athens in Pharo'
+
+
+## drawing using mask
+
+## Mask
+
+Athens mask will paint the canvas. It fills the area with the current fill pattern and blends it by whatever alpha is for that pixel on the mask.
+
+Here, the mask the the Pharo
+
+
+*Note RDV: this API is part of *AthensCairoPatternPaint* but is not in the standard messages of Athens API. I'm wondering if we should include it.*
+
+```smalltalk
+|surface|
+surface := AthensCairoSurface   extent: 400@120.
+
+surface drawDuring: [ :canvas | |paint font|
+
+paint := (PolymorphSystemSettings pharoLogoForm) asAthensPaintOn: canvas.
+
+canvas setPaint: (
+ (LinearGradientPaint from: 0@0  to: 400@120)
+ colorRamp: {  
+  0 -> (Color red alpha: 0.8).
+  1 -> (Color yellow alpha: 0.8).
+ })..
+
+
+canvas drawShape: (0@0 extent: 400@120).
+paint maskOn: canvas.
+].
+
+surface asForm
+```
 
 ### Some example
 

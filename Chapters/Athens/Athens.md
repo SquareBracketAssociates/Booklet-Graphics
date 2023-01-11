@@ -1,4 +1,3 @@
-
 # Vector graphics in Athens
 
 There are two different computer graphics: vector and raster graphics.
@@ -29,292 +28,150 @@ balloon Canvas, or the cairo graphic library for the rasterization phase.
 
 ## Example
 
-Here it would be nice to have an example
+By the end of this chapter, you will be able to understand the example below:
 
-<<<<<<< HEAD
-### Practicing Athens drawing.
-
-To help you practice your Athens drawing, you can use Athens sketch, migrated from SmalltalkHub that is available at 
-[Athens Sketch: https://github.com/rvillemeur/AthensSketch](https://github.com/rvillemeur/AthensSketch)
-
-=======
 ```smalltalk
 |surface|
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
+surface := AthensCairoSurface   extent: 400@400.
 
-surface := AthensCairoSurface extent: 400@400.
+surface drawDuring: [ :canvas | |paint font|
 
-surface drawDuring: [ :canvas | |font|
-font := LogicalFont familyName: 'Arial' pointSize: 10.
-        canvas setPaint: ((LinearGradientPaint from: 0@0  to: 400@400) colorRamp: {  0 -> Color white. 1 -> Color black }).
-        canvas drawShape: (0@0 extent: 400@400). 
-        canvas setFont: font.
-        canvas setPaint: Color pink.
-        canvas pathTransform translateX: 20 Y: 20 + (font getPreciseAscent); scaleBy: 2; rotateByDegrees: 25.
-        canvas drawString: 'Hello Athens in Pharo'].
+paint := (PolymorphSystemSettings pharoLogoForm) asAthensPaintOn: canvas.
+ 
+canvas setPaint: (
+ (LinearGradientPaint from: 0@0  to: 400@400) 
+ colorRamp: {  
+  0 -> (Color red alpha: 0.8).
+  0.166 -> (Color orange alpha: 0.8).
+  0.332 -> (Color yellow alpha: 0.8).
+  0.5 -> (Color green alpha: 0.8).
+  0.664 -> (Color blue alpha: 0.8).
+  0.83 -> (Color magenta alpha: 0.8).
+  1 -> (Color purple alpha: 0.8). 
+ }).
+
+canvas drawShape: (0@0 extent: 400@400). 
+paint maskOn: canvas.
+ 
+font := LogicalFont familyName: 'Source Sans Pro' pointSize: 30.
+canvas setFont: font.
+canvas setPaint:(  (LinearGradientPaint from: 0@0  to: 100@150)
+ colorRamp: {  
+  0 -> (Color white alpha: 0.9).
+  1 -> (Color black alpha: 0.9).}).
+canvas pathTransform translateX: 20 Y: 180 + (font getPreciseAscent); scaleBy: 1.1; rotateByDegrees: 25.
+
+canvas drawString: 'Hello Athens in Pharo'
+
+"canvas draw."
+
+].
 
 surface asForm
 ```
 
 ## Athens details
 
-<<<<<<< HEAD
-`AthensSurface` and its subclass `AthensCairoSurface` instances represent a surface.
-A surface is the area in pixel where your drawing will be rendered. 
-You  never draw directly on the surface. 
-Instead, you specify what you want to display on the canvas, and Athens will render it on the area specified by the surface. 
-
-The class `AthensCanvas` is the central object used to perform drawing on an `AthensSurface`
-A canvas is not directly instanciated but used through a message such as: 
-=======
 `AthensSurface` and its subclass `AthensCairoSurface` will initialize a new surface.
 The surface represent the area in pixel where your drawing will be rendered. You
 never draw directly on the surface. Instead, you specify what you want to display
- on the canvas, and Athens will render your it on the area specified by the surface.
+on the canvas, and Athens will render your it on the area specified by the surface.
 
 The class `AthensCanvas` is the central object used to perform drawing on an `AthensSurface`
 A canvas is not directly instanciated but used through a call like
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
 `surface drawDuring: [:canvas | .... ]`
 
 The Athens drawing model relies on a three layer model. Any drawing process
 takes place in three steps:
 
-- First a `path` is created, which includes one or more vector primitives , i.e., circles, lines, TrueType fonts, Bézier curves, etc...
-- Then painting must be defined, which may be a color, a color gradient, a bitmap or some vector graphics
+- First, a painting must be defined, which may be a color, a color gradient, or a bitmap.
+- Then a `path` is created, which includes one or more vector primitives , i.e., lines, TrueType fonts, Bézier curves, etc... This path will define the shape that is then rendered.
 - Finally the result is drawn to the Athens surface, which is provided by the back-end for the output.
 
-### Path
+### Paint
 
-<<<<<<< HEAD
-Athens has always an active path. 
-Use `AthensPathBuilder` or `AthensSimplePathBuilder` to build a path.
-They will assemble path segments for you.
-=======
-Athens always has an active path.
+Paint can be:
 
-Use `AthensPathBuilder` or `AthensSimplePathBuilder` to build a path
-They will assemble segment for you
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
+- a single color, defined with the message *color:*
+- A radial gradient paint, defined through object *RadialGradientPaint*
+- a linear gradient paint, defined through object *LinearGradientPaint*
+- a bitmap you can get by sending *asAthensPaintOn:* to a *Form*.
 
-The method `createPath:` exists in all important Athens class: `AthensCanvas`,
-`AthensSurface`, and  `AthensPathBuilder`.
-The message `createPath: aPath`
+The way the paint is applied in the canvas is specified as *Fill* or *Stroke* that we will see in detail:
 
-Using it returns a new path:
+- *setPaint:* message will fill the Paint in the area defined by the path.
+- *setStrokePaint:* message will set the paint as a virtual pen along the path.
 
-```language=smalltalk
-<<<<<<< HEAD
-surface createPath: [ :builder |
-	builder
-		absolute;
-		moveTo: 100@100;
-		lineTo: 100@300;
-		lineTo: 300@300;
-		lineTo: 300@100;
-		close ].
-=======
-surface createPath: [:builder |
-  builder
-   absolute;
-   moveTo: 100@100;
-   lineTo: 100@300;
-   lineTo: 300@300;
-   lineTo: 300@100;
-   close ].
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
+Let see some example to better understand how it works.
+
+#### Stroke paint (a pen that goes around the path)
+
+The **stroke** operation takes a virtual pen along the path. It allows the source to transfer through the mask in a thin \(or thick\) line around the path
+
+```smalltalk
+|surface|
+surface := AthensCairoSurface extent: 200@200.
+
+surface drawDuring: [ :canvas | 
+        surface clear: Color white.
+        canvas setStrokePaint:  Color red.
+        canvas drawShape: (20@20 extent: 160@160). 
+].
+
+surface asForm
 ```
 
-Here are some helper messages in `AthensSimplePathBuilder`:
+The paint can be customized like
 
-- `pathStart`
-- `pathBounds` gives the limit of the bounds associated to the path
+```smalltalk
+|surface|
+surface := AthensCairoSurface extent: 200@200.
 
-If you want to build path using only straight line, you can use the class `AthensPolygon`.
+surface drawDuring: [ :canvas | 
+        surface clear: Color white.
+        canvas setStrokePaint:  Color red.
+        canvas paint dashes: #( "fill"5   "gap" 15) offset: 5.
+        canvas paint capSquare.
+        canvas paint width: 10.
+        canvas drawShape: (20@20 extent: 160@160). 
+].
 
-<<<<<<< HEAD
-| path builder Messages | Object Segment | comment |
-=======
-|path builder Messages  |Object Segment     |comment                     |
-|~~~~~~~~~~~-|~~~~~~~~~-|~~~~~~~~~~~~~~|
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
-|ccwArcTo: angle:       |AthensCCWArcSegment|counter clock wise segment  |
-|cwArcTo:angle:         |AthensCWArcSegment |clock wise segment          |
-|lineTo:                |AthensLineSegment  |straight line               |
-|moveTo:                |AthensMoveSegment  |start a new contour         |
-|curveVia: to:          |AthensQuadSegment  |quadric bezier curve        |
-|curveVia: and: to:     |AthensCubicSegment |Cubic bezier curve          |
-|reflectedCurveVia: to: |AthensCubicSegment |Reflected cubic bezier curve|
-|string: font:          |                   |specific to cairo           |
-|close                  |AthensCloseSegment |close the current contour   |
-
-<<<<<<< HEAD
-
-### Absolute or relative coordinates
-Athens supports two kinds of coordinates: 
-=======
-### Coordinate class: **Absolute** or **Relative**
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
-
-###### Absolute: absolute coordinate from surface coordinate.
-This will draw a square in a surface which extent is 400@400 using absolute move.
-
-```language=smalltalk
-builder absolute;
-<<<<<<< HEAD
-	moveTo: 100@100;
-	lineTo: 100@300;
-	lineTo: 300@300;
-	lineTo: 300@100;
-	close
+surface asForm
 ```
 
-
-##### Relative: each new move is relative to the previous one.
-This will draw a square in a surface which extent is 400@400 using relative move.
-
-```language=smalltalk
-	builder relative ;
-		moveTo: 100@100;
-		lineTo: 200@0;
-		lineTo: 0@200;
-		lineTo: -200@0;
-		close
-```
-
-The messages `cwArcTo:angle:` and `ccwArcTo: angle:` draw circular arc, connecting  
-previous segment endpoint and current endpoint of given angle, passing in 
-=======
-   moveTo: 100@100;
-   lineTo: 100@300;
-   lineTo: 300@300;
-   lineTo: 300@100;
-   close
-]]]
-
-relative: each new move is relative to the previous one.
-This will draw a square in a surface which extent is 400@400 using relative move.
-[[[language=smalltalk
- builder relative ;
-  moveTo: 100@100;
-  lineTo: 200@0;
-  lineTo: 0@200;
-  lineTo: -200@0;
-  close
-]]]
-
-cwArcTo:angle: and ccwArcTo: angle: will draw circular arc, connecting  
-previous segment endpoint and current endpoint of given angle, passing in
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
-clockwise or counter clockwise direction. The angle must be specified in Radian.
-
-Please remember that the circumference of a circle is equal to 2 Pi  R.
-If R = 1, half of the circumference is equal to PI, which is the value of half a circle.
-
-<<<<<<< HEAD
-### Beziers
-The two messages`curveVia:to:` and `curveVia:and:to:` are linked to bezier curves.
-A Bézier curve consists of two or more control points, which define the size and shape of the line. The first and  last points mark the beginning and end of the path, while the intermediate
- points define the path's curvature.
- 
- More detail on Bezier curve on available at: https://pomax.github.io/bezierinfo/
-=======
-#### curveVia: to: and |curveVia: and: to
-
-This call is related to bezier curve. A Bézier curve consists of two or more
- control points, which define the size and shape of the line. The first and
- last points mark the beginning and end of the path, while the intermediate
- points define the path's curvature.
-
- More detail on Bezier curve on available at: <https://pomax.github.io/bezierinfo/>
-
-#### path transformation
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
-
-A path can be rotated, translated and scaled so you can adapt it to your need.
-For example, you can define a path in your own coordinate system, and then
-scale it to match the size of your surface extent.
-
-### The different type of painting
-
-Paints can be created either from the surface or directly from a class that will
-do the call to the surface for you.
-
-any object can be treated as paint:
-
-- `athensFillPath: aPath on: aCanvas`
-- `athensFillRectangle: aRectangle on: aCanvas`
-- `asStrokePaint`
-
-| surface message | comment |
-| `createFormPaint:`| create paint from a Form |
-|createLinearGradient: start: stop:               | linear gradient paint |
-|createRadialGradient: center: radius:            | Radial gradient paint |
-|createRadialGradient: center: radius: focalPoint:| Radial gradient paint |
-|createShadowPaint:                               |???                     |
-|createSolidColorPaint:                           |fill paint              |
-|createStrokePaintFor:                            |stroke paint            |
-
-a Canvas define its paint method we will see in detail below:
-<<<<<<< HEAD
-- setPaint:
-- setStrokePaint:
-
-### Stroke paint (a pen that goes around the path)
-The `createStrokePaintFor:` operation takes a virtual pen along the path. It allows the source 
-=======
-
-- setPaint:
-- setStrokePaint:
-
-# Stroke paint (a pen that goes around the path)
-
-The **createStrokePaintFor** operation takes a virtual pen along the path. It allows the source
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
-to transfer through the mask in a thin \(or thick\) line around the path
-
-`AthensStrokePaint` represents a stroke paint.
-
-<<<<<<< HEAD
-
-
-### Solid paint \(a pen that fill the path\)
-The `createSolidColorPaint` operation instead uses the path like the lines of a coloring book, 
-and allows the source through the mask within the hole whose boundaries are the 
-path. For complex paths \(paths with multiple closed sub-paths—like a donut—or
-paths that self-intersect\) this is influenced by the fill rule
-
-SD: We need examples
-
-
-
-
-### Gradient
-=======
-!!! Solid paint \(a pen that fill the path\)
-The **createSolidColorPaint** operation instead uses the path like the lines of a coloring book,
-and allows the source through the mask within the hole whose boundaries are the
-path. For complex paths \(paths with multiple closed sub-paths—like a donut—or
-paths that self-intersect\) this is influenced by the fill rule
+#### Fill paint (a paint that fill the area defined by the path)
 
 !!! Gradient
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
 Gradient will let you create gradient of color, either linear, or radial.
 
 The color ramp is a collection of associations with keys - floating point values
 between 0 and 1 and values with Colors, for example:
 {0 -> Color blue . 0.5 -> Color white. 1 -> Color red}.
 
-You can use either helper class or calling surface messages:
+full example with all paints:
 
 ```language=smalltalk
-surface createLinearGradient: {0 -> Color blue .0.5 -> Color white. 1 -> Color red} start:  0@0  stop: 200@100.
-```
+|surface|
+surface := AthensCairoSurface extent: 200@200.
 
-or
+surface drawDuring: [ :canvas |
+"Bitmap fill"
+    canvas setPaint: (PolymorphSystemSettings pharoLogoForm asAthensPaintOn: canvas ).
+    canvas drawShape: (0@0 extent: 100@100).
 
-```language=smalltalk
-????
+"plain color fill"
+    canvas setPaint:  (Color yellow alpha: 0.9).
+    canvas drawShape: (100@0 extent: 200@100).
+
+"linear gradient fill"
+    canvas setPaint:  ((LinearGradientPaint from: 0@100  to: 100@200) colorRamp: {  0 -> Color white. 1 -> Color black }).
+    canvas drawShape: (0@100 extent: 100@200).
+
+"Radial gradient fill"
+    canvas setPaint: ((RadialGradientPaint new) colorRamp: { 0 -> Color white. 1 -> Color black }; center: 150@150; radius: 50; focalPoint: 180@180).
+    canvas drawShape: (100@100 extent: 200@200).
+ ].
+surface asForm 
 ```
 
 Start and stop point are reference to the current shape being drawn.
@@ -334,12 +191,8 @@ canvas
     canvas drawShape: \(0@200 extent: 300@400\).
 ```
 
-<<<<<<< HEAD
-The following creates a horizontal gradient:
-=======
 create a horizontal gradient:
 
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
 ```language=smalltalk
 canvas
     setPaint:
@@ -368,57 +221,208 @@ canvas
     canvas drawShape: \(0@200 extent: 300@400\).
 ```
 
+### Path
+
+Athens always has an active path.
+
+Use `AthensPathBuilder` or `AthensSimplePathBuilder` to build a path
+They will assemble segment for you
+
+The method `createPath:` exists in all important Athens class: `AthensCanvas`,
+`AthensSurface`, and  `AthensPathBuilder`.
+The message `createPath: aPath`
+
+Using it returns a new path:
+
+```language=smalltalk
+surface createPath: [:builder |
+  builder
+   absolute;
+   moveTo: 100@100;
+   lineTo: 100@300;
+   lineTo: 300@300;
+   lineTo: 300@100;
+   close ].
+```
+
+Here are some helper messages in `AthensSimplePathBuilder`:
+
+- `pathStart`
+- `pathBounds` gives the limit of the bounds associated to the path
+
+If you want to build path using only straight line, you can use the class `AthensPolygon`.
+
+|path builder Messages  |Object Segment     |comment                     |
+|~~~~~~~~~~~-|~~~~~~~~~-|~~~~~~~~~~~~~~|
+|ccwArcTo: angle:       |AthensCCWArcSegment|counter clock wise segment  |
+|cwArcTo:angle:         |AthensCWArcSegment |clock wise segment          |
+|lineTo:                |AthensLineSegment  |straight line               |
+|moveTo:                |AthensMoveSegment  |start a new contour         |
+|curveVia: to:          |AthensQuadSegment  |quadric bezier curve        |
+|curveVia: and: to:     |AthensCubicSegment |Cubic bezier curve          |
+|reflectedCurveVia: to: |AthensCubicSegment |Reflected cubic bezier curve|
+|string: font:          |                   |specific to cairo           |
+|close                  |AthensCloseSegment |close the current contour   |
+
+### Coordinate class: **Absolute** or **Relative**
+
+#### Absolute: absolute coordinate from surface coordinate
+
+This will draw a square in a surface which extent is 400@400 using absolute move.
+
+```language=smalltalk
+builder absolute;
+   moveTo: 100@100;
+   lineTo: 100@300;
+   lineTo: 300@300;
+   lineTo: 300@100;
+   close
+]]]
+
+relative: each new move is relative to the previous one.
+This will draw a square in a surface which extent is 400@400 using relative move.
+[[[language=smalltalk
+ builder relative ;
+  moveTo: 100@100;
+  lineTo: 200@0;
+  lineTo: 0@200;
+  lineTo: -200@0;
+  close
+]]]
+
+#### moving
+
+- moveTo: -> move path to a specific point to *initiate* drawing.
+
+#### straight line
+
+- lineTo: line path from previous point to target point.
+
+#### arcs
+
+- ccwArcTo: endPt angle: rot -> "Add a counter-clockwise arc segment, starting from current path endpoint and ending at andPt. Angle should be specified in radians "
+- cwArcTo: endPt angle: rot ->  "Add a clockwise arc segment, starting from current path endpoint and ending at andPt. Angle should be specified in radians "
+
+cwArcTo:angle: and ccwArcTo: angle: will draw circular arc, connecting  
+previous segment endpoint and current endpoint of given angle, passing in
+clockwise or counter clockwise direction. The angle must be specified in Radian.
+
+Please remember that the circumference of a circle is equal to 2 Pi  R.
+If R = 1, half of the circumference is equal to PI, which is the value of half a circle.
+
+#### curves
+
+- curveVia: cp1 and: cp2 to: aPoint ->  "Add a cubic bezier curve starting from current path endpoint, using control points cp1, cp2 and ending at aPoint "
+- curveVia: cp1 to: aPoint -> "Add a quadric bezier curve, starting from current path endpoint, using control point cp1, and ending at aPoint "
+- reflectedCurveVia: cp2 to: aPoint ->  "Add a reflected cubic bezier curve, starting from current path endpoint and ending at aPoint. The first control point is calculated as a reflection from the current point, if the last command was also a cubic bezier curve.Otherwise, the first control point is the current point. The second control point is cp2."
+
+#### curveVia: to: and |curveVia: and: to
+
+This call is related to bezier curve. A Bézier curve consists of two or more
+ control points, which define the size and shape of the line. The first and
+ last points mark the beginning and end of the path, while the intermediate
+ points define the path's curvature.
+
+ More detail on Bezier curve on available at: <https://pomax.github.io/bezierinfo/>
+
+
+#### close the path
+
+- close -> Close the path countour, between initial point, and last reached point.
+
+
+
+
+full example with all familly of path
+
+```language=smalltalk
+|surface|
+surface := AthensCairoSurface extent: 100@100.
+
+surface drawDuring: [ :canvas |
+ surface clear: Color white.
+   canvas setStrokePaint: Color red.
+ canvas paint width: 5.
+   canvas drawShape: (
+  canvas createPath: [ :builder | 
+       builder
+        absolute;
+      moveTo: 25@25;
+      lineTo: 50@37.5;
+   relative;
+      lineTo: 25@(-12.5);
+   absolute;
+   cwArcTo: 75 @ 75 angle: 90 degreesToRadians;
+   curveVia: 50@60 and: 50@90 to: 25@75;
+      close
+  ]
+ ).
+].
+surface asForm 
+```
+
+#### path transformation
+
+A path can be rotated, translated and scaled so you can adapt it to your need.
+For example, you can define a path in your own coordinate system, and then
+scale it to match the size of your surface extent.
+
+can pathTransform loadIdentity.
+can pathTransform translateX: 30 Y: 30.
+can pathTransform rotateByDegrees: 30.
+can pathTransform scaleBy: 1.2.
+
 ## drawing
 
-<<<<<<< HEAD
-### Drawing
-
-Either you set the shape first and then you send the message `draw`, or you send the 
-convenient message `drawShape:` directly with the path to draw as argument
-=======
 Either you set the shape first and then you call **draw**, or you call the
 convenient method **drawShape:** directly with the path to draw as argument
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
+
+## drawing text
+
+font := LogicalFont familyName: 'Arial' pointSize: 10.
+canvas setFont: font.
+canvas setPaint: Color pink.
+canvas pathTransform translateX: 20 Y: 20 + (font getPreciseAscent); scaleBy: 2; rotateByDegrees: 25.
+canvas drawString: 'Hello Athens in Pharo'
+
+
+## drawing using mask
+
+## Mask
+
+Athens mask will paint the canvas. It fills the area with the current fill pattern and blends it by whatever alpha is for that pixel on the mask.
+
+Here, the mask the the Pharo
+
+
+*Note RDV: this API is part of *AthensCairoPatternPaint* but is not in the standard messages of Athens API. I'm wondering if we should include it.*
+
+```smalltalk
+|surface|
+surface := AthensCairoSurface   extent: 400@120.
+
+surface drawDuring: [ :canvas | |paint font|
+
+paint := (PolymorphSystemSettings pharoLogoForm) asAthensPaintOn: canvas.
+
+canvas setPaint: (
+ (LinearGradientPaint from: 0@0  to: 400@120)
+ colorRamp: {  
+  0 -> (Color red alpha: 0.8).
+  1 -> (Color yellow alpha: 0.8).
+ })..
+
+
+canvas drawShape: (0@0 extent: 400@120).
+paint maskOn: canvas.
+].
+
+surface asForm
+```
 
 ### Some example
 
 ```language=smalltalk
-<<<<<<< HEAD
-	surface clear.
-	canvas
-		setPaint:	
-		((LinearGradientPaint from: 0 @ 0 to: self extent)
-			colorRamp:
-				{(0 -> Color white).
-				(1 -> Color black)}).
-	canvas drawShape: (0 @ 0 extent: self extent).
-	canvas
-		setPaint:
-			(canvas surface
-				createLinearGradient:
-					{(0 -> Color blue).
-					(0.5 -> Color white).
-					(1 -> Color red)}
-				start: 0@200
-				stop: 0@400). "change to 200 to get an horizontal gradient"
-			canvas drawShape: (0@200 extent: 300@400).
-			canvas setFont: font.
-			canvas
-				setPaint:
-					(canvas surface
-						createLinearGradient:
-							{(0 -> Color blue).
-							(0.5 -> Color white).
-							(1 -> Color red)}
-						start: 50@0
-						stop: (37*5)@0). "number of caracter * 5"
-			canvas pathTransform
-				translateX: 45 Y: 45 + font getPreciseAscent;
-				scaleBy: 2;
-				rotateByDegrees: 28.
-			canvas
-				drawString: 'Hello Athens in Pharo/Morphic !!!!!!!'.
-=======
 "canvas pathTransform loadIdentity.  font1 getPreciseAscent. font getPreciseHeight"
    surface clear.
    canvas
@@ -454,7 +458,6 @@ convenient method **drawShape:** directly with the path to draw as argument
     rotateByDegrees: 28.
    canvas
     drawString: 'Hello Athens in Pharo/Morphic !!!!!!!'.
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c
 ```
 
 ```language=smalltalk
@@ -497,11 +500,7 @@ renderAthens
    canvas drawShape: circlePath ]
 ```
 
-<<<<<<< HEAD
-                
-=======
 ### practicing Athens drawing
 
 To help you practice your Athens drawing, you can use Athens sketch, migrated from SmalltalkHub that is available at
 [Athens Sketch: https://github.com/rvillemeur/AthensSketch](https://github.com/rvillemeur/AthensSketch)
->>>>>>> d70144378e5805e322f20eddfd78261937e8497c

@@ -84,15 +84,27 @@ Events are defined as subclasses of {{gtClass:name=BlEvent|expanded}}
 
 ## managing events
 
+
+You have 3 players:
+- The element that will receive the events.
+- Events, or announcement in Pharo, subclasses of BlEvent.
+- Event handler. Either BlEventHandler, or by subclassing BlEventListener.
+
+
 ### simple case for BlElement
 
 1. use method: {{gtMethod:name=BlElement>>when:do:}}
 2. anEventClass can be a subclass of {{gtClass:name=BlUIEvent}}
 
+This will use BlEventHandler, and will associate a single block action to an Event.
+
 ### complex case - reusing event handling logic with BlEventListener
 
 1. Subclass {{gtClass:name=BlEventListener}} (which is a subclass of {{gtClass:name=BlBasicEventHandler}} and override all method that match specific event you want to catch, for example {{gtMethod:name=BlEventListener>>clickEvent:}}
 2. Add your listener to your BlElement with method: {{gtMethod:name=BlElement>>addEventHandler:}}
+
+This allow complete flexibility. You can define custom behavior and interact with 
+domain model object in a much cleaner way than when using **when:do:** messages.
 
 ### using event Handler
 
@@ -124,3 +136,31 @@ OSWindowMorphicEventHandler => gère les évènements au niveau OS Windows, qui 
 BlMorphicEventHandler => convertit les évènements Morphic en évenements Bloc
 OSEvent -> Announcement coté Pharo
 BlEvent -> announcement coté Bloc/GToolkit
+
+quand on fait un click, l'evènement descent l'arbre des BlElement, par bond de
+
+
+BlEventDispatcherChain >> dispatchEvent: anEvent
+	"Dispatch a given event through the whole dispatcher chain
+    	...
+        	^ self dispatcher dispatchEvent: anEvent next: aPreviousChain
+
+            BlBubblingEventDispatcher >>  dispatchEvent: anEvent next: aBlEventDispatcherChain
+            	...
+                	anEvent canBePropagated "true par défaut"
+                    		ifTrue: [ aBlEventDispatcherChain dispatchEvent: anEvent ].
+
+                            jusqu'à arriver à:
+
+                            BlBubblingEventDispatcher >> dispatchEvent: anEvent next: aBlEventDispatcherChain
+                            	self owner == anEvent target
+                                		ifTrue: [ self dispatchArrivedEvent: anEvent ]
+                                        		ifFalse: [ self dispatchBubblingEvent: anEvent ].
+
+                                                        Après, il interroge le registre d'évènement
+
+                                                        BlHandlerAnnouncerRegistry >> dispatchEvent: anEvent
+                                                        	"Dispatch a given event to all registered handlers that are interested in it"
+                                                            	self announcer announce: anEvent
+
+                                                                    Puis, à travers divers visiteur entre *BlEventListener*, *BlClickEvent*  et notre objet pour finir par appeler le message qui nous intéresse.

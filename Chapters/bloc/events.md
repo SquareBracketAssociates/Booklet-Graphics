@@ -76,11 +76,24 @@ surface when: BlMouseLeaveEvent do: [ :anEvent |
 
 ## events definition
 
-The announcement framwork is an event notification framework. Compared to "traditional" Smalltalk event systems in this new framework, an event is a real object rather than a symbol. Announcement is the superclass for events that someone might want to announce, such as a button click or an attribute change. Typically you create subclasses for your own events you want to announce.
+The announcement framwork is an event notification framework. Compared to
+"traditional" Smalltalk event systems in this new framework, an event is a real
+object rather than a symbol. Announcement is the superclass for events that
+someone might want to announce, such as a button click or an attribute change.
+Typically you create subclasses for your own events you want to announce.
 
 Events are defined as subclasses of {{gtClass:name=BlEvent|expanded}}
 
- An event someone might want to announce, such as a button click or an attribute change, is defined as a subclass of the abstract superclass Announcement. The subclass can have instance variables for additional information to pass along, such as a timestamp, or mouse coordinates at the time of the event, or the old value of the parameter that has changed. To signal the actual occurrence of an event, the "announcer" creates and configures an instance of an appropriate announcement, then broadcasts that instance. Objects subscribed to receive such broadcasts from the announcer receive a broadcast notification together with the instance. They can talk to the instance to find out any additional information about the event that has occurred.!
+ An event someone might want to announce, such as a button click or an attribute
+ change, is defined as a subclass of the abstract superclass Announcement. The
+ subclass can have instance variables for additional information to pass along,
+ such as a timestamp, or mouse coordinates at the time of the event, or the old
+ value of the parameter that has changed. To signal the actual occurrence of an
+ event, the "announcer" creates and configures an instance of an appropriate
+ announcement, then broadcasts that instance. Objects subscribed to receive such
+ broadcasts from the announcer receive a broadcast notification together with
+ the instance. They can talk to the instance to find out any additional
+ information about the event that has occurred.!
 
 ## managing events
 
@@ -118,49 +131,3 @@ BlEventHandler
  do: [ :anEvent | self inform: 'Click!' ]
 ```
 
-## underlying mecanism
-
-BlEventDispatcher -> announcer qui dispatch event
-BlSpaceEventListener >> handleEvent
-
-BlMouseEnterEvent
-
-double dispatch: Classe de base: BlEvent
-BlMouseEnterEvent >> sendTo: anObject
- anObject mouseEnterEvent: self
-
-BlEventListener >> mouseEnterEvent: anEvent qui peut être spécialisé par une sous-classe.
-
-On pharo side, using OSWindow
-OSWindowMorphicEventHandler => gère les évènements au niveau OS Windows, qui fait le lien avec SDL2.
-BlMorphicEventHandler => convertit les évènements Morphic en évenements Bloc
-OSEvent -> Announcement coté Pharo
-BlEvent -> announcement coté Bloc/GToolkit
-
-quand on fait un click, l'evènement descent l'arbre des BlElement, par bond de
-
-
-BlEventDispatcherChain >> dispatchEvent: anEvent
-	"Dispatch a given event through the whole dispatcher chain
-    	...
-        	^ self dispatcher dispatchEvent: anEvent next: aPreviousChain
-
-            BlBubblingEventDispatcher >>  dispatchEvent: anEvent next: aBlEventDispatcherChain
-            	...
-                	anEvent canBePropagated "true par défaut"
-                    		ifTrue: [ aBlEventDispatcherChain dispatchEvent: anEvent ].
-
-                            jusqu'à arriver à:
-
-                            BlBubblingEventDispatcher >> dispatchEvent: anEvent next: aBlEventDispatcherChain
-                            	self owner == anEvent target
-                                		ifTrue: [ self dispatchArrivedEvent: anEvent ]
-                                        		ifFalse: [ self dispatchBubblingEvent: anEvent ].
-
-                                                        Après, il interroge le registre d'évènement
-
-                                                        BlHandlerAnnouncerRegistry >> dispatchEvent: anEvent
-                                                        	"Dispatch a given event to all registered handlers that are interested in it"
-                                                            	self announcer announce: anEvent
-
-                                                                    Puis, à travers divers visiteur entre *BlEventListener*, *BlClickEvent*  et notre objet pour finir par appeler le message qui nous intéresse.

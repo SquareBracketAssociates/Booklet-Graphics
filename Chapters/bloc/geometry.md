@@ -14,6 +14,26 @@ BlAnnulusSector BlBezierCurve BlCircle BlEllipse BlHistogram BlLine
 BlMultiPolygon BlMultiPolyline BlNormalizedPolygon BlNormalizedPolyline
 BlPolygon BlPolyline BlRectangle BlSigmoid BlSquare BlStadium
 
+*As of 14 feb 2023, many classes does not work:
+KO BlRectangleGeometry 
+KO BlAnnulusSectorGeometry
+KO BlBezierCurveGeometry
+OK BlCircleGeometry
+OK BlEllipseGeometry
+BlHistogramGeometry
+KO BlLineGeometry
+KO BlMultiPolygonGeometry
+KO BlMultiPolylineGeometry
+KO BlNormalizedPolygonGeometry
+KO BlNormalizedPolylineGeometry
+OK BlPolygonGeometry
+OK BlPolylineGeometry
+OK BlRoundedRectangleGeometry
+KO BlSigmoidGeometry
+OK BlSquareGeometry
+KO BlStadiumGeometry
+OK BlTriangleGeometry )*
+
 As you can see, you already have a lot of geometry possibilities. If you were
 used to the Morphic way of doing things, you'll notice a big difference here.
 
@@ -57,3 +77,61 @@ geometry: (BlTriangleGeometry new matchExtent: 50@100; beTop  );
 background: Color orange;
 size: 100@100; openInNewSpace
 ```
+
+### circle geometry
+```smalltalk
+BlElement new
+geometry: (BlCircleGeometry   new matchExtent: 100@50);
+size: 100@50;
+background: Color yellow;
+border: (BlBorder builder
+paint: Color red;
+width: 10;
+build); openInNewSpace
+```
+
+### Ellipse Geometry
+```smalltalk
+BlElement new
+geometry: (BlEllipseGeometry  new matchExtent: 100@50);
+size: 100@50;
+background: Color yellow;
+border: (BlBorder builder
+paint: Color red;
+width: 10;
+build); openInNewSpace
+```
+### Polygon geometry
+```smalltalk
+BlElement new
+geometry: (BlPolygonGeometry vertices: {10@10 . 10@90 . 90@90 . 90@10});
+size: 100@50;
+background: Color yellow;
+border: (BlBorder builder
+paint: Color red;
+width: 10;
+build); openInNewSpace
+```
+### PolyLine geometry
+```smalltalk
+BlElement new
+geometry: (BlPolylineGeometry  vertices: {10@10 . 10@90 . 50@50 . 90@90 . 90@10 . 10@10});
+size: 100@90;
+background: Color yellow;
+border: (BlBorder builder
+paint: Color red;
+width: 10;
+build); openInNewSpace
+```
+### Square geometry
+```smalltalk
+BlElement new
+geometry: (BlSquareGeometry new matchExtent: 70@70);
+size: 100@90;
+background: Color yellow;
+border: (BlBorder builder
+paint: Color red;
+width: 10;
+build); openInNewSpacei
+```
+

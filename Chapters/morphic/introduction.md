@@ -1,5 +1,84 @@
 # Morphic introduction
 
+
+## What is morphic ?
+
+ Morphic is a user interface framework that supports composable graphical
+ objects, along with the machinery required to display and animate these
+ objects, handle user inputs, and manage underlying system resources such as
+ displays, fonts and colormaps. A primary goal of Morphic is to make it easy to
+ construct and edit interactive graphical objects (morphs), both by direct
+ manipulation and from within programs.
+
+
+### Morphs
+
+The central abstraction of morphic is the graphical object or morph (from the
+Greek for "shape" or "form"). A morph has a visual representation that can be
+picked up and moved. Any morph can have component morphs (called submorphs). A
+morph with submorphs is called a composite morph. A composite morph is treated
+as a unit, moving, copying, or deleting a composite morph causes all it's
+submorphs to be moved, copied, or deletet as well.
+
+By convention, all morphs are visible; Morphic does not use invisible structural
+morphs for aggregation. This means that if a composite morph is disassembled,
+all of its component morphs can be seen and manipulated.
+
+
+### Classic Morphic Programming
+
+In "Classic Morphic Programming" style, you define your own subclasses of one or
+more generic Morph classes, and blend them into a working subsystem. Here,
+you're directly extending Morphic, in grand and time-honored Smalltalk manner.
+The fundamental tool here is the Browser: you locate and familiarize yourself
+with particular Morphic classes, and you then subclass the ones that you decide
+are appropriate for your application.
+
+Most current Squeak users will prefer this traditional, mature, analytic,
+browser-based Smalltalk approach,
+
+### Scripting with Players - The "User-Scripting" Style
+
+The second style of programming is rather more informal, more like "scratch
+programming", somewhat comparable to what we Smalltalkers do when we use a
+Workspace to construct and evaluate various lines of code for some exploration
+or calculation in Smalltalk, and also comparable to the kind of scripting done
+by users of systems like HyperCard and HyperStudio, etc.
+
+In the User-Scripting style, you construct surface graphics by directly
+assembling standard Morphic parts -- e.g. Rectangles, Images, Joysticks, etc.,
+by dragging them from a Parts Bin and arranging them as desired, and then you
+add user-defined state and behavior by adding instance variables and writing
+methods for "Players" who represent the individual morphs you wish to script.
+
+The user thus does not directly subclass any particular kind of Morph, but
+rather she *assembles* Morphs and gives them special state and behavior by
+associating them with "Players", which are the fundamental user-scriptable
+object types for User Scripting. (The basic hookup is that every Morph can have,
+optionally, a Player as it's "costumee", and every Player has an associated
+Morph that it "wears" as its "costume". Player itself is a class with lots of
+capability but very little instance state; user-defined Players are all
+implemented as compact,single-instance subclasses of Player.)
+
+### The "Halo"
+
+The "Halo" lets you interact with any object you can touch (i.e., any morph).
+Alt-Click on a morph to bring up its halo.
+
+Successive alt-clicks will transfer the halo to the next morph in the hierarchy. 
+Mouse over the various halo handles and read the help-balloons that will pop up
+to explain what each handle does. The name of the object that currently bears a
+halo will be seen at the base of the halo (and a click on the name will let you
+edit it.)
+
+### main classes (somehow historic ones)
+**Morph**, **BorderedMorph**, **AlignmentMorph**, **WorldMorph**
+
+You can ask a morph for his world by sending the message world. WorldMorph is a
+direct subclass of PasteUpMorph.
+
+[source](https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00030.htm)
+
 • Morph is a superclass of graphical objects; it has methods that let those objects respond to events and display themselves.
 • All morphs have bounds (rectangles on the screen), and can have submorphs.
 • The world (the screen or page) is itself a morph. This gives you the basic model for a scene graph displayed on the screen.

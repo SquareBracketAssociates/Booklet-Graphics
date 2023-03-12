@@ -124,8 +124,24 @@ Gestion de la souris et des évènement.
 
 - handleKeyStroke
 
-Pour combiner les Morph:
+To get World form:
+```
+Smalltalk currentWorld worldState  worldRenderer window renderer form
+```
+Now, you can play a little bit with it:
+```smalltalk
+canvas := FormCanvas on: (Smalltalk currentWorld worldState  worldRenderer window renderer form).
 
+canvas drawRectangle: (10@10 extent: 200@100) color: Color blue borderWidth: 3 borderColor: Color red.
+
+canvas form.
+```
+will display a rectangle in the world. You can see it by moving your playground
+window on the top of it. To make it disappear, simply do:
+`Smalltalk currentWorld fullRepaintNeeded`. Because your rectangle is not part
+of the world as calculated by Morphic, it will disappear.
+
+Pour combiner les Morph:
 - addMorph: and all method in protocol 'submorphs-add/remove'
 - position, dans le protocol geometry
 Note that the geometry protocol is used to position element inside a Morph.
@@ -157,6 +173,7 @@ or by itself, going from 0@0 to bounds extend
 
 Canvas utilisé par défaut: FormCanvas
 Athen dessine dans une image, qu'il envoie ensuite dans le canvas.
+
 
 Morph subclass: #AthensDemoMorph
 

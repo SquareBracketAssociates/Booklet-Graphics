@@ -76,23 +76,48 @@ surface when: BlMouseLeaveEvent do: [ :anEvent |
 
 ## events definition
 
-The announcement framwork is an event notification framework. Compared to "traditional" Smalltalk event systems in this new framework, an event is a real object rather than a symbol. Announcement is the superclass for events that someone might want to announce, such as a button click or an attribute change. Typically you create subclasses for your own events you want to announce.
+The announcement framwork is an event notification framework. Compared to
+"traditional" Smalltalk event systems in this new framework, an event is a real
+object rather than a symbol. Announcement is the superclass for events that
+someone might want to announce, such as a button click or an attribute change.
+Typically you create subclasses for your own events you want to announce.
 
 Events are defined as subclasses of {{gtClass:name=BlEvent|expanded}}
 
- An event someone might want to announce, such as a button click or an attribute change, is defined as a subclass of the abstract superclass Announcement. The subclass can have instance variables for additional information to pass along, such as a timestamp, or mouse coordinates at the time of the event, or the old value of the parameter that has changed. To signal the actual occurrence of an event, the "announcer" creates and configures an instance of an appropriate announcement, then broadcasts that instance. Objects subscribed to receive such broadcasts from the announcer receive a broadcast notification together with the instance. They can talk to the instance to find out any additional information about the event that has occurred.!
+ An event someone might want to announce, such as a button click or an attribute
+ change, is defined as a subclass of the abstract superclass Announcement. The
+ subclass can have instance variables for additional information to pass along,
+ such as a timestamp, or mouse coordinates at the time of the event, or the old
+ value of the parameter that has changed. To signal the actual occurrence of an
+ event, the "announcer" creates and configures an instance of an appropriate
+ announcement, then broadcasts that instance. Objects subscribed to receive such
+ broadcasts from the announcer receive a broadcast notification together with
+ the instance. They can talk to the instance to find out any additional
+ information about the event that has occurred.!
 
 ## managing events
+
+
+You have 3 players:
+- The element that will receive the events.
+- Events, or announcement in Pharo, subclasses of BlEvent.
+- Event handler. Either BlEventHandler, or by subclassing BlEventListener.
+
 
 ### simple case for BlElement
 
 1. use method: {{gtMethod:name=BlElement>>when:do:}}
 2. anEventClass can be a subclass of {{gtClass:name=BlUIEvent}}
 
+This will use BlEventHandler, and will associate a single block action to an Event.
+
 ### complex case - reusing event handling logic with BlEventListener
 
 1. Subclass {{gtClass:name=BlEventListener}} (which is a subclass of {{gtClass:name=BlBasicEventHandler}} and override all method that match specific event you want to catch, for example {{gtMethod:name=BlEventListener>>clickEvent:}}
 2. Add your listener to your BlElement with method: {{gtMethod:name=BlElement>>addEventHandler:}}
+
+This allow complete flexibility. You can define custom behavior and interact with 
+domain model object in a much cleaner way than when using **when:do:** messages.
 
 ### using event Handler
 
@@ -106,21 +131,3 @@ BlEventHandler
  do: [ :anEvent | self inform: 'Click!' ]
 ```
 
-## underlying mecanism
-
-BlEventDispatcher -> announcer qui dispatch event
-BlSpaceEventListener >> handleEvent
-
-BlMouseEnterEvent
-
-double dispatch: Classe de base: BlEvent
-BlMouseEnterEvent >> sendTo: anObject
- anObject mouseEnterEvent: self
-
-BlEventListener >> mouseEnterEvent: anEvent qui peut être spécialisé par une sous-classe.
-
-On pharo side, using OSWindow
-OSWindowMorphicEventHandler => gère les évènements au niveau OS Windows, qui fait le lien avec SDL2.
-BlMorphicEventHandler => convertit les évènements Morphic en évenements Bloc
-OSEvent -> Announcement coté Pharo
-BlEvent -> announcement coté Bloc/GToolkit

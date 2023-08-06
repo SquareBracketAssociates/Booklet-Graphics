@@ -6,6 +6,12 @@ Every Morph now has the capability to layout it's submorphs if it is given a Lay
 
 You should also be able to make your own subclasses of **LayoutPolicy**.
 
+
+proportional layout
+https://discord.com/channels/223421264751099906/585417673438134273/1118499829199413258
+
+ unlike Morphic or Bloc, Spec is not a graphics framework, is a widgets framework, and its layouts are specially conceived to fit this purpose.
+
 ## examples
 
 ### centeredMorph1

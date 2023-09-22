@@ -92,7 +92,9 @@ If you use *exact:*, the size of the element will be static. *size: aPoint* is a
 for `c horizontal exact: aPoint x. c vertical exact: aPoint y`
 
 If you use *matchParent* or *fitContent*, the size of the element will be computed
-dynamically, dependent of its parent or child space.
+dynamically, dependent of its parent or child space. Beware to not mix those properties 
+between parent and child. If your child try to mach its parent, while its parent try to
+fit its child content, the size will be 0 plus the border width
 
 **Attention**, if you define your element using a geometry, you should define as 
 well its *size*. The overall bounds of the element is not deduced from its geometry,

@@ -16,6 +16,76 @@ your drawing is represented. This drawing can happen outside (adding its border
 size to the size of your element), centered, or inside.
 
 
+
+### element geometry
+Geometry will define the shape and the bounds of your element. Each element can 
+have only one geometry. There are several geometry figures available:
+`BlElementGeometry allSubclasses`
+
+
+Exemple of a polygon geometry, showing a star with 5 branches.
+```Smalltalk
+ geometry: (BlPolygonGeometry vertices: {
+						              (50 @ 0).
+						              (65 @ 40).
+						              (100 @ 40).
+						              (75 @ 60).
+						              (85 @ 100).
+						              (50 @ 80).
+						              (15 @ 100).
+						              (25 @ 60).
+						              (0 @ 40).
+						              (35 @ 40) });
+``` 
+
+
+### element border
+
+Short call: `border: (BlBorder paint: Color orange width: 5)`
+
+Long call `BlBorder builder dashed; paint: Color red; width: 3; build`
+`BlBorder builder paint: Color black;width: 10;	dashArray: #(10 20);capSquare;	build`
+
+(BlBorder paint:((BlLinearGradientPaint direction: 1 @ 1)
+						matchExtent: 100 @ 75; from: Color blue to: Color red)
+				width: 5).
+				
+
+	border: (BlBorder builder
+			paint: (borderColor alpha: 0.75) asBlPaint;
+			width: 10;
+			opacity: 0.5;
+			build);
+			
+### element background
+
+quick set-up: `background: (Color red alpha: 0.8);`
+
+background: (Color r: 63 g: 81           b: 181     range: 255);
+background: ((BlLinearGradientPaint direction: 1 @ 1) from: Color red to: Color blue).
+
+background: (BlRadialGradientPaint new
+			stops: { 0 -> Color blue. 1 -> Color red };
+			center: largeExtent // 2;
+			radius: largeExtent min;
+			yourself);
+
+background: ((BlPaintBackground paint: fillColor asBlPaint) opacity: 0.75; yourself);				
+### element effect	
+`BlElementEffect allSubclasses`					   
+
+Exemple: `effect: BlGaussianShadowEffect color: (Color black alpha: 0.5) width: 7 offset: 2@2;`
+
+		
+effect: (BlSimpleShadowEffect
+				color: (Color orange alpha: shadowAlpha)
+				offset: shadowOffset);
+				
+### element oppacity
+`element opacity:`, value between 0 and 1, 0 meaning completely transparent
+You can apply opacity to background, border, or to your hole element.
+
+
 ## element custom Painting
 
 BlElement >> aeFullDrawOn: aCanvas
@@ -36,22 +106,6 @@ BARenderer (BlHostRenderer) >> render: aHostSpace, display on a AeCairoImageSurf
   3. aeDrawGeometryOn:
   
   
-## Event handling & shortcut management.
+## transformation
 
-
-## child Element
-Element can be inspected, but for your application, it'll probably be integrated
-in another element, or in a *space*.
-
-BlUniverse host multiple BLSpace, managed by a BlSpaceManager.
-
-
-BlOSpace and BlSpace is the new "World" for Bloc.
-=> logical representation of a window in Bloc regardless of the current Host in use
-
-rootElement := self defaultRoot return a BlElement
--> we're working on a graph of BlElement.
-
-In the Initialize method:
-host := BlHost pickHost.
-session := Smalltalk session.
+transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];

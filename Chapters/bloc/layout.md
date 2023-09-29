@@ -7,6 +7,26 @@ BlElement can be combined in a tree-like structure. How all these will end up
 showing depend of the graphical statement of each element, and how all of them
 are layout together.
 
+
+
+## child Element
+Element can be inspected, but for your application, it'll probably be integrated
+in another element, or in a *space*.
+
+BlUniverse host multiple BLSpace, managed by a BlSpaceManager.
+
+
+BlOSpace and BlSpace is the new "World" for Bloc.
+=> logical representation of a window in Bloc regardless of the current Host in use
+
+rootElement := self defaultRoot return a BlElement
+-> we're working on a graph of BlElement.
+
+In the Initialize method:
+host := BlHost pickHost.
+session := Smalltalk session.
+
+
 ## Example
 ```smalltalk
 	BlElement new
@@ -44,6 +64,25 @@ It's defined in the parent element and will determined who children are position
 when they are added to it.
 
 If you don't define a layout, it'll default to *BlBasicLayout*
+
+
+### zoom Layout
+```Smalltalk
+icon := BrGlamorousVectorIcons transcript asElement.
+icon constraintsDo: [ :c | c accountTransformation ].
+
+e := BlElement new
+    background: Color white;
+    border: (BlBorder paint: Color gray width: 1);
+    geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+    padding: (BlInsets top: 5 left: 10 bottom: 5 right: 10);
+    layout: (BlZoomableLayout new addLayout: BlFrameLayout new; defaultScale: 2; animationDuration: 1 second);
+    constraintsDo: [ :c |
+        c vertical fitContent.
+        c horizontal fitContent ];
+    addChild: icon;
+    yourself.
+```
 
 ### forcing position
 If your parent don't define any specific layout, it will default to *BlBasicLayout*.
@@ -96,9 +135,9 @@ dynamically, dependent of its parent or child space. Beware to not mix those pro
 between parent and child. If your child try to mach its parent, while its parent try to
 fit its child content, the size will be 0 plus the border width
 
-**Attention**, if you define your element using a geometry, you should define as 
-well its *size*. The overall bounds of the element is not deduced from its geometry,
-and its default will be 50@50, which will certainly be different from your element.
+**Attention**, If you don't use dynamic size, you must define it. 
+The overall bounds of the element is not deduced from its geometry,
+and its default size will be 50@50, which will certainly be different from your element.
 
 ### overriding parent layout.
 You can ignore the layout define by the parent using *ignoreLayout* or override 

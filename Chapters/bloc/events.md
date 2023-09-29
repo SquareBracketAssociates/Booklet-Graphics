@@ -1,3 +1,49 @@
+# Event handling & shortcut management.
+
+## event handling
+```smalltalk
+BlElement new 
+		background: Color white; 
+		border: (BlBorder paint: Color black width: 2); 
+		size: 300 @ 200;
+		when: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
+		when: BlMouseLeaveEvent 	do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
+		openInNewSpace 
+```
+
+Other syntax: `addEventHandlerOn: BlMouseOverEvent   do: [ :e | a background: Color lightGray ];`
+
+
+## drag&drop
+"Draggable card that says 'Rainbow!'"
+	a := BlElement new
+		     geometry: BlRectangleGeometry new;
+		     size: 65 @ 24;
+		     background: Color white;
+		     border: stroke;
+		     addEventHandlerOn: BlMouseOverEvent
+		     do: [ :e | a background: Color lightGray ];
+		     addEventHandlerOn: BlMouseOutEvent
+		     do: [ :e | a background: Color white ];
+		     addEventHandler: BlPullHandler new disallowOutOfBounds;
+		     addChild: (BlTextElement new
+				      position: 5 @ 5;
+				      text: ('Rainbow!' asRopedText attributes:
+							       { (BlTextForegroundAttribute paint: Color black) })).
+								   
+addEventHandler: BlPullHandler new disallowOutOfBounds;
+
+## keyboard
+addShortcut: (BlShortcutWithAction new
+			combination: (BlKeyCombination builder shift; meta; key: BlKeyboardKey arrowLeft; build);
+			action: [ :anEvent :aShortcut | self inform: 'Triggered ', aShortcut combination asString ]);
+			
+
+
+
+
+
+
 # introductive example
 
 ```smalltalk

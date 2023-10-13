@@ -19,7 +19,7 @@ The bits representing the bitmap pixels are packed in rows. The size of each row
 
 ![bitmap smile](Rgb-raster-image.png)
 
-- The coordinates of a Form start from the top-left corner much like most graphic system out there (why ? Because Western language are mostly written left to right, top to bottom, and initial text display follow this convention, instead of classic cartesian coordinate). Forms are indexed starting at 0 instead of 1;  thus, the top-left pixel of a Form has coordinates 0@0.
+- The coordinates of a Form start from the top-left corner much like most graphic system out there (why ? Because Western language are mostly written left to right, top to bottom, and initial text display follow this convention, instead of classic Cartesian coordinate). Forms are indexed starting at 0 instead of 1; thus, the top-left pixel of a Form has coordinates 0@0.
 
 The actual bits are held in a Bitmap, whose internal structure is different at each depth. Class Color allows you to deal with colors without knowing how they are actually encoded inside a Bitmap.
 

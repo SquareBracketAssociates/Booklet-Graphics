@@ -32,4 +32,12 @@ your graphical interface.
 
 
 
+# Text handling
 
+(BlTextElement new text: 'hello' asRopedText)
+
+
+BlTextElement new
+				      position: 5 @ 5;
+				      text: ('Rainbow!' asRopedText attributes:
+							       { (BlTextForegroundAttribute paint: Color black) 

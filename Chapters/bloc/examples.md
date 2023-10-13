@@ -29,7 +29,7 @@ e := BlElement new
 
 ## iconScaleToFitElement
 
-```smalltalk
+```lang=smalltalk
 |icon scaledIcon e|
 icon := BrGlamorousVectorIcons transcript asElement.
 scaledIcon := icon asScalableElement

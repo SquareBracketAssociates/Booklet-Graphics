@@ -1,14 +1,15 @@
 # Event handling & shortcut management.
 
 ## event handling
+
 ```smalltalk
 BlElement new 
-		background: Color white; 
-		border: (BlBorder paint: Color black width: 2); 
-		size: 300 @ 200;
-		when: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
-		when: BlMouseLeaveEvent 	do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
-		openInNewSpace 
+  background: Color white; 
+  border: (BlBorder paint: Color black width: 2); 
+  size: 300 @ 200;
+  when: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
+  when: BlMouseLeaveEvent 	do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
+  openInNewSpace 
 ```
 
 Other syntax: `addEventHandlerOn: BlMouseOverEvent   do: [ :e | a background: Color lightGray ];`

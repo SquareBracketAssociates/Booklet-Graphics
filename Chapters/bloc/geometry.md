@@ -4,15 +4,6 @@ Geometry define the shape of your BlElement. You already have many possibilities
 defined as subclasses of **BlElementGeometry**
 
 *BlElementGeometry allSubclasses* shows:
-BlElementVectorGeometry BlEmptyGeometry BlRectangleGeometry
-BlAnnulusSectorGeometry BlBezierCurveGeometry BlCircleGeometry BlEllipseGeometry
-BlHistogramGeometry BlLineGeometry BlMultiPolygonGeometry
-BlMultiPolylineGeometry BlNormalizedPolygonGeometry BlNormalizedPolylineGeometry
-BlPolygonGeometry BlPolylineGeometry BlRoundedRectangleGeometry
-BlSigmoidGeometry BlSquareGeometry BlStadiumGeometry BlTriangleGeometry
-BlAnnulusSector BlBezierCurve BlCircle BlEllipse BlHistogram BlLine
-BlMultiPolygon BlMultiPolyline BlNormalizedPolygon BlNormalizedPolyline
-BlPolygon BlPolyline BlRectangle BlSigmoid BlSquare BlStadium
 
 *As of 14 feb 2023, many classes does not work:
 KO BlRectangleGeometry
@@ -57,6 +48,17 @@ outskirts: (BlOutskirts centered);
 size: 100@100.
 ```
 
+### circle geometry
+
+```smalltalk
+BlElement new
+geometry: (BlCircleGeometry   new matchExtent: 100@50);
+size: 100@50;
+background: Color yellow;
+border: (BlBorder builder paint: Color red; width: 10; build); 
+openInNewSpace
+```
+
 ## other geometry: rectangle, square, triangle
 
 ### rectangle geometry
@@ -79,17 +81,6 @@ background: Color orange;
 size: 100@100; openInNewSpace
 ```
 
-### circle geometry
-
-```smalltalk
-BlElement new
-geometry: (BlCircleGeometry   new matchExtent: 100@50);
-size: 100@50;
-background: Color yellow;
-border: (BlBorder builder paint: Color red; width: 10; build); 
-openInNewSpace
-```
-
 ### Ellipse Geometry
 
 ```smalltalk
@@ -97,10 +88,8 @@ BlElement new
 geometry: (BlEllipseGeometry  new matchExtent: 100@50);
 size: 100@50;
 background: Color yellow;
-border: (BlBorder builder
-paint: Color red;
-width: 10;
-build); openInNewSpace
+border: (BlBorder builder paint: Color red; width: 10; build); 
+openInNewSpace
 ```
 
 ### Polygon geometry
@@ -110,10 +99,8 @@ BlElement new
 geometry: (BlPolygonGeometry vertices: {10@10 . 10@90 . 90@90 . 90@10});
 size: 100@50;
 background: Color yellow;
-border: (BlBorder builder
-paint: Color red;
-width: 10;
-build); openInNewSpace
+border: (BlBorder builder paint: Color red; width: 10; build); 
+openInNewSpace
 ```
 
 ### PolyLine geometry
@@ -123,10 +110,8 @@ BlElement new
 geometry: (BlPolylineGeometry  vertices: {10@10 . 10@90 . 50@50 . 90@90 . 90@10 . 10@10});
 size: 100@90;
 background: Color yellow;
-border: (BlBorder builder
-paint: Color red;
-width: 10;
-build); openInNewSpace
+border: (BlBorder builder paint: Color red; width: 10; build); 
+openInNewSpace
 ```
 
 ### Square geometry
@@ -135,9 +120,7 @@ build); openInNewSpace
 BlElement new
 geometry: (BlSquareGeometry new matchExtent: 70@70);
 size: 100@90;
-background: Color yellow;
-border: (BlBorder builder
-paint: Color red;
-width: 10;
-build); openInNewSpacei
+background: Color yellow; 
+border: (BlBorder builder paint: Color red; width: 10; build); 
+openInNewSpace
 ```

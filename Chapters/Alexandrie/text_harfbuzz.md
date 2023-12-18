@@ -62,5 +62,92 @@ The shaping process is dependent on the input string, the active font, the scrip
 
 https://harfbuzz.github.io/what-harfbuzz-doesnt-do.html
 
+## concept
+
+1. Character set: maps numbers to abstract characters.
+2. Character: An abstraction of the representation of a character in the given medium. Since we're talking graphic design, then usually we're talking about some kind of base image. In a different medium, such as audio, a character would have a sound.
+3. Font Type: A specific set of visual conventions that are used for all related glyphs in the given font.
+4. Font: Maps abstract characters to glyphs that adhere to the font type.
+5. Glyph: A pictorial representation of a character.
+So a font is usually a collection of glyphs
+
+https://graphicdesign.stackexchange.com/questions/45162/what-is-the-difference-between-glyph-and-font
+
+## global steps with Harfbuzz
+
+This involve 3 differents tools that needs to work together:
+
+- Freetype font, which provide the collection of representation for different characters. 
+- Harfbuffer, which will provide shaped glyphs for text provided, according to selected font
+- Cairo context which will render glyphs.
+
+1. Create a Harfbuzz buffer with text and description of text option. This can be independent of font specification.
+2. Select a font library and the face of the font
+3. Specify font options
+4. Scale font to desired display size, and make Cairo context aware of it.
+5. Ask Harfbuzz to create the glyphs of your text, dependent of the font selected and their size.
+6. Ask Cairo context to display the glyphs at specified location.
+
+Example
+
+```smalltalk
+    | surface context scaledFont fontHeight freetypeFace fontOptions text buffer fontLibrary text|
+        fontHeight := 22.
+        text := 'a := A->B->>C <= c|=>d~~>e.'.
+
+        surface := AeCairoImageSurface
+                    extent: 1000 @ (fontHeight * 4)
+                    format: AeCairoSurfaceFormat argb32.
+        context := surface newContext.
+
+    "font selection, option and scale"
+        fontLibrary := AeFTLibrary newInitialized.
+        freetypeFace := AeCascadiaCodeDownloadedFont new
+                            downloadDirectory:
+                                AeFilesystemResources downloadedFontsDirectory;
+                            ensureDownloaded;
+                            firstFaceUsing: AeFTLibrary newInitialized.
+            
+        fontOptions := AeCairoFontOptions new
+                        antialias: AeCairoAntialias fast;
+                        hintMetrics: AeCairoHintMetrics on;
+                        hintStyle: AeCairoHintStyle slight;
+                        subpixelOrder: AeCairoSubpixelOrder default.
 
 
+        scaledFont := AeCairoScaledFont
+                        fontFace:
+                        (AeCairoFreetypeFontFace newForFace: freetypeFace)
+                        fontMatrix:
+                        (AeCairoMatrix newScalingByX: fontHeight y: fontHeight)
+                        userToDeviceMatrix: AeCairoMatrix newIdentity
+                        options: fontOptions.
+
+    "create harfbuzz buffer for your text"
+        buffer := AeHbBuffer new
+                    direction: AeHbDirection leftToRight;
+                    script: AeHbScript latin;
+                    language: AeHbLanguage en;
+                    clusterLevel: AeHbBufferClusterLevel recommended;
+                    flags: AeHbBufferFlags beginningOrEndingOfText;
+                    addString: text.
+
+    "context set-up"
+        context
+            scaledFont: scaledFont;
+            translateBy: fontHeight / 2 @ 0;
+            sourceColor: Color white;
+            paint.
+
+    "Draw text withOUT Harfbuzz:"
+        context translateBy: 0 @ (fontHeight * 1.1).
+        context sourceColor: Color red muchDarker.
+        context showGlyphs: (scaledFont glyphArrayForString: text).
+
+    "draw text formatted by harfbuzz."
+        context translateBy: 0 @ (fontHeight * 1.1).
+        context sourceColor: Color green muchDarker.
+        context showGlyphs: (buffer cairoGlyphArrayForFace: freetypeFace size: fontHeight).
+
+    surface asForm
+```

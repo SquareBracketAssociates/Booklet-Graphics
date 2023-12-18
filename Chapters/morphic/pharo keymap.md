@@ -105,6 +105,9 @@ you need to add following method to class side of command:
 
 [Understading class annotation](https://github.com/pharo-ide/ClassAnnotation)
 
+Many commands for calypso are defined in package *SystemCommands-**.
+ClassAnnotation mechanism is then used to attach them to specific shortcut.
+
 ### example
 
     ClyInspectSelectionCommand class >> browserShortcutActivation
@@ -118,6 +121,10 @@ you need to add following method to class side of command:
     ClyRemoveClassGroupCommand class >> fullBrowserShortcutActivation
         <classAnnotation>
         ^CmdShortcutActivation removalFor: ClyFullBrowserClassGroupContext
+
+    SycRenamePackageCommand class >> fullBrowserShortcutActivation
+        <classAnnotation>
+        ^CmdShortcutActivation renamingFor: ClyFullBrowserPackageContext
 
 If you want to execute command from context menu you need another activator:
 

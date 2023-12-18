@@ -15,7 +15,8 @@ in another element, or in a *space*.
 BlUniverse host multiple BLSpace, managed by a BlSpaceManager.
 
 BlOSpace and BlSpace is the new "World" for Bloc.
-=> logical representation of a window in Bloc regardless of the current Host in use
+=> logical representation of a window in Bloc regardless of the current Host in
+use
 
 rootElement := self defaultRoot return a BlElement
 -> we're working on a graph of BlElement.
@@ -114,8 +115,8 @@ layout has a dedicated constraint object, an instance of
 Each type of layout can further define its own specific constraints by creating
 a subclass of gtClass:BlLayoutConstraints.
 
-As your element will always be the child of another element (including space root),
-layout constraint can always be defined.
+As your element will always be the child of another element (including space
+root), layout constraint can always be defined.
 
 Constraints allows you to clearly defined the size and the position of your
 element withing its parent.
@@ -123,23 +124,26 @@ element withing its parent.
 Constraints are associated with the layout used by parent and follow by default
 *BlLayoutCommonConstraints*.
 
-Ex: Parent define *BlLinearLayout*, children constraints are defined by *BlLayoutConstraints*
+Ex: Parent define *BlLinearLayout*, children constraints are defined by
+*BlLayoutConstraints*
 
 ### static or dynamic size
 
 Size can be determined **statically** or **dynamically**
 
-If you use *exact:*, the size of the element will be static. *size: aPoint* is a synonym
-for `c horizontal exact: aPoint x. c vertical exact: aPoint y`
+If you use *exact:*, the size of the element will be static. *size: aPoint* is a
+synonym for `c horizontal exact: aPoint x. c vertical exact: aPoint y`
 
-If you use *matchParent* or *fitContent*, the size of the element will be computed
-dynamically, dependent of its parent or child space. Beware to not mix those properties
-between parent and child. If your child try to mach its parent, while its parent try to
-fit its child content, the size will be 0 plus the border width
+If you use *matchParent* or *fitContent*, the size of the element will be
+computed dynamically, dependent of its parent or child space. Beware to not mix
+those properties between parent and child. If your child try to mach its parent,
+while its parent try to fit its child content, the size will be 0 plus the
+border width
 
 **Attention**, If you don't use dynamic size, you must define it.
 The overall bounds of the element is not deduced from its geometry,
-and its default size will be 50@50, which will certainly be different from your element.
+and its default size will be 50@50, which will certainly be different from your
+element.
 
 ### overriding parent layout
 

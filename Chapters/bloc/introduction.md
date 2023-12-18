@@ -1,9 +1,9 @@
 # Bloc - base element for GUI
 
-**Bloc** is the new graphical framework developped for Pharo. Initially 
+**Bloc** is the new graphical framework developped for Pharo. Initially
 developped by Pharo team, it has been extended by Feenk team for GToolkit. Their
 work is now being integrated back into **Pharo**. It should ultimately replace
-the aging **Morphic** graphical framework, 
+the aging **Morphic** graphical framework,
 
 To install it in Pharo 11, simply type in the playground
 
@@ -22,12 +22,12 @@ Contrary to Morph, which relied a lot on inheritance to customize graphical
 element, Bloc is designed to be composable. Basic bloc element can be
 customized, and added to each other, to create high level component.
 
-Bloc introduce new concept in the user interface. Previously, Pharo users 
+Bloc introduce new concept in the user interface. Previously, Pharo users
 where used to talk about the **World** or **Morphic World**, which represent
 the environment where we spend most of our time. With Bloc, we now deal with
-**BlUniverse** and **BlSpace**. **BlSpace** is an operating system window in 
+**BlUniverse** and **BlSpace**. **BlSpace** is an operating system window in
 which the Pharo systems is executed. If you have more than one BlSpace opened,
-they will be listed as part of BlUniverse - a list of all available BlSpace in 
+they will be listed as part of BlUniverse - a list of all available BlSpace in
 your current Pharo session.
 
 Let's create our first Bloc component. The root of all graphical element is
@@ -43,14 +43,14 @@ background: Color blue;
 openInNewSpace
 ```
 
-Once executed, a new window should appear on your desktop, with a white 
+Once executed, a new window should appear on your desktop, with a white
 background, and a blue rectangle inside. Let's look at it in more detail.
 
 We first create a new BlElement. It's a blank element, and if you try to display
-it, you won't see anything. We then define its geometry. The shape of your 
+it, you won't see anything. We then define its geometry. The shape of your
 element, in Bloc, is defined by its geometry. It's a simple rectangle in our
-example, but it can be much more complicated. We'll look at geometry in more 
-detail later. We then define its size, its color, and then ask to open it in 
+example, but it can be much more complicated. We'll look at geometry in more
+detail later. We then define its size, its color, and then ask to open it in
 a new space. As of this writing, it's not possible to open in Morphic World.
 
 

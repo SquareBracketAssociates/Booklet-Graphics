@@ -292,7 +292,7 @@ to your path.
 
 A full example with all color possibilities:  
 
-![fill example](figures/fillpaint.png)
+![color paint](figures/fillPaint.png)
 
 ## transformation
 

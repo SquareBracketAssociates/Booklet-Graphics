@@ -51,6 +51,34 @@ FreeType is a very low-level rendering engine. All it knows how to do is render 
 
 Arranging glyphs into words and lines is best left to a 2D graphics rendering library like Cairo. Cairo is able to do some primitive typesetting, including very basic translation of Unicode character codes to glyphs; for a more general solution, Pharo can use HarfBuzz to implement the full OpenType rules for glyph substitution and placement (Cairo still handles the actual text drawing).
 
+### font selection code
+
+```smalltalk
+fontLibrary := AeFTLibrary newInitialized.
+freetypeFace := AeCascadiaCodeDownloadedFont new
+                    downloadDirectory:
+                        AeFilesystemResources downloadedFontsDirectory;
+                    ensureDownloaded;
+                    firstFaceUsing: AeFTLibrary newInitialized.
+
+
+
+fontOptions := AeCairoFontOptions new
+                    antialias: AeCairoAntialias fast;
+                    hintMetrics: AeCairoHintMetrics on;
+                    hintStyle: AeCairoHintStyle slight;
+                    subpixelOrder: AeCairoSubpixelOrder default.
+
+
+scaledFont := AeCairoScaledFont
+                    fontFace:
+                    (AeCairoFreetypeFontFace newForFace: freetypeFace)
+                    fontMatrix:
+                    (AeCairoMatrix newScalingByX: fontHeight y: fontHeight)
+                    userToDeviceMatrix: AeCairoMatrix newIdentity
+                    options: fontOptions.
+```
+
 ## harfbuzz
 https://harfbuzz.github.io/
 
@@ -59,6 +87,19 @@ HarfBuzz is a text shaping library. Using the HarfBuzz library allows programs t
  Text shaping is the process of translating a string of character codes (such as Unicode codepoints) into a properly arranged sequence of glyphs that can be rendered onto a screen or into final output form for inclusion in a document.
 
 The shaping process is dependent on the input string, the active font, the script (or writing system) that the string is in, and the language that the string is in. 
+
+### create harfbuzz buffer for your text
+
+```smalltalk
+buffer := AeHbBuffer new
+            direction: AeHbDirection leftToRight;
+            script: AeHbScript latin;
+            language: AeHbLanguage en;
+            clusterLevel: AeHbBufferClusterLevel recommended;
+            flags: AeHbBufferFlags beginningOrEndingOfText;
+            addString: text.
+```
+
 
 https://harfbuzz.github.io/what-harfbuzz-doesnt-do.html
 
@@ -91,63 +132,150 @@ This involve 3 differents tools that needs to work together:
 Example
 
 ```smalltalk
-    | surface context scaledFont fontHeight freetypeFace fontOptions text buffer fontLibrary text|
-        fontHeight := 22.
-        text := 'a := A->B->>C <= c|=>d~~>e.'.
+| surface context scaledFont fontHeight freetypeFace fontOptions text buffer fontLibrary text|
+    fontHeight := 22.
+    text := 'a := A->B->>C <= c|=>d~~>e.'.
 
-        surface := AeCairoImageSurface
-                    extent: 1000 @ (fontHeight * 4)
-                    format: AeCairoSurfaceFormat argb32.
-        context := surface newContext.
+    surface := AeCairoImageSurface
+                extent: 1000 @ (fontHeight * 4)
+                format: AeCairoSurfaceFormat argb32.
+    context := surface newContext.
 
-    "font selection, option and scale"
-        fontLibrary := AeFTLibrary newInitialized.
-        freetypeFace := AeCascadiaCodeDownloadedFont new
-                            downloadDirectory:
-                                AeFilesystemResources downloadedFontsDirectory;
-                            ensureDownloaded;
-                            firstFaceUsing: AeFTLibrary newInitialized.
-            
-        fontOptions := AeCairoFontOptions new
-                        antialias: AeCairoAntialias fast;
-                        hintMetrics: AeCairoHintMetrics on;
-                        hintStyle: AeCairoHintStyle slight;
-                        subpixelOrder: AeCairoSubpixelOrder default.
+"font selection, option and scale"
+    fontLibrary := AeFTLibrary newInitialized.
+    freetypeFace := AeCascadiaCodeDownloadedFont new
+                        downloadDirectory:
+                            AeFilesystemResources downloadedFontsDirectory;
+                        ensureDownloaded;
+                        firstFaceUsing: AeFTLibrary newInitialized.
+        
+    fontOptions := AeCairoFontOptions new
+                    antialias: AeCairoAntialias fast;
+                    hintMetrics: AeCairoHintMetrics on;
+                    hintStyle: AeCairoHintStyle slight;
+                    subpixelOrder: AeCairoSubpixelOrder default.
 
 
-        scaledFont := AeCairoScaledFont
-                        fontFace:
-                        (AeCairoFreetypeFontFace newForFace: freetypeFace)
-                        fontMatrix:
-                        (AeCairoMatrix newScalingByX: fontHeight y: fontHeight)
-                        userToDeviceMatrix: AeCairoMatrix newIdentity
-                        options: fontOptions.
+    scaledFont := AeCairoScaledFont
+                    fontFace:
+                    (AeCairoFreetypeFontFace newForFace: freetypeFace)
+                    fontMatrix:
+                    (AeCairoMatrix newScalingByX: fontHeight y: fontHeight)
+                    userToDeviceMatrix: AeCairoMatrix newIdentity
+                    options: fontOptions.
 
-    "create harfbuzz buffer for your text"
-        buffer := AeHbBuffer new
-                    direction: AeHbDirection leftToRight;
-                    script: AeHbScript latin;
-                    language: AeHbLanguage en;
-                    clusterLevel: AeHbBufferClusterLevel recommended;
-                    flags: AeHbBufferFlags beginningOrEndingOfText;
-                    addString: text.
+"create harfbuzz buffer for your text"
+    buffer := AeHbBuffer new
+                direction: AeHbDirection leftToRight;
+                script: AeHbScript latin;
+                language: AeHbLanguage en;
+                clusterLevel: AeHbBufferClusterLevel recommended;
+                flags: AeHbBufferFlags beginningOrEndingOfText;
+                addString: text.
 
-    "context set-up"
-        context
-            scaledFont: scaledFont;
-            translateBy: fontHeight / 2 @ 0;
-            sourceColor: Color white;
-            paint.
+"context set-up"
+    context
+        scaledFont: scaledFont;
+        translateBy: fontHeight / 2 @ 0;
+        sourceColor: Color white;
+        paint.
 
-    "Draw text withOUT Harfbuzz:"
-        context translateBy: 0 @ (fontHeight * 1.1).
-        context sourceColor: Color red muchDarker.
-        context showGlyphs: (scaledFont glyphArrayForString: text).
+"Draw text withOUT Harfbuzz:"
+    context translateBy: 0 @ (fontHeight * 1.1).
+    context sourceColor: Color red muchDarker.
+    context showGlyphs: (scaledFont glyphArrayForString: text).
 
-    "draw text formatted by harfbuzz."
-        context translateBy: 0 @ (fontHeight * 1.1).
-        context sourceColor: Color green muchDarker.
-        context showGlyphs: (buffer cairoGlyphArrayForFace: freetypeFace size: fontHeight).
+"draw text formatted by harfbuzz."
+    context translateBy: 0 @ (fontHeight * 1.1).
+    context sourceColor: Color green muchDarker.
+    context showGlyphs: (buffer cairoGlyphArrayForFace: freetypeFace size: fontHeight).
 
-    surface asForm
+surface asForm
 ```
+
+## draw glyphs at once or append glyphs path
+
+Help to differentiate between fill and stroke color
+
+```smalltalk
+| surface context scaledFont fontHeight freetypeFace fontOptions text fontLibrary  |
+text := 'a := A->B->>C <= c|=>d~~>e.'.
+fontHeight := 22.
+
+surface := AeCairoImageSurface
+                extent: 1000 @ (fontHeight * 4)
+                format: AeCairoSurfaceFormat argb32.
+context := surface newContext.
+
+context
+    sourceColor: Color white;
+    paint.
+
+fontLibrary := AeFTLibrary newInitialized.
+freetypeFace := AeCascadiaCodeDownloadedFont new
+                    downloadDirectory:
+                        AeFilesystemResources downloadedFontsDirectory;
+                    ensureDownloaded;
+                    firstFaceUsing: AeFTLibrary newInitialized.
+
+
+
+fontOptions := AeCairoFontOptions new
+                    antialias: AeCairoAntialias fast;
+                    hintMetrics: AeCairoHintMetrics on;
+                    hintStyle: AeCairoHintStyle slight;
+                    subpixelOrder: AeCairoSubpixelOrder default.
+
+
+scaledFont := AeCairoScaledFont
+                    fontFace:
+                    (AeCairoFreetypeFontFace newForFace: freetypeFace)
+                    fontMatrix:
+                    (AeCairoMatrix newScalingByX: fontHeight y: fontHeight)
+                    userToDeviceMatrix: AeCairoMatrix newIdentity
+                    options: fontOptions.
+context scaledFont: scaledFont.
+"Margin"
+context translateBy: fontHeight / 2 @ 0.
+
+"full stroke and fill paint"
+context translateBy: 0 @ (fontHeight * 1.1);
+    sourceColor: Color red muchDarker;
+    showGlyphs: (scaledFont glyphArrayForString: text).
+
+"different paint between fill and stroke"
+context
+    translateBy: 0 @ (fontHeight * 1.5);
+    appendGlyphsPath: (scaledFont glyphArrayForString: text);
+    sourceColor: (Color blue   alpha: 0.7);
+    strokePreserve;
+    source: (AeCairoLinearGradientPattern
+                from: 0 @ 0
+                to: 100 @ 100
+                addStopsFrom: {
+                        (0 -> Color white).
+                        (1 -> Color darkGray ) });
+    fill.
+
+^ surface asForm
+```
+
+
+### Show Text / Glyphs
+
+The cairo_show_text() operation forms the mask from text. It may be easier to
+think of cairo_show_text() as a shortcut for creating a path with
+cairo_text_path()
+and then using cairo_fill() to transfer it. Be aware cairo_show_text() caches
+glyphs so is much more efficient if you work with a lot of text.
+
+cairo_text_extents_t te;
+cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+cairo_select_font_face (cr, "Georgia",
+CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+cairo_set_font_size (cr, 1.2);
+cairo_text_extents (cr, "a", &te);
+cairo_move_to (cr, 0.5 - te.width / 2 - te.x_bearing,
+0.5 - te.height / 2 - te.y_bearing);
+cairo_show_text (cr, "a");
+

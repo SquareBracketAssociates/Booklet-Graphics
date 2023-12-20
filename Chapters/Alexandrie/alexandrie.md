@@ -239,6 +239,8 @@ context
     stroke.
 ```
 
+![stroke and fill](figures/strokAndFill.png)
+
 ### color
 
 You can select different color style to paint your path:

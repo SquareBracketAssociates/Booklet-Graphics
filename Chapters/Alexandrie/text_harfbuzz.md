@@ -64,9 +64,9 @@ you don't need advanced shaping feature, Pharo can use the primitive directly
 available in the Cairo library
 
 Alexandrie then do the rendering of the glyphs on surface destination. You can
-choose to use Harfbuzz or not. You can somehow view Glyphs as a vectorial 
-representation of the characters you want to display. Being vectorial, you have 
-2 API available: 
+choose to use Harfbuzz or not. You can somehow view Glyphs as a vectorial
+representation of the characters you want to display. Being vectorial, you have
+2 API available:
 
 - **showGlyphs:** Generate the shape of glyphs directly.
 - **appendGlyphsPath:** Append to context path, giving you the option to customize fill and stroke color rendering.

@@ -23,32 +23,128 @@ You can set token directly on element:
 
 "skin managing need a list of unique writeable properties."
 Defined in *ToStyleSheet class >> defaultWritablePropertyList*
-ToFeatureProperty name: #mouseCursor
 
-Full list
-          (ToFeatureProperty name: #mouseCursor).
-          (ToFeatureProperty name: #background).
-          (ToFeatureProperty name: #geometry).
-          (ToFeatureProperty name: #border).
-          (ToFeatureProperty name: #size).
-          (ToFeatureProperty name: #height).
-          (ToFeatureProperty name: #width).
-          (ToFeatureProperty name: #margin).
-          (ToFeatureProperty name: #padding).
-          (ToFeatureProperty name: #icon).
-          (ToFeatureProperty name: #label).
-          (ToFeatureProperty name: #justified).
+These properties can read or write values. Writing mean changing a property
+on a BlElement.
+
+(ToFeatureProperty name: #background).
+(ToFeatureProperty name: #geometry).
+(ToFeatureProperty name: #border).
+(ToFeatureProperty name: #size).
+
+ToFeatureProperty links to an object feature accessor (getter/setter).
 
 ToPseudoProperty name: #'layout-direction'
                reader: [ :e | e layout direction ]
                writer: [ :e :v | e layout direction: v ]
 
-These properties can read or write values. Writing mean changing a property
-on a BlElement.
+*writer receive and object and a property value*
+*reader receive an object and return a value*
+
+different type of properties and usage
+
+```smalltalk
+self select: (self id: #'Space root') style: [
+self
+    write: (self property: #background)
+    with: [ :e | e tokenValueNamed: #'background-color' ] ]
+```
+
+ is linked with
+ `(ToTokenProperty name: #'background-color' value: Color white).`
+
+ and with `(ToFeatureProperty name: #background).`
+
+```smalltalk
+ToButton asTypeSelector style:[ :sr |
+
+"Background"
+sr
+    when: ToInstallLookEvent
+    write: (self property: #'background-color')
+    with: [ :e | e tokenValueNamed: #'color-bg-container' ].
+sr
+    when: ToDisabledLookEvent
+    write: (self property: #'background-color')
+    with: [ :e | e tokenValueNamed: #'color-bg-container-disabled' ].
+ ]
+```
+
+is linked with
+
+```smalltalk
+(ToPseudoProperty name: #'background-color'
+        reader: [ :e | e background paint ifNotNil: [ :f | f color ] ifNil:[ Color transparent ] ]
+        writer: [ :e :v | e background: v ]).
+```
+
+and
+`ToTokenProperty name: #'color-bg-container' value: (Color fromHexString: '#ffffff')`
+`ToTokenProperty name: #'color-bg-container-disabled' value: (Color black alpha: 0.04)`
+
+or
+
+```smalltalk
+self
+    when: ToDisabledLookEvent
+    write: (self property: #'text-attributes-with-builder')
+    with: [ :e |
+        e textAttributesBuilder foreground:
+            (e tokenValueNamed: #'color-text-disabled') ].
+
+self select: #H1 asStampSelector style: [
+    self
+        supplement: (self property: #'text-attributes-with-builder')
+        with: [ :e |
+            e textAttributesBuilder
+                defaultFontSize: (e tokenValueNamed: #'font-size-H1');
+                lineSpacing: (e tokenValueNamed: #'line-height-H1');
+                yourself ] ].
+```
+
+property definition
+
+```smalltalk
+(ToPseudoProperty new name: #'text-attributes-with-builder';
+    writer: [ :e :v |
+        e text attributes: v attributes.
+        e textChanged ]).
+```
+
+Other example
+
+```smalltalk
+self
+    select: (#'labeled-icon' asStampSelector
+                withParent: #button asStampSelector
+                atDepth: 1)
+    style: [
+        self
+            write: (self property: #layout)
+            with: [ :e | BlLinearLayout horizontal].
+
+        self write: (self property: #'layout-constraints') with: [ :e |
+            [ :c |
+            c horizontal fitContent.
+            c vertical fitContent.
+            c linear vertical alignCenter.
+            c linear horizontal alignCenter ] ].
+    ]
+```
+
+properties definition
+
+```smalltalk
+(ToFeatureProperty name: #layout).
+
+(ToPseudoProperty name: #'layout-constraints'
+    reader: [ :e | e constraints ]
+    writer: [ :e :v | v value: e constraints ])
+```
 
 ## Style sheet definition
 
-Style are defined through call to *select:style:* with multiple. 
+Style are defined through call to *select:style:* with multiple.
 
 select let you select specific element. You can look at various attritute
 selection below. You can even refine your selection through parent or child,

@@ -151,10 +151,7 @@ context
     moveTo: 25 @ 25;
     lineTo: 50 @ 37.75;
     relativeLineTo: 25 @ -12.5;
-    arcCenter: 75 @ 50
-    radius: 20
-    startAngle: 0
-    endAngle: 135 degreesToRadians;
+    arcCenter: 75 @ 50 radius: 20 startAngle: 0 endAngle: 135 degreesToRadians;
     curveVia: 50 @ 60 via: 50 @ 90 to: 25 @ 75;
     closePath;
     sourceColor: Color red;

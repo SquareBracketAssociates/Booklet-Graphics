@@ -29,3 +29,36 @@ the form is displayed with its origin at the specified point plus the offset; i.
 The coordinates of a Form start from the top-left corner much like most graphic system out there (why ? Because Western language are mostly written left to right, top to bottom, and initial text display follow this convention, instead of classic cartesian coordinate). Forms are indexed starting at 0 instead of 1; thus, the top-left pixel of a Form has coordinates 0@0.
 
 The actual bits are held in a Bitmap, whose internal structure is different at each depth.
+The supported color depths (in bits) are 1, 2, 4, 8, 16, and 32.
+
+If the depth is 32 bits, each element in the bitmap will represent one point
+If you're only using 1 bits for color depth (2 possible colors), you can store
+up to 32 points for each bitmap elements. However, if you want to draw a single
+pixel, and its value depend of the higher bit, you must add enough 0 to pad on
+32 bits.
+
+This example will display a single pixel. However, its value in the bitmap needs
+to be encoded in 32 bits.
+
+```smalltalk
+    | pict map bitmap|
+    pict := ColorForm extent: 1 @ 1 depth: 1.
+
+    map := { Color black . Color white }.
+    bitmap := Bitmap newFrom: #( 2r10000000000000000000000000000000 ).
+    pict colors: map.
+    pict initFromArray: bitmap.
+```
+
+This will display 32 pixel. The definition of the bitmap doesn´t change.
+The form, however, is defined to use 32 pixel on one line.
+
+```smalltalk
+    | pict map bitmap|
+    pict := ColorForm extent: 32 @ 1 depth: 1.
+
+    map := { Color black . Color white }.
+    bitmap := Bitmap newFrom: #( 2r10000000000000000000000000000000 ).
+    pict colors: map.
+    pict initFromArray: bitmap.
+```

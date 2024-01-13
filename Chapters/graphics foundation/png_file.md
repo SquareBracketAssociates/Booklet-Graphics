@@ -11,6 +11,32 @@ This chapter is heavily inspired by this
 
 Refefence: [PNG specification](https://www.w3.org/TR/png-3/)
 
+We'll be creating a PNG with a single pixel. The final form we will look like:
+
+white pixel:
+
+```smalltalk
+    | pict map bitmap|
+    pict := ColorForm extent: 1 @ 1 depth: 1.
+
+    map := { Color black . Color white }.
+    bitmap := Bitmap newFrom: #( 2r10000000000000000000000000000000 ).
+    pict colors: map.
+    pict initFromArray: bitmap.
+```
+
+Black pixel:
+
+```smalltalk
+    | pict map bitmap|
+    pict := ColorForm extent: 1 @ 1 depth: 1.
+
+    map := { Color black . Color white }.
+    bitmap := Bitmap newFrom: #( 2r00000000000000000000000000000000 ).
+    pict colors: map.
+    pict initFromArray: bitmap.
+```
+
 ## file description
 
 In this chapter, we'll draw a single black pixel, stored as PNG.
@@ -229,6 +255,13 @@ Pharo can give us this compression:
 ```smalltalk
 ByteArray streamContents: [ :out |
     (ZLibWriteStream  on: out) nextPutAll: #[ 00 00 ]; close ]
+```
+
+For a white pixel, you would do:
+
+```smalltalk
+ByteArray streamContents: [ :out |
+    (ZLibWriteStream  on: out) nextPutAll: #[ 00 2r10000000 ]; close ]
 ```
 
 Again, unfortunate that we had to run our two-byte scanline through an algorithm

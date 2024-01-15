@@ -7,7 +7,9 @@ BlElement can be combined in a tree-like structure. How all these will end up
 showing depend of the graphical statement of each element, and how all of them
 are layout together.
 
-## child Element
+## introduction
+
+### child Element
 
 Element can be inspected, but for your application, it'll probably be integrated
 in another element, or in a *space*.
@@ -25,17 +27,17 @@ In the Initialize method:
 host := BlHost pickHost.
 session := Smalltalk session.
 
-## Example
+Parent define which layout apply to their children
+children specify which constraint they apply, which impact their position and
+their size.
 
-```smalltalk
-BlElement new
-layout: BlLinearLayout horizontal alignCenter;
-constraintsDo: [ :c |
-    c horizontal matchParent.
-    c vertical matchParent ].
-```
+It's defined in the parent element and will determined who children are position
+when they are added to it.
 
-## space around elements
+If you don't define a layout, it'll default to *BlBasicLayout*
+
+
+### space around elements
 
 * padding
 * margin
@@ -49,53 +51,25 @@ BlElement new
     padding: (BlInsets all: 3);
 ```
 
-## Layout
+### static or dynamic size
 
-Layout define the way children appear inside their parent element. A small list
-of layout included in Pharo Image.
+Size can be determined **statically** or **dynamically**
 
-* BlLinearLayout
-* BlGridLayout
-* BlFlowLayout
-* BlProportionalLayout
+If you use *exact:*, the size of the element will be static. *size: aPoint* is a
+synonym for `c horizontal exact: aPoint x. c vertical exact: aPoint y`
 
-List of all layout available: `BlLayout allSubclasses`
+If you use *matchParent* or *fitContent*, the size of the element will be
+computed dynamically, dependent of its parent or child space. Beware to not mix
+those properties between parent and child. If your child try to mach its parent,
+while its parent try to fit its child content, the size will be 0 plus the
+border width
 
-It's defined in the parent element and will determined who children are position
-when they are added to it.
+**Attention**, If you don't use dynamic size, you must define it.
+The overall bounds of the element is not deduced from its geometry,
+and its default size will be 50@50, which will certainly be different from your
+element.
 
-If you don't define a layout, it'll default to *BlBasicLayout*
-
-### zoom Layout
-
-```Smalltalk
-icon := BrGlamorousVectorIcons transcript asElement.
-icon constraintsDo: [ :c | c accountTransformation ].
-
-e := BlElement new
-    background: Color white;
-    border: (BlBorder paint: Color gray width: 1);
-    geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-    padding: (BlInsets top: 5 left: 10 bottom: 5 right: 10);
-    layout: (BlZoomableLayout new addLayout: BlFrameLayout new; defaultScale: 2; animationDuration: 1 second);
-    constraintsDo: [ :c |
-        c vertical fitContent.
-        c horizontal fitContent ];
-    addChild: icon;
-    yourself.
-```
-
-### forcing position
-
-If your parent don't define any specific layout, it will default to *BlBasicLayout*.
-Using this layout, children can position themselves at arbitrary position within
-the parent coordinate space using *position:*
-
-`BlElement new position: 50@50.`
-
-## constraints
-
-### introduction
+### constraints
 
 Position of an element is defined by its constraint. You can add contraints to
 your element using the *constraintsDo:* message.
@@ -127,25 +101,137 @@ Constraints are associated with the layout used by parent and follow by default
 Ex: Parent define *BlLinearLayout*, children constraints are defined by
 *BlLayoutConstraints*
 
-### static or dynamic size
+Constraint can apply to margin and padding as well,
+as `constraintsDo: [ :c | c margin: (BlInsets all: 10) ])`
 
-Size can be determined **statically** or **dynamically**
+### Example
 
-If you use *exact:*, the size of the element will be static. *size: aPoint* is a
-synonym for `c horizontal exact: aPoint x. c vertical exact: aPoint y`
+```smalltalk
+BlElement new
+layout: BlLinearLayout horizontal alignCenter;
+constraintsDo: [ :c |
+    c horizontal matchParent.
+    c vertical matchParent ].
+```
 
-If you use *matchParent* or *fitContent*, the size of the element will be
-computed dynamically, dependent of its parent or child space. Beware to not mix
-those properties between parent and child. If your child try to mach its parent,
-while its parent try to fit its child content, the size will be 0 plus the
-border width
+## Layout strategy
 
-**Attention**, If you don't use dynamic size, you must define it.
-The overall bounds of the element is not deduced from its geometry,
-and its default size will be 50@50, which will certainly be different from your
-element.
+Layout define the way children appear inside their parent element. A small list
+of layout included in Pharo Image.
+
+* BlLinearLayout
+* BlGridLayout
+* BlFlowLayout
+* BlProportionalLayout
+
+List of all layout available: `BlLayout allSubclasses`
+
+### default layout: basicLayout
+
+If your parent don't define any specific layout, it will default to *BlBasicLayout*.
+Using this layout, children can position themselves at arbitrary position within
+the parent coordinate space using *position:*
+
+`BlElement new position: 50@50.`
+
+### Linear layout - BlLinearLayout
+
+#### parent definition
+
+* horizontal
+* vertical
+
+#### child constraints
+
+* horizontal
+  * alignCenter
+  * alignLeft
+  * alignRight
+* vertical
+  * alignBottom
+  * alignCenter
+  * alignTop
+
+### flow layout - BlFlowLayout
+
+#### parent definition
+
+* horizontal
+* vertical
+
+#### child constraints
+
+* horizontal
+  * alignCenter
+  * alignLeft
+  * alignRight
+* vertical
+  * alignBottom
+  * alignCenter
+  * alignTop
+
+
+### grid layout
+
+### Frame Layout
+
+#### parent definition
+
+`BlFrameLayout new `
+
+* align:horizontal
+* align:vertical
+* 
+
+*TODO* Check class BlElementAlignment and *weight:* message
+
+#### children constraints
+
+* horizontal
+  * alignCenter
+  * alignLeft
+  * alignRight
+  * alignCenterAt:
+  * alignLeftAt:
+  * alignRightAt:
+  * alignNone
+
+* vertical
+  * alignBottom
+  * alignCenter
+  * alignTop
+  * alignBottomAt:
+  * alignCenterAt:
+  * alignTopAt:
+  * alignNone
+
+### zoom Layout
+
+```Smalltalk
+icon := BrGlamorousVectorIcons transcript asElement.
+icon constraintsDo: [ :c | c accountTransformation ].
+
+e := BlElement new
+    background: Color white;
+    border: (BlBorder paint: Color gray width: 1);
+    geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+    padding: (BlInsets top: 5 left: 10 bottom: 5 right: 10);
+    layout: (BlZoomableLayout new addLayout: BlFrameLayout new; defaultScale: 2; animationDuration: 1 second);
+    constraintsDo: [ :c |
+        c vertical fitContent.
+        c horizontal fitContent ];
+    addChild: icon;
+    yourself.
+```
 
 ### overriding parent layout
 
 You can ignore the layout define by the parent using *ignoreLayout* or override
 it using *flow*, *frame*, *grid*, *linear* or *relative* message.
+
+```smalltalk
+constraintsDo: [ :c |
+            c ignoreByLayout.
+            c ignored horizontal alignRightAt: 1.1.
+            c ignored vertical alignTopAt: 1.1 ].
+```

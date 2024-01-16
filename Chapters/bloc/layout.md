@@ -131,11 +131,10 @@ layout has a dedicated constraint object, an instance of
 *BlLayoutCommonConstraints*, that contains these universal constraints."
 
 Each type of layout can further define its own specific constraints by creating
-a subclass of gtClass:BlLayoutConstraints.
+a subclass of **BlLayoutConstraints**.
 
 As your element will always be the child of another element (including space
-root), layout constraint can always be defined.
-
+root), layout constraint can always be defined. 
 Constraints allows you to clearly defined the size and the position of your
 element withing its parent.
 
@@ -143,10 +142,15 @@ Constraints are associated with the layout used by parent and follow by default
 *BlLayoutCommonConstraints*.
 
 Ex: Parent define *BlLinearLayout*, children constraints are defined by
-*BlLayoutConstraints*
+*BlLinearLayoutConstraints*
 
 Constraint can apply to margin and padding as well,
 as `constraintsDo: [ :c | c margin: (BlInsets all: 10) ])`
+
+You can define constraints at the parent level
+`layout: BlLinearLayout horizontal alignCenter;`
+
+or refine it in its child
 
 ### Example
 

@@ -168,6 +168,29 @@ domain model object in a much cleaner way than when using **when:do:** messages.
 
 ### using event Handler
 
+
+UI element model can use Announcer (observer) pattern to tell when their state
+change:
+ card announcer when: CardFlipped send: #onFlipped to: self.
+ card announcer when: CardDisappeared send: #onDisappear to: self.
+
+
+To add event to an element, you first need to subclass 'BlEventListener' and
+override the event you want to manage. You then add your event handler to your
+bloc element with method 'addEventHandler'. Event are bloc announcement method
+and classes.
+
+- event handling (BlEvent and children)
+  
+- handling mouse and keyboard event (shortcut, keybinding, etc...)
+=> subclass BlEventListener, overwrite method which handle event, and add
+instance of the class to your BlElement with method addEventHandler:
+
+Keyboard shortcut: BlShortcut
+
+- Drag&Drop
+Explore BlBaseDragEvent and subclasses.
+
 Take a look at {{gtClass:name=BlEventHandler|full}} comments:
 
 BlEventHandler: I am a scriptable event handler that allows users to assign a valuable action to the event of chosen type.
@@ -177,4 +200,3 @@ BlEventHandler
  on: BlClickEvent
  do: [ :anEvent | self inform: 'Click!' ]
 ```
-

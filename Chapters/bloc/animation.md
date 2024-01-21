@@ -1,5 +1,11 @@
 ## animation
 
+
+- Bloc animation
+=> announcer
+=> BlBaseAnimation and subclasses
+=> addAnimation method in BlElement
+
 ```smalltalk
 animtedBackground
 <gtExample>

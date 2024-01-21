@@ -142,6 +142,9 @@ Layout define the way children are positioned inside their parent element. This
 position is deduced from the layout strategy used. If you don't specify which
 layout your parent element will use, it'll default to **BlBasicLayout** strategy.
 
+You can add element with **addChild:**, and the will be disposed according the
+the layout specified.
+
 A small list of layout included in Pharo Image.
 
 * BlBasicLayout

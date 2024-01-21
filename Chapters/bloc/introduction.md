@@ -53,7 +53,6 @@ example, but it can be much more complicated. We'll look at geometry in more
 detail later. We then define its size, its color, and then ask to open it in
 a new space. As of this writing, it's not possible to open in Morphic World.
 
-
 - Root: BlElement
 
 Defines
@@ -176,3 +175,32 @@ centersAndSizes do: [ :c |
             yourself)
         ].
 container
+
+## geometry of BlElement
+
+Geometry define the shape of your BlElement. You already have many possibilities
+defined as subclasses of **BlElementGeometry**
+
+`BlElementGeometry allSubclasses`
+
+As you can see, you already have a lot of geometry possibilities. If you were
+used to the Morphic way of doing things, you'll notice a big difference here.
+
+Bloc really favor BlElement composition to create your interface. Most of the
+time, you will not have to create a custom painting of your element widget. You
+can already do a lot with existing geometry. Ultimately, you can define
+drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
+for its elements. However, Bloc element composition create a tree of elements,
+that can be inspected, and shaped dynamically.
+
+Morphic was already capable of doing such things, but it was clearly an
+afterthough of its creation. It was quite troublesome to define the layout of
+different element together, especially when you have to manage resizing of your
+element. Bloc offer a very nice way of creating custom component, and advanced
+layout possibilities to mix all together.
+
+When drawing with Athens or another vector canvas. you already noticed the
+few primitives that we where using: lines, curves and bezier curves. Let's look
+at associted geometry in detail to see how you can use them
+
+![base geometry](figures/allGeometry.png)

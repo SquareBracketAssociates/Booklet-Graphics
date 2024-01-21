@@ -17,27 +17,29 @@ label text: labelText.
 
 label openInNewSpace
 ```
+
 Before being displayed, you define your text as an instance of **BlRopedText**,
 which you can then style with attributes like:
+
 - font name
 - font size
 - font foreground and background color
 - font style (normal, italic, bold).
 
-Text can after be rendered as **BlTextElement**, which will take care of 
+Text can after be rendered as **BlTextElement**, which will take care of
 displaying properly the text with all properties defined on it.
-Once you have a **BlTextElement**, all properties of **BlElement** apply. You 
+Once you have a **BlTextElement**, all properties of **BlElement** apply. You
 can add your element to any existing **BlElement**, and integrate it easily in
 your graphical interface.
 
-
-
-# Text handling
+## Text handling
 
 (BlTextElement new text: 'hello' asRopedText)
 
-
+```smalltalk
 BlTextElement new
-				      position: 5 @ 5;
-				      text: ('Rainbow!' asRopedText attributes:
-							       { (BlTextForegroundAttribute paint: Color black) 
+        position: 5 @ 5;
+        text: ('Rainbow!' asRopedText attributes:
+        { (BlTextForegroundAttribute paint: Color black)
+
+```

@@ -25,6 +25,9 @@ The layout property define the visual agencement of the element and its
 children. It defines the position and size of child and grand-child elements
 within the parent. It can also have an impact on the size of the parent element.
 
+Element are stored in a tree-like structure. Each element is an
+instance of *BlElement* the root element of Bloc.
+
 When defining layout, 2 parts must be combined to play together: *parent* and
 *children* elements.
 

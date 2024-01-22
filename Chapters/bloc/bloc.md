@@ -20,22 +20,17 @@ on: MCMergeOrLoadWarning
 do: [ :warning | warning load ].
 ```
 
-Contrary to Morph, which relied a lot on inheritance to customize graphical
-element, Bloc is designed to be composable. Basic bloc element can be
-customized, and added to each other, to create high level component.
+Bloc is designed to favor composition over inheritance. Basic bloc element can
+be customized, and added to each other, to create higher level component. The
+root of all graphical Bloc element is **BlElement**.
 
-Bloc introduce new concept in the user interface. Previously, Pharo users
-where used to talk about the **World** or **Morphic World**, which represent
-the environment where we spend most of our time. With Bloc, we now deal with
+Bloc introduce new concept in the user interface. With Bloc, we  deal with
 **BlUniverse** and **BlSpace**. **BlSpace** is an operating system window in
 which the Pharo systems is executed. If you have more than one BlSpace opened,
 they will be listed as part of BlUniverse - a list of all available BlSpace in
 your current Pharo session.
 
-Let's create our first Bloc component. The root of all graphical element is
-**BlElement**. You'll have to customize or subclass this element to create your
-awesome graphical interface. Let's start with an easy one. Type this in the
-playground
+Let's create our first Bloc component.  
 
 ```smalltalk
 BlElement new
@@ -49,14 +44,10 @@ Once executed, a new window should appear on your desktop, with a white
 background, and a blue rectangle inside. Let's look at it in more detail.
 
 We first create a new BlElement. It's a blank element, and if you try to display
-it, you won't see anything. We then define its geometry. The shape of your
-element, in Bloc, is defined by its geometry. It's a simple rectangle in our
+it, you won't see anything. The shape of your element, in Bloc, is defined by its geometry so we must specify it.  It's a simple rectangle in our
 example, but it can be much more complicated. We'll look at geometry in more
 detail later. We then define its size, its color, and then ask to open it in
-a new space. As of this writing, it's not possible to open in Morphic World.
-
-Element are stored in a tree-like structure. Each element is an instance of *BlElement*
-the root element of Bloc.
+a new space.
 
 ## element shape & color
 
@@ -64,116 +55,108 @@ the root element of Bloc.
 * border & outSkirts (outside, centered, inside)
 * background
 
-You can see each element as a *geometry* encasulated inside a hidden
-rectangle (its bounds). The geometry is like a an invisible line on which
-your drawing is represented. This drawing can happen outside (adding its border
-size to the size of your element), centered, or inside.
-
 ### geometry of BlElement
 
 Geometry will define the shape and the bounds of your element. Each element can
-have only one geometry. There are several geometry figures available:
-`BlElementGeometry allSubclasses`
+have only one geometry. You can also see each element as a *geometry*
+encasulated inside a hidden rectangle (its bounds). There are several geometry
+figures available: `BlElementGeometry allSubclasses`
 
-Exemple of a polygon geometry, showing a star with 5 branches.
+Bloc offer a very nice way of creating custom component with advanced
+layout possibilities to mix and position different graphical elements together.
 
-```Smalltalk
- geometry: (BlPolygonGeometry vertices: {
-(50 @ 0).
-(65 @ 40).
-(100 @ 40).
-(75 @ 60).
-(85 @ 100).
-(50 @ 80).
-(15 @ 100).
-(25 @ 60).
-(0 @ 40).
-(35 @ 40) });
-```
-
-Geometry define the shape of your BlElement. You already have many possibilities
-defined as subclasses of **BlElementGeometry**
-
-`BlElementGeometry allSubclasses`
-
-As you can see, you already have a lot of geometry possibilities. If you were
-used to the Morphic way of doing things, you'll notice a big difference here.
-
-Bloc really favor BlElement composition to create your interface. Most of the
-time, you will not have to create a custom painting of your element widget. You
-can already do a lot with existing geometry. Ultimately, you can define
-drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
-for its elements. However, Bloc element composition create a tree of elements,
-that can be inspected, and shaped dynamically.
-
-Morphic was already capable of doing such things, but it was clearly an
-afterthough of its creation. It was quite troublesome to define the layout of
-different element together, especially when you have to manage resizing of your
-element. Bloc offer a very nice way of creating custom component, and advanced
-layout possibilities to mix all together.
-
-When drawing with Athens or another vector canvas. you already noticed the
-few primitives that we where using: lines, curves and bezier curves. Let's look
-at associted geometry in detail to see how you can use them
+When drawing with Alexandrie canvas, you may have noticed the
+few primitives that we where using: lines, curves and bezier curves. Here is an
+example of different geometry primitives available in pharo.
 
 ![base geometry](figures/allGeometry.png)
 
-## elements bounds& outskirts
+* **Annulus** : `BlAnnulusSectorGeometry new startAngle: 225; endAngle: 360;   innerRadius: 0.3; outerRadius: 0.9);`
+* **bezier** : `BlBezierCurveGeometry controlPoints: { 5@0. 25@80. 75@30. 95@100 }`
+* **circle** : `BlCircleGeometry new matchExtent: 100 @ 50`
+* **ellipse** : `BlEllipseGeometry new matchExtent: 100 @ 50)`
+* **line** : `BlLineGeometry from: 10@10 to: 90@90`
+* **Polygon** : `BlPolygonGeometry vertices: {(10 @ 10). (10 @ 90). (50 @ 50). (90 @ 90). (90 @ 10)}`
+* **Polyline**: `BlPolylineGeometry vertices: {(10 @ 10). (10 @ 90). (50 @ 50).(90 @ 90). (90 @ 10) }`
+* **Rectangle** : `BlRectangleGeometry  new`
+* **Rounded rectangle** : `BlRoundedRectangleGeometry cornerRadius: 20`
+* **square** : `BlSquareGeometry new matchExtent: 70 @ 70`
+* **triangle** : `BlTriangleGeometry new matchExtent: 50 @ 100; beLeft`
 
-- geometry (shape) and bounds (BlBounds)
-  
-![outskirts](figures/multipletriangleoutskirts.png)
+### element border
 
-- *Layout* bounds are drawn with gray dashed rectangles in the figure above. They are of this size in this particular example, because each element defines its size explicitly using **size:** method. Layout bounds are considered by layout algorithms to define mutual locations for all considered elements.
+The geometry is like a an invisible line on which your border is painted. The
+painting is a subclass of **BlPaint**, and one of the three:
 
-"Geometry" bounds are drawn with red dashed rectangles . The area is defined by minimum and maximum values of a polygon vertices. This does not take in account the border width, for example.
-
-"Visual" bounds are drawn with blue rectangles in the figure above. It is an exact area occupied by an element. Computing visual bounds is the most expensive computation as it takes strokes and rendering into account.
-
-If we specify BlOutskirts inside, visual bound and geometry bounds will be the same. But if BlOutskirts is outside, then visual bounds are larger than geometry bounds to take border width into its calculation.
-
-see {{gtClass:BlGeometryVisualAndLayoutBoundsExamples}}
-
-- BlDevElement new size:200@200;
-geometry:( BlPolygon
-  vertices:
-   {(100 @ 50).
-   (115 @ 90).
-   (150 @ 90).
-   (125 @ 110).
-   (135 @ 150).
-   (100 @ 130).
-   (65 @ 150).
-   (75 @ 110).
-   (50 @ 90).
-   (85 @ 90)});
-background: (Color pink alpha:0.2);
-border: (BlBorder paint: Color black width: 5);
-outskirts: BlOutskirts outside"replace with inside to see the difference".
-
-### element border 
-
-- background (BlBackground). Paints (BlPaint) are used for background, border, text fill or stroke.
-
-Short call: `border: (BlBorder paint: Color orange width: 5)`
+* solid color
+* linear gradient color
+* radial gradient color
 
 ![border color type](figures/bordercolortype.png)
 
-Long call `BlBorder builder dashed; paint: Color red; width: 3; build`
-`BlBorder builder paint: Color black;width: 10; dashArray: #(10 20);capSquare;build`
+Your border opacity can be specified as well: `opacity: 0.5;`
+
+By default, your border will be a full line, but it can also be dashed, with
+**dash array** and **dash offset**. Dash array define the number of element, and
+dash offset, the space between elements.
+
+You also have pre-defined option, available in a single call:
+
+* **dashed**
+* **dashed small**
 
 ![border dash](figures/multipletriangledash.png)
 
-(BlBorder paint:((BlLinearGradientPaint direction: 1 @ 1)
-matchExtent: 100 @ 75; from: Color blue to: Color red)
-width: 5).
-border: (BlBorder builder
-paint: (borderColor alpha: 0.75) asBlPaint;
-width: 10;
-opacity: 0.5;
-build);
+If the path is not closed, The style extent of your border can be defined with
+
+* **cap square**
+* **cap round**
+* **cap butt**
+
+Last, when the line of your border cross each other, you can define the style of
+the join:
+
+* **round join**
+* **bevel join**
+* **mitter join**
 
 ![border join type](figures/borderjointype.png)
+
+You have two option to define your border:
+
+* short call : `border: (BlBorder paint: Color orange width: 5)`
+* with a builder :`BlBorder builder dashed; paint: Color red; width: 3; build`
+
+The first one is very helpfull for solid line definition. The builder let use
+customize all the detail of your border.
+
+### elements bounds and outskirts
+
+Lets look at the diffent possible bounds of your element.
+
+**Layout bounds** can be defined explicitly using **size:** method or dynamicaly
+Layout bounds are considered by layout algorithms to define mutual locations
+for all considered elements. You'll know more about layout later.
+
+**Geometry bounds** area is defined by minimum and maximum values of polygon
+vertices. This does not take in account the border width
+
+**Visual bounds** is an exact area occupied by an element. it takes strokes
+and rendering into account.
+
+The geometry is like a an invisible line on which your border is represented.
+The border drawing can happen outside (adding its border size to the size of
+your element), centered, or inside the geometry of the element. The final size
+(geometry + border width) will define the **bounds** of your element.
+
+In this figure, the same exact star is drawned 3 time. The only difference is
+the outskirts definition between those 3.
+
+![outskirts](figures/multipletriangleoutskirts.png)
+
+If we specify BlOutskirts inside, visual bound and geometry bounds will be the
+same. But if BlOutskirts is outside, then visual bounds are larger than
+geometry bounds to take border width into its calculation.
 
 ### element background
 
@@ -181,7 +164,7 @@ quick set-up: `background: (Color red alpha: 0.8);`
 
 background: (Color r: 63 g: 81           b: 181     range: 255);
 background: ((BlLinearGradientPaint direction: 1 @ 1) from: Color red to: Color blue).
- 
+
 background: (BlRadialGradientPaint new
 stops: { 0 -> Color blue. 1 -> Color red };
 center: largeExtent // 2;
@@ -231,7 +214,8 @@ You can apply opacity to background, border, or to your hole element.
 
 ![element opacity](figures/elementwitopacity.png)
 
-## transformation
+## element transformation
+
 You can apply transformation to a BlElement:
 
 - rotation
@@ -275,6 +259,15 @@ aContainer forceLayout.
 ## Bloc styles
 
 ## element custom Painting
+
+Bloc really favor BlElement composition to create your interface. Most of the
+time, you will not have to create a custom painting of your element widget. You
+can already do a lot with existing geometry.
+
+Ultimately, you can define
+drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
+for its elements. However, Bloc element composition create a tree of elements,
+that can be inspected, and shaped dynamically.
 
  creating and drawing your own block
 => subclass BlElement

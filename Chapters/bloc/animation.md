@@ -1,6 +1,5 @@
 ## animation
 
-
 - Bloc animation
 => announcer
 => BlBaseAnimation and subclasses

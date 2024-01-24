@@ -470,20 +470,33 @@ A layout where child element can be zoomed into their parent.
 #### example
 
 ```Smalltalk
-icon := BrGlamorousVectorIcons transcript asElement.
-icon constraintsDo: [ :c | c accountTransformation ].
+|elt zoom|
 
-e := BlElement new
-    background: Color white;
-    border: (BlBorder paint: Color gray width: 1);
-    geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-    padding: (BlInsets top: 5 left: 10 bottom: 5 right: 10);
-    layout: (BlZoomableLayout new addLayout: BlFrameLayout new; defaultScale: 2; animationDuration: 1 second);
+elt := BlSvgIcons settingsIcon.
+elt
+    border: (BlBorder paint: Color red width: 2);
+    background: Color yellow;
+    size: 24@24;
+    transformDo: [ :t | t scaleBy: 2 ];
     constraintsDo: [ :c |
-        c vertical fitContent.
-        c horizontal fitContent ];
-    addChild: icon;
-    yourself.
+        c accountTransformation.].
+
+
+zoom := BlElement new
+            background: Color white;
+            border: (BlBorder paint: Color gray width: 10);
+            geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+            padding: (BlInsets all: 10);
+            layout: (BlZoomableLayout new
+                        addLayout: BlFrameLayout new;
+                        defaultScale: 5;
+                        animationDuration: 2 second);
+            constraintsDo: [ :c |
+                        c vertical fitContent.
+                        c horizontal fitContent ];
+            addChild: elt;
+            yourself.
+zoom openInNewSpace 
 ```
 
 #### example

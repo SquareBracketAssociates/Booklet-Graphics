@@ -137,7 +137,11 @@ constraintsDo: [ :c |
 
 **Beware to not mix those properties** between parent and child.
 If your child try to mach its parent, while its parent try to fit its child
-content, the size will be 0 plus the border width
+content, the size will be 0 plus the border width.
+
+when the parent uses "fit content" and the child uses "match parent", there is
+no way to determine the size. In such cases, the size of both the parent and
+the child will be 0@0.
 
 ## Layout strategy and constraints
 
@@ -345,6 +349,34 @@ root := BlElement new
 
 Element are disposed in a grid.Element can span over multiple row or columns.
 
+All children of an element with GridLayout must use GridConstraints that allows
+users to configure how children are located within grid independently.
+
+A grid consists of cells that are separated by invisible lines. Each line is
+assigned to an index, meaning that a grid with N columns would have N+1 line.
+Indices lie in closed interval [ 1, N + 1 ].
+
+Grid Layout supports fitContent, matchParent and exact resizing mode of the
+owner. Children are allowed to have fitContent and exact resizing modes. Because
+child's matchParent does not make sense in case of grid users should use #fill
+to declare that child should take all available cell's space.
+
+By default grid layout does not specify how many columns and rows exist, instead
+it tries to compute necessary amount of columns or rows depending on amount of
+children. User can specify amount of columns or rows by sending columnCount: or
+rowCount: to an instance of grid layout.
+
+Grid Layout supports spacing between cells which can be set sending cellSpacing:
+message.
+
+Public API and Key Messages
+
+* **columnCount:** aNumber to specify amount of columns
+* **rowCount:** aNumber to specify amount of rows
+* **cellSpacing:** aNumber to specify spacing between cells
+* **alignMargins**  bounds of each element are extended outwards, according to their margins, before the edges of the resulting rectangle are aligned.
+* **alignBounds**  alignment is made between the edges of each component's raw bounds
+
 #### example
 
 ```smalltalk
@@ -406,8 +438,26 @@ Element are disposed in a grid.Element can span over multiple row or columns.
 
 ### Frame Layout
 
-Can contain only one child. Give more dynamic control than BlBasicLayout which
-only allow fixed position.
+Frame layout prefered usage contains only one child. Its Give more dynamic
+control than BlBasicLayout which only allow fixed position. It can however
+contain multiple children.
+
+The alignment attribute controls the position of children within a FrameLayout.
+Children can be aligned both vertically and horizontally as follows:
+
+* horizontally children can be aligned to left, center or right;
+* vertically children can be aligned to top, center or bottom.
+
+Alignment is a constraint specific to frame layouts, as it's not relevant to
+all layouts. To access frame-specific contraints, we send *frame* to the current
+constraint object, which returns an instance of *BlFrameLayoutConstraints* that
+we can use to set the desired alignment. Other constraints like the size of an
+element are common to all layouts and can be set directly without requesting a
+specific constraint object.
+
+When using multiple children, if we do not specify any alignment they will be
+placed in the top-left corner in the order in which they were added to the
+parent and they will overlap each other.
 
 #### parent definition
 
@@ -440,6 +490,8 @@ only allow fixed position.
 
 #### example
 
+One children
+
 ```smalltalk
 container := BlElement new
                      background: (Color red alpha: 0.2);
@@ -462,6 +514,70 @@ container := BlElement new
 ```
 
 ![frame layout](figures/framelayout.png)
+
+Frame can also accept multiple children
+
+Multiple children positioned with size defined by weight. In this case, children
+that match their parent can also be configured to occupy only a fraction of
+the parent's size using the weight attribute. A child can match its parent both
+horizontally and vertically. If no padding or margin is used, the child will
+overlap the parent completely.
+
+```smalltalk
+| root elt1 elt2 elt3 elt4 elt5 elt6 elt7 elt8 elt9 |
+root := BlElement new
+            border: (BlBorder paint: Color red width: 1);
+            background: (Color red alpha: 0.2);
+            layout: BlFrameLayout new;
+            constraintsDo: [ :c |
+                c horizontal matchParent.
+                c vertical matchParent ].
+
+"weight can only be used if the size, or if fitContent are not specified"
+elt1 := BlElement new
+            border: (BlBorder paint: Color blue width: 1);
+            background: Color random;
+            margin: (BlInsets all: 5);
+            constraintsDo: [ :c |
+                c frame horizontal alignLeft weight: 0.2.
+                c frame vertical alignTop weight: 0.2.
+                c horizontal matchParent.
+                c vertical matchParent ];
+            addChild: (BlTextElement new text: 'left top' asRopedText).
+root addChild: elt1.
+
+"...code continue for the 8 other children"
+```
+
+![frame layout](figures/MultipleElementFrameWithWeight.png)
+
+Multiple children positioned with fixed size
+
+```smalltalk
+| root elt1 elt2 elt3 elt4 elt5 elt6 elt7 elt8 elt9 |
+root := BlElement new
+            border: (BlBorder paint: Color red width: 1);
+            background: (Color red alpha: 0.2);
+            layout: BlFrameLayout new;
+            constraintsDo: [ :c |
+                c horizontal matchParent.
+                c vertical matchParent ].
+
+elt1 := BlElement new
+            size: 80 @ 80;
+            border: (BlBorder paint: Color blue width: 1);
+            background: Color random;
+            margin: (BlInsets all: 5);
+            constraintsDo: [ :c |
+                c frame horizontal alignLeft.
+                c frame vertical alignTop ];
+            addChild: (BlTextElement new text: 'left top' asRopedText).
+root addChild: elt1.
+
+"...code continue for the 8 other children"
+```
+
+![frame layout](figures/MultipleElementFrameWithFixedSize.png)
 
 ### zoom Layout
 

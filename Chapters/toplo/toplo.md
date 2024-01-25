@@ -146,3 +146,31 @@ Look must be added for each widget state.
 
 For CheckBox button, default type is *ToButtonTextType* or *ToClickableType*
 Button will call its *privateUpdateChildren* to update all internal properties.
+
+
+## note from video presentation
+
+state + evt associé -> skin
+Basé sur Ant design
+Toplo-Example >> ToSandbox
+
+Album -> éditeur de Brick, repris, simplifié avec ajout de sélection et décoration de un texte + communication avec un modèle par gestion d'évènement.
+Plus de possibilité d'avoir des BlElement dans Album, car trop compliqué dans Brick
+
+Style
+
+BlElement >> requestInstallStyle -> installRawStyle to dress the BlElement.
+
+rawStyle -> theme par defaut. install*Raw*Style -> raw imposé par le nom du style.
+Style déposé dans un skin (objet séparé), appelé par installLookEvent
+Un skin est un event handleur qui va réagir à des look events.
+
+En element toplo est un BlElement, look concentrated in a skin.
+Un BlElement peut avoir des skins. ToElement ajoute des éléments incluant les skins.
+
+theme regarde pour récuperer le skin d'un élément.
+Theme -> factory de skin pour tes objets, incluant les propriétés pour décorer.
+
+Look -> skin event. 
+Skin -> élément central 
+Stylesheet à revoir.

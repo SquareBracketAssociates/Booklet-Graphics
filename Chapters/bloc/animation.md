@@ -5,6 +5,8 @@
 => BlBaseAnimation and subclasses
 => addAnimation method in BlElement
 
+space has its own pulse. At each pulse, it can call your animation.
+
 ```smalltalk
 animtedBackground
 <gtExample>

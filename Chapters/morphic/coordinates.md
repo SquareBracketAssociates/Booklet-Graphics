@@ -60,7 +60,7 @@ topRight        -> (250.0@75.0)
 `|       topLeft       |       topRight                             |`
 `|          +---------------------+                                 |`
 `|          |                     |                                 |`
- |          leftCenter |                          center                          | rightCenter                                                                            |
+`|leftCenter|       center        | rightCenter                     |`
 `|          |                     |                                 |`
 `|          +---------------------+                                 |`
 `|    bottomLeft       ^    bottomRight                             |`

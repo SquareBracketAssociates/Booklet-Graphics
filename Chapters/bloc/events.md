@@ -1,4 +1,29 @@
-# Event handling & shortcut management.
+# Event handling & shortcut management
+
+addEventHandlerOn:do: returns the new handler
+when:do: is now deprecated and rewritten as #addEventHandlerOn:do:
+
+## Keymap at system platform level
+
+KeyboardKey class, which is used when a key on the keyboard is pressed.
+
+It's used at Morphic level, when your morph want to catch a specific keyboard
+event.
+
+It can be used by Keymapping (KMSingleKeyCombination & KMShortcutPrinter) as an
+equivalent of `$a asKeyCombination`
+
+It's used ultimately by BlKeyCombinationBuilder to build keyboard shortcut
+in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
+
+### combination from Bloc framework
+
+Bloc come with its own keymapping framework.
+BlShortcutWithAction would be the equivalent of KMKeymap.
+
+BlShortcutWithAction new
+    combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
+    action: [ flag := true ].
 
 ## event handling
 
@@ -14,38 +39,36 @@ BlElement new
 
 Other syntax: `addEventHandlerOn: BlMouseOverEvent   do: [ :e | a background: Color lightGray ];`
 
-
 ## drag&drop
+
+```smalltalk
 "Draggable card that says 'Rainbow!'"
-	a := BlElement new
-		     geometry: BlRectangleGeometry new;
-		     size: 65 @ 24;
-		     background: Color white;
-		     border: stroke;
-		     addEventHandlerOn: BlMouseOverEvent
-		     do: [ :e | a background: Color lightGray ];
-		     addEventHandlerOn: BlMouseOutEvent
-		     do: [ :e | a background: Color white ];
-		     addEventHandler: BlPullHandler new disallowOutOfBounds;
-		     addChild: (BlTextElement new
-				      position: 5 @ 5;
-				      text: ('Rainbow!' asRopedText attributes:
-							       { (BlTextForegroundAttribute paint: Color black) })).
-								   
+  a := BlElement new
+          geometry: BlRectangleGeometry new;
+          size: 65 @ 24;
+          background: Color white;
+          border: stroke;
+          addEventHandlerOn: BlMouseOverEvent
+          do: [ :e | a background: Color lightGray ];
+          addEventHandlerOn: BlMouseOutEvent
+          do: [ :e | a background: Color white ];
+          addEventHandler: BlPullHandler new disallowOutOfBounds;
+          addChild: (BlTextElement new
+              position: 5 @ 5;
+              text: ('Rainbow!' asRopedText attributes:
+                      { (BlTextForegroundAttribute paint: Color black) })).
 addEventHandler: BlPullHandler new disallowOutOfBounds;
+```
 
 ## keyboard
+
+```smalltalk
 addShortcut: (BlShortcutWithAction new
-			combination: (BlKeyCombination builder shift; meta; key: BlKeyboardKey arrowLeft; build);
-			action: [ :anEvent :aShortcut | self inform: 'Triggered ', aShortcut combination asString ]);
-			
+      combination: (BlKeyCombination builder shift; meta; key: BlKeyboardKey arrowLeft; build);
+      action: [ :anEvent :aShortcut | self inform: 'Triggered ', aShortcut combination asString ]);
+```
 
-
-
-
-
-
-# introductive example
+## introductive example
 
 ```smalltalk
 eventExample
@@ -144,12 +167,11 @@ Events are defined as subclasses of {{gtClass:name=BlEvent|expanded}}
 
 ## managing events
 
-
 You have 3 players:
+
 - The element that will receive the events.
 - Events, or announcement in Pharo, subclasses of BlEvent.
 - Event handler. Either BlEventHandler, or by subclassing BlEventListener.
-
 
 ### simple case for BlElement
 
@@ -163,17 +185,15 @@ This will use BlEventHandler, and will associate a single block action to an Eve
 1. Subclass {{gtClass:name=BlEventListener}} (which is a subclass of {{gtClass:name=BlBasicEventHandler}} and override all method that match specific event you want to catch, for example {{gtMethod:name=BlEventListener>>clickEvent:}}
 2. Add your listener to your BlElement with method: {{gtMethod:name=BlElement>>addEventHandler:}}
 
-This allow complete flexibility. You can define custom behavior and interact with 
+This allow complete flexibility. You can define custom behavior and interact with
 domain model object in a much cleaner way than when using **when:do:** messages.
 
 ### using event Handler
-
 
 UI element model can use Announcer (observer) pattern to tell when their state
 change:
  card announcer when: CardFlipped send: #onFlipped to: self.
  card announcer when: CardDisappeared send: #onDisappear to: self.
-
 
 To add event to an element, you first need to subclass 'BlEventListener' and
 override the event you want to manage. You then add your event handler to your

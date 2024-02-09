@@ -248,6 +248,19 @@ TextEditor class >> buildTextEditorShortcutsOn: with pragma *keymap*
 WorldState class >> pharoItemsOn: aBuilder for Pharo menu
 SettingBrowser class >> menuCommandOn: aBuilder
 
+##### dispatch
+
+During Morphic loop cycle, OSWindowMorphicEventHandler >> dispatchMorphicEvent
+will catch OS event, like key stroke, and ask the activeHand (the cursor), to 
+handle the event. 
+
+The HandMorph will send the keyboard event to the active Morph, and then
+call *handleKeyDown* to handle event at system level. It'll ask Morph
+default shortcutHandler to handle key stroke, being an instance of 
+*KMShortcutHandler*. The key stroke will then be dispatched through *KMDispatcher*.
+In the dispath chain, it'll call *KMGlobalDispatcher* who will match global
+keymap categories.
+
 ### Example
 
 ```smalltalk

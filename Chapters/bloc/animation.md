@@ -1,33 +1,5 @@
 # animation & Task
 
-## task
-
-space has its own pulse. At each pulse, it can call a BlTask.
-`BlElement >> enqueueTask:` and `BlElement >> dequeueTask:` and monitor
-`taskQueue`, either at space or element level.
-
-You can defined pre-compute activity through BlTask which has different states
-
-- new
-- queued
-- pendingExecution
-- executing
-- complete
-
-BlTask is an abtract class that is specialized by *BlBaseAnimation* and *BlAnimation*
-
-## Bloc animation & Task
-
-Animation is a kind of BlTask, with additional information
-
-- steps
-- loops: the number of loops to execute an animation
-- delay: how much time to postpone the actual start after an animation is added
-- duration: how much time the animation will last for each step (start time + delay)
-- event raised when step is done or loop is done.
- 
-Execution is done by *steps*
-
 => announcer
 => BlBaseAnimation and subclasses
 => addAnimation method in BlElement
@@ -141,3 +113,60 @@ sequencially to an element:
 
 - position
 - scale
+
+## task
+
+space has its own pulse. At each pulse, it can call a BlTask.
+`BlElement >> enqueueTask:` and `BlElement >> dequeueTask:` and monitor
+`taskQueue`, either at space or element level.
+
+You can defined pre-compute activity through BlTask which has different states
+
+- new
+- queued
+- pendingExecution
+- executing
+- complete
+
+BlTask is an abtract class that is specialized by *BlBaseAnimation* and *BlAnimation*
+
+## Bloc animation & Task
+
+Animation is a kind of BlTask, with additional information
+
+- steps
+- loops: the number of loops to execute an animation
+- delay: how much time to postpone the actual start after an animation is added
+- duration: how much time the animation will last for each step (start time + delay)
+- event raised when step is done or loop is done.
+
+When animation run, it'll call the `step` which in turn will call the `doStep`
+When one step is done, it'll fire the `BlAnimationStepEvent` event.
+When an entire loop animation is done, it'll fire the `BlAnimationLoopDoneEvent`event.
+
+Step can be decomposed into multiple sub-step. All those sub-step comprise the
+animation loop, which can be repeated multiple time of indefinitely.
+
+At every pulse, `doStep` is called. Because of that, you can't compute any new
+state during a step. You either have to pre-compute it, or react to `BlAnimationStepEvent` to
+get new state.
+
+You can use pre-defined animation class, or create your own animation
+by subclassing `BlAnimation` and overwrite `valueForStep:`
+`valueForStep:` receive a progress number:
+    "a normalized number within [0..1] representing animation progress.
+    0 - means animation is not yet started.
+    1 - animation loop is done"
+the progress value is the result of `BlEasing`selected class, which provide
+different mathematical function to go from 0 to 1
+
+progress := (elapsedTime / self duration) asFloat
+BlEasing: Math function taking progress as argument to show different animation style
+`self applyValue: (self valueForStep: (easing interpolate: progress))`
+
+"Execute an actual animation step. My subclasses define this hook, and assume it's executed after my internal state has been updated, for example, progress."
+
+you can `start` and `stop` an animation
+
+
+Execution is done by *steps*

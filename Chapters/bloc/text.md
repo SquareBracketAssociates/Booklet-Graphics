@@ -43,3 +43,51 @@ BlTextElement new
         { (BlTextForegroundAttribute paint: Color black)
 
 ```
+################################################################
+Measure get specified by BlMeasurementSpec
+
+BlTextElement will instanciate a BlTextParagraph, with measurement
+strategy. On instanciation, BlTextParagraph will create a BlTextParagraphLine. A line is a collection of spans
+A span is an homogeneous styled piece of text where every character has the same set of attributes.
+
+Measure is done in BATextParagraphSpan >> measure
+	"Without Harfbuzz:"
+	cairoGlyphsArray := cairoScaledFont glyphArrayForString: usedSpan.
+
+	"With Harfbuzz:"
+	"cairoGlyphsArray := AeHbBuffer defaultCairoGlyphArrayFor: usedSpan face: face size: fontSize."
+
+	metrics := canvas metricsFor: cairoGlyphsArray font: cairoScaledFont.
+	baseline := 0 @ 0.
+	ascent := metrics ascent.
+	descent := metrics descent.
+	left := metrics bearingX.
+	top := metrics bearingY.
+	height := metrics height.
+	self span isTabulation
+		ifTrue: [ 
+			advance := self tabStopWidth.
+			width := self tabStopWidth ]
+		ifFalse: [ 
+			advance := metrics advanceX.
+			width := metrics width ]
+
+https://stackoverflow.com/questions/27631736/meaning-of-top-ascent-baseline-descent-bottom-and-leading-in-androids-font
+
+https://www.cairographics.org/manual/cairo-cairo-scaled-font-t.html#cairo-text-extents-t
+
+https://freetype.org/freetype2/docs/tutorial/step2.html
+
+the x_advance and y_advance values indicate the amount by which the current point would be advanced by cairo_show_text().
+
+tight Measurement
+        aMeasuredWidth  := aParagraph width.
+        aMeasuredHeight := aParagraph height.
+
+editor measurement
+        aMeasuredWidth  := aParagraph advance.
+        aMeasuredHeight := (aParagraph ascent abs + aParagraph descent).
+
+label measurement.
+        aMeasuredWidth  := aParagraph width.
+        aMeasuredHeight := (aParagraph ascent abs + aParagraph descent).

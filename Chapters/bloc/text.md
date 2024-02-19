@@ -19,7 +19,7 @@ label openInNewSpace
 ```
 
 Before being displayed, you define your text as an instance of **BlRopedText**,
-which you can then style with attributes like:
+which you can then style with **attributes** like:
 
 - font name
 - font size
@@ -44,6 +44,42 @@ BlTextElement new
 
 ```
 ################################################################
+
+## nomenclature (for horizontal text layout)
+
+**width**
+:  This is the width of the glyph image's bounding box.
+
+**height**
+: This is the height of the glyph image's bounding box.
+
+**Advance**
+:  Distance to increment the pen position when the glyph is drawn as part of a string of text.
+
+**BearingX**
+:  Distance from the current cursor position to the leftmost border of the glyph image's bounding box.
+
+**BearingY**
+: Distance from the current cursor position (on the baseline) to the topmost border of the glyph image's bounding box.
+
+![glyph figure](figures/glyph-metrics-3.png)
+
+**ascender**
+:    portion of letter that extends above the mean line of a font.
+
+**descender**
+:    portion of a letter that extends below the baseline of a font.
+
+**baseline**
+:    line upon which most letters sit and below which descenders extend.
+
+![typograpy figure](figures/2880px-Typography_Line_Terms.svg.png)
+
+Reference:
+
+- [wikipedia](https://en.wikipedia.org/wiki/Ascender_(typography))
+- [freetype](https://freetype.org/freetype2/docs/tutorial/step2.html)
+
 Measure get specified by BlMeasurementSpec
 
 BlTextElement will instanciate a BlTextParagraph, with measurement
@@ -72,13 +108,6 @@ Measure is done in BATextParagraphSpan >> measure
 			advance := metrics advanceX.
 			width := metrics width ]
 
-https://stackoverflow.com/questions/27631736/meaning-of-top-ascent-baseline-descent-bottom-and-leading-in-androids-font
-
-https://www.cairographics.org/manual/cairo-cairo-scaled-font-t.html#cairo-text-extents-t
-
-https://freetype.org/freetype2/docs/tutorial/step2.html
-
-the x_advance and y_advance values indicate the amount by which the current point would be advanced by cairo_show_text().
 
 tight Measurement
         aMeasuredWidth  := aParagraph width.

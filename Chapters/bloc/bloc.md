@@ -44,10 +44,10 @@ Once executed, a new window should appear on your desktop, with a white
 background, and a blue rectangle inside. Let's look at it in more detail.
 
 We first create a new BlElement. It's a blank element, and if you try to display
-it, you won't see anything. The shape of your element, in Bloc, is defined by its geometry so we must specify it.  It's a simple rectangle in our
-example, but it can be much more complicated. We'll look at geometry in more
-detail later. We then define its size, its color, and then ask to open it in
-a new space.
+it, you won't see anything. The shape of your element, in Bloc, is defined by
+its geometry so we must specify it.  It's a simple rectangle in our example, but
+it can be much more complicated. We'll look at geometry in more detail later. We
+then define its size, its color, and then ask to open it in a new space.
 
 ## element shape & color
 

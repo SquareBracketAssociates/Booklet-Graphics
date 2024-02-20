@@ -2,31 +2,31 @@
 
 ## introduction
 
-Widget are not composed of one single element. If you want to have more complex
-bloc element, you'll need to combine them together. Each element can be build
-and inspected individually, which is good for development purpose. If you want
-to build a full graphical interface, you'll need to combine element with each
-others, or at at least add it to a *space*.
+Widgets aren't just simple components; they're complex assemblies of various
+elements. To create more intricate block elements, you'll need to blend them
+together seamlessly. Each element can be developed and examined independently,
+which is advantageous during the development phase.  However, to construct a
+complete graphical interface, you'll need to seamlessly integrate these elements
+with each other or, at the very least, place them within a bloc *space*.
 
 Element in a bloc scene are added to each other, ending in a tree-like structure
-where parents and children can identify each other. Each element have its own
-visual properties, like background, border, geometry, etc. How all elements will
-end up showing depend of the graphical properties of each element, and how all
-of them are layout together.
+where parents and children can identify each other, and each element being an
+instance of BlElement, the root element of Bloc.. Each element have its own
+visual properties, like background, border, geometry, etc. The final appearance
+depends on the graphical properties of each element and how they're arranged
+together in the layout.
 
 ![multiple element](figures/multipleElements.png)
 
 ![element tree](figures/blelementtreestructure.png)
 
-Layout is one of fondamentals feature of *Bloc*. Instead of *drawing* your whole
-widget in a single method, it encourage you to build small element with specific
-geometry and visual properties and combine them using various layout strategy.
-The layout property define the visual agencement of the element and its
-children. It defines the position and size of child and grand-child elements
-within the parent. It can also have an impact on the size of the parent element.
-
-Element are stored in a tree-like structure. Each element is an
-instance of *BlElement* the root element of Bloc.
+Layout constitutes a fundamental aspect of *Bloc*. Rather than constructing your
+entire widget within a single *drawing* method, it advocates for the creation of
+small elements with distinct geometries and visual attributes, which are then
+integrated using diverse layout strategies. The layout property determines the
+visual arrangement of the element and its descendants, specifying their
+positions and sizes within the parent container. Moreover, it may influence the
+dimensions of the parent element itself.
 
 When defining layout, 2 parts must be combined to play together: *parent* and
 *children* elements.
@@ -42,6 +42,15 @@ support a set of attributes which define the visual properties of the layout. A
 small set of constraints, like padding, margin or minimal and maximum
 dimensions, are common among all the layouts. Constraints allows you to clearly
 defined the size and the position of your element withing its parent.
+
+When you change the position or the size of an element, a requestLayout is sent
+but the effect on the element’s bounds is actually visible only after the layout
+is computed. In bloc, the layout is computed from a dedicated space Phase,
+applied on each pulse. Have a look at BlSpaceFrame and BlSpaceFramePhase and its
+subclasses.
+
+To easy this kind of script one can use *#whenLayoutedDoOnce:* which arms a one
+shot event handler that reacts to the *BlElementLayoutComputedEvent* event.
 
 ### element combination
 
@@ -219,9 +228,10 @@ the parent coordinate space using *position:*
 
 `BlElement new position: 50@50.`
 
-"BlBasicLayout let you position your children at the position you want them to be
-Layout constraint are irrelevant for this layout, you should specify the size of
-each child element to be added. Those child can them implement their own layout strategy"
+"BlBasicLayout let you position your children at the position you want them to
+be Layout constraint are irrelevant for this layout, you should specify the size
+of each child element to be added. Those child can them implement their own
+layout strategy"
 
 #### example
 
@@ -255,10 +265,11 @@ each child element to be added. Those child can them implement their own layout 
 
 ### Linear layout - BlLinearLayout
 
-Child can use dynamic size with constraints. The number of element will then fit its
-parents available space.     If you specify their size, and the total is over its parents,
-they will be hidden. need to specify their size. If they use constraint, the last one
-will hide previous one. They will fit available space + move to next line if necessary
+Child can use dynamic size with constraints. The number of element will then fit
+its parents available space.     If you specify their size, and the total is
+over its parents, they will be hidden. need to specify their size. If they use
+constraint, the last one will hide previous one. They will fit available space +
+move to next line if necessary
 
 #### parent definition
 
@@ -300,10 +311,10 @@ root := BlElement new
 
 ### flow layout - BlFlowLayout
 
-Child need to specify their size. If they use constraint, the last one will hide previous one.
-They will fit available space + move to next line if necessary. Flow will fill
-all available space in its parent, and parent can be resized to match the space
-needed to display all its children.
+Child need to specify their size. If they use constraint, the last one will hide
+previous one. They will fit available space + move to next line if necessary.
+Flow will fill all available space in its parent, and parent can be resized to
+match the space needed to display all its children.
 
 #### parent definition
 
@@ -646,3 +657,56 @@ zoom openInNewSpace
 
 As this example is dynamic, it's better if you look at the example or try this
 code directly into Pharo. As screenshot couldn't render it properly.
+
+### Proportional layout
+
+layout that determines the position and extent of each child of an element by
+taking into account fractions defined in the constraints.
+
+#### parent definition
+
+`BlProportionalLayout new`
+
+#### children constraints
+
+* horizontal
+  * left
+  * right
+
+* vertical
+  * bottom
+  * top
+
+#### example
+
+```smalltalk
+| aContainer childA childB |
+childA := BlElement new
+    id: #childA;
+    background: Color red;
+    constraintsDo: [ :c |
+        c proportional horizontal rightFraction: 0.5 ];
+    yourself.
+
+childB := BlElement new
+    id: #childB;
+    background: Color green;
+    constraintsDo: [ :c |
+        c proportional horizontal leftFraction: 0.5 ];
+    yourself.
+
+aContainer := BlElement new
+    id: #container;
+    background: Color blue;
+    layout: BlProportionalLayout new;
+    size: 100 @ 100;
+    addChild: childA;
+    addChild: childB;
+    constraintsDo: [ :c |
+        c horizontal matchParent.
+        c vertical matchParent ];
+    padding: (BlInsets all: 5);
+    yourself.
+
+aContainer openInNewSpace.
+```

@@ -102,15 +102,24 @@ element addAnimation: animation.
 
 Apply a gaussian blur effect with opacity on BlElement
 
-TODO: Example to develop
+```smalltak
+BlGaussianEffectOpacityAnimation new
+                        delay: 1 second;
+                        color: Color red;
+                        width: 25;
+                        opacity: 0.9;
+                        duration: 300 milliSeconds.
+```
 
 ### Opacity animation
 
 Update the opacity of the BlElement from its initial value to specified opacity.
 
 ```smalltalk
-(BlOpacityAnimation new opacity: 1.6) 
-    duration: 300 milliSeconds.
+ BlOpacityAnimation new
+                    delay: 1 second;
+                    opacity: 0.1;
+                    duration: 300 milliSeconds.
 ```
 
 ### transform animation

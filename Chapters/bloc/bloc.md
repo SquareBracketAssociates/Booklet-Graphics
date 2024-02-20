@@ -162,16 +162,33 @@ geometry bounds to take border width into its calculation.
 
 quick set-up: `background: (Color red alpha: 0.8);`
 
-background: (Color r: 63 g: 81           b: 181     range: 255);
-background: ((BlLinearGradientPaint direction: 1 @ 1) from: Color red to: Color blue).
+using rgb color
 
+```smalltalk
+background: (Color r: 63 g: 81           b: 181     range: 255);
+```
+
+using linear gradient
+
+```smalltalk
+background: ((BlLinearGradientPaint direction: 1 @ 1) from: Color red to: Color blue).
+```
+
+using radial gradient
+
+```smalltalk
 background: (BlRadialGradientPaint new
 stops: { 0 -> Color blue. 1 -> Color red };
 center: largeExtent // 2;
 radius: largeExtent min;
 yourself);
+```
 
+Using dedicated *BlPaintBackground* object.
+
+```smalltalk
 background: ((BlPaintBackground paint: fillColor asBlPaint) opacity: 0.75; yourself);
+```
 
 ![background color](figures/backgroundcolortype.png)
 
@@ -218,11 +235,11 @@ You can apply opacity to background, border, or to your hole element.
 
 You can apply transformation to a BlElement:
 
-- rotation
-- translation
-- Scaling
-- reflection
-- etc...
+* rotation
+* translation
+* Scaling
+* reflection
+* etc...
 
 transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
 

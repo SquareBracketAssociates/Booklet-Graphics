@@ -133,3 +133,39 @@ your graphical interface; it'll follow the same layout rules.
 ![text measure](figures/textMeasure.png)
 
 By default, *BlTextElement* will follow the *tightMeasurement* mesaure.
+
+## example
+
+Rectangle surrounded by number:
+
+```smalltalk
+BlElement new
+    layout: (BlGridLayout horizontal columnCount: 3);
+    constraintsDo: [ :c |
+        c horizontal matchParent.
+        c vertical matchParent ];
+    addChildren: {
+        "top row"
+        (BlTextElement new text: '5,0' asRopedText).
+        (BlElement new size: 0@0).
+        (BlTextElement new text: '13,0' asRopedText).
+        
+        "middle row"
+        (BlElement new size: 0@0).
+        (BlElement new
+            constraintsDo: [ :c |
+                c horizontal matchParent.
+                c vertical matchParent ];
+            border: (BlBorder paint: Color gray width: 1)).
+        (BlElement new size: 0@0).
+        
+        "bottom row"
+        (BlTextElement new text: '5,25' asRopedText).
+        (BlElement new size: 0@0).
+        (BlTextElement new text: '13,25' asRopedText). }.
+
+```
+
+which gives:
+
+![rectangle with numbers](figures/rectangleWithNumbers.png)

@@ -8,11 +8,10 @@ This chapter is heavily inspired by [morphic introduction](https://github.com/Sq
 All of the objects that you see on the screen when you run Pharo are
 *BlElemments*, that is, they are instances of subclasses of class `BlElement`.
 
-The class `BlElement` itself is a large class with many methods;
-this makes it possible for subclasses to implement interesting
-behaviour with little code. You can also customize an element
-directly. Contrary to the old Morphic environment, Bloc favor
-much more object composition over inheritance.
+The class `BlElement` itself is a large class with many methods; this makes it
+possible for subclasses to implement interesting behaviour with little code. You
+can also customize an element directly. Contrary to the old Morphic environment,
+Bloc favor much more object composition over inheritance.
 
 To create a BlElement to represent a string object, execute the following code in a Playground.
 

@@ -1,26 +1,24 @@
 # Alexandrie
 
-There are two different computer graphics: vector and raster graphics. Raster
-graphics represents images as a collection of pixels. Vector graphics is the use
-of geometric primitives such as points, lines, curves, or polygons to represent
-images. These primitives are created using mathematical equations.
+In the realm of computer graphics, two fundamental approaches reign: **vector graphics** and **raster graphics**. 
 
-Ultimately, picture on a computer are displayed on a screen with a specific
-display dimension. However, while raster graphic doesn't scale very well
-when the resolution differ too much from the picture resolution, vector graphics
-are rasterized to fit the display they will appear on. Rasterization is the
-technique of taking an image described in a vector graphics format and
-transform it into a set of pixels for output on a screen.
+Raster graphics, akin to mosaics, construct images from a multitude of tiny
+colored squares called pixels. Each pixel represents a specific point on the
+display, contributing to the overall image by its color and position. The
+resolution of a raster image, defined by the number of pixels horizontally and
+vertically, dictates the level of detail it can capture. Increasing the image
+size beyond its original resolution often results in pixelation, a loss of
+sharpness and clarity as individual pixels become more prominent. Raster graphics reign supreme in capturing photographic imagery and complex color gradients.
 
-Both types of computer graphics have advantages and disadvantages. The
-advantages of vector graphics over raster are:
+In stark contrast, vector graphics embrace a fundamentally different philosophy.
+Instead of relying on a grid of pixels, they utilize geometric primitives such
+as points, lines, and curves to represent visual elements. These primitives are
+defined by mathematical equations, enabling precise control over their shape,
+size, and position. Unlike raster graphics, vector images are
+resolution-independent. They can be scaled infinitely without compromising image
+quality. They are ideal for logos, illustrations, technical drawings, and any application where maintaining sharp lines and details is crucial.
 
-* Smaller size,
-* Ability to zoom indefinitely,
-* Moving, scaling, filling, and rotating do not degrade the quality of an image.
-
-Enter Alexandrie, a vector based graphic API. Under the scene, it use the
-[Cairo graphic library](https://www.cairographics.org/) for the rasterization phase.
+Historically, Pharo employed two distinct libraries for graphical rendering: **FormCanvas**, utilizing a bitmap-based approach, and **Athens**, specializing in vector graphics. However, the introduction of **Bloc** marks a significant shift, ushering in **Alexandrie**, a cutting-edge vector graphics API specifically designed for the Pharo environment. It leverages the well-established [Cairo graphic library](https://www.cairographics.org/) for the critical rasterization process
 
 Here's a full example. You should be able to understand it before the end of this
 chapter.

@@ -2,10 +2,22 @@
 
 ## introduction
 
-**Bloc** is the new graphical framework developped for Pharo. Initially
-developped by Pharo team, it has been extended by Feenk team for GToolkit. Their
-work is now being integrated back into **Pharo**. It should ultimately replace
-the aging **Morphic** graphical framework,
+**Bloc** is a powerful and innovative graphical framework designed specifically
+for Pharo. Initially developed by the **Pharo** team, it has received valuable
+contributions from the Feenk team for **GToolkit** integration. These combined
+efforts are now being merged back into **Pharo**, paving the way for a
+significant step forward in its graphical capabilities.
+
+### Evolution Beyond Morphic
+
+**Bloc** is poised to become the primary graphical framework for Pharo,
+gradually replacing the well-established but aging Morphic framework. This
+transition promises to bring numerous advantages, including:
+
+* Enhanced performance and efficiency
+* Greater flexibility and customization options
+* Modernized development experience
+* Improved compatibility with various platforms and technologies
 
 To install it in Pharo 11, simply type in the playground
 
@@ -20,17 +32,29 @@ on: MCMergeOrLoadWarning
 do: [ :warning | warning load ].
 ```
 
-Bloc is designed to favor composition over inheritance. Basic bloc element can
-be customized, and added to each other, to create higher level component. The
-root of all graphical Bloc element is **BlElement**.
+**Bloc** distinguishes itself by prioritizing object composition over
+inheritance as its core design principle. This means that instead of relying
+heavily on complex inheritance hierarchies, **Bloc** encourages building user
+interface components by combining and customizing basic building blocks.
 
-Bloc introduce new concept in the user interface. With Bloc, we  deal with
-**BlUniverse** and **BlSpace**. **BlSpace** is an operating system window in
-which the Pharo systems is executed. If you have more than one BlSpace opened,
-they will be listed as part of BlUniverse - a list of all available BlSpace in
-your current Pharo session.
+### BlElement: The Foundation of Bloc Components
 
-Let's create our first Bloc component.  
+Every visual element within **Bloc** stems from the fundamental class
+**BlElement**. This versatile class serves as the foundation upon which you can
+construct more intricate components. By directly customizing and combining
+**BlElement** instances, you gain granular control over the appearance and
+behavior of your UI elements.
+
+### Navigating Bloc's Spatial Landscape: BlUniverse and BlSpace
+
+**Bloc** introduces two key concepts for managing the visual environment:
+**BlUniverse** and **BlSpace**. Imagine **BlUniverse** as a container housing a
+collection of individual **BlSpace** instances. Each **BlSpace** represents a
+distinct operating system window where your Pharo application unfolds. If you
+have multiple windows open simultaneously, they'll be neatly organized within
+the **BlUniverse**, providing a clear overview of your active spaces.
+
+### Ready to Build: Creating Your First Bloc Component
 
 ```smalltalk
 BlElement new
@@ -40,34 +64,42 @@ background: Color blue;
 openInNewSpace
 ```
 
-Once executed, a new window should appear on your desktop, with a white
-background, and a blue rectangle inside. Let's look at it in more detail.
+![basic element](figures/basicElement.png)
 
-We first create a new BlElement. It's a blank element, and if you try to display
-it, you won't see anything. The shape of your element, in Bloc, is defined by
-its geometry so we must specify it.  It's a simple rectangle in our example, but
-it can be much more complicated. We'll look at geometry in more detail later. We
-then define its size, its color, and then ask to open it in a new space.
+1. **Start with a blank canvas:** Begin by creating a new BlElement. This serves
+as the foundation for your user interface element, initially appearing
+invisible.
+1. **Define its shape:** In Bloc, the element's visual representation is
+determined by its geometry. In this example, we'll use a simple rectangle, but
+more complex shapes are also possible (explored in further detail later).
+1. **Set its dimensions and appearance:** Specify the element's size and color
+to customize its visual characteristics.
+1. **Bring it to life:** Finally, open the element in a new space, making it
+visible on the screen.
 
 ## element shape & color
 
-* geometry (bounds)
-* border & outSkirts (outside, centered, inside)
-* background
-
 ### geometry of BlElement
 
-Geometry will define the shape and the bounds of your element. Each element can
-have only one geometry. You can also see each element as a *geometry*
-encasulated inside a hidden rectangle (its bounds). There are several geometry
-figures available: `BlElementGeometry allSubclasses`
+In Bloc, the visual form and boundaries of your UI elements are determined by
+their geometries. Each element can only possess a single geometry, essentially
+acting as a blueprint for its shape and size. You can visualize an element as a
+specific geometry encapsulated within an invisible rectangular container,
+representing its overall *bounds*.
 
-Bloc offer a very nice way of creating custom component with advanced
-layout possibilities to mix and position different graphical elements together.
+Bloc provides a diverse range of pre-defined geometry shapes accessible through
+`BlElementGeometry allSubclasses`. This comprehensive library empowers you to
+construct elements of varying complexities, from basic rectangles and circles to
+more intricate forms.
 
-When drawing with Alexandrie canvas, you may have noticed the
-few primitives that we where using: lines, curves and bezier curves. Here is an
-example of different geometry primitives available in pharo.
+Bloc excels in facilitating the creation of custom components with advanced
+layout possibilities. Imagine building complex layouts by strategically
+arranging various elements, each defined by its unique geometry, to form a
+cohesive whole.
+
+While Alexandrie canvas provides a foundational set of building drawing
+primitives, Bloc offers a richer library of pre-defined shapes and the
+flexibility to construct even more intricate geometries.
 
 ![base geometry](figures/allGeometry.png)
 

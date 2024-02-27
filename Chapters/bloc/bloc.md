@@ -22,14 +22,15 @@ transition promises to bring numerous advantages, including:
 To install it in Pharo 11, simply type in the playground
 
 ```smalltalk
-[ Metacello new
-baseline: 'Bloc';
-repository: 'github://pharo-graphics/Bloc:dev-1.0/src';
-onConflictUseIncoming;
-ignoreImage;
-load ]
-on: MCMergeOrLoadWarning
-do: [ :warning | warning load ].
+EpMonitor disableDuring: [
+  Author useAuthor: 'Load' during: [
+    [ Metacello new baseline: 'Toplo'; repository: 'github://pharo-graphics/Toplo:master/src';
+        onConflictUseIncoming;
+        ignoreImage;
+        load.
+    ] on: MCMergeOrLoadWarning do: [ :warning | warning load ].
+  ].
+]
 ```
 
 **Bloc** distinguishes itself by prioritizing object composition over

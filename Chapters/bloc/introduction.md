@@ -25,12 +25,12 @@ This creates a BlTextElement to represent the string
 You should obtain a graphical element (a `BlElement`), which you can
 inspect.
 
-Of course, it is possible to define morphs that are more interesting
+Of course, it is possible to define elements that are more interesting
 graphical representations than the one that you have just seen.
 
 Now execute
 `BlElement new size: 20@20; background: (BlBackground paint: Color orange)`
-in a Playground. Instead of the string-like morph, you get an orange square.
+in a Playground. Instead of the string-like element, you get an orange square.
 ![basic element inspect](figures/basicelementinspect.png)
 
 ## manipulating BlElement
@@ -53,13 +53,15 @@ and height of the bloc element rather than a location.
 Type the following code into a playground and **Do it**:
 
 ```smalltalk
-joe := BlElement new size: 20@20; background: (BlBackground paint: Color blue).
-joe openInNewSpace.
-joe.
+joe := BlElement new size: 100@50; background: Color blue.
+bill := BlElement new size: 100@50; background: Color red; position: 100@100.
+space := BlSpace new.
+space root addChildren: { joe . bill }.
+space show .
 ```
 
 Then, in the inspector, type `self position` and then `Print it`. To move joe,
-execute `self position: (self position + (10@3))` repeatedly.
+execute `joe position: (self position + (10@3))` repeatedly.
 
 It is possible to do a similar thing with size. `self extent` answers joe's
 size; to have joe grow, execute `self size: (self extent * 1.1)`. To change

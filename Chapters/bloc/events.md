@@ -135,7 +135,7 @@ surface addChild: elt.
 elt relocate: -20@(-20).
   
 surface when: BlMouseMoveEvent do: [ :anEvent |
-  anEvent consumed: true.
+  anEvent consumed: true. "Event stops getting propagated while also not doing anything"
   elt relocate: (anEvent localPosition + (10@10)) ].
   
 surface when: BlMouseLeaveEvent do: [ :anEvent |

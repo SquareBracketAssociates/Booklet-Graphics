@@ -195,16 +195,39 @@ and is a good fit for *flow layout* or *linear layout*. For layout that have a
 limited number of child, like *frame layout*, it's better to let children decide
 of their position constraints. You'll find some example below.
 
-### overriding or redefining parent layout
+### Ignoring or interacting with parent layout
 
-You can ignore the layout define by the parent using *ignoreLayout* or override
-it using *flow*, *frame*, *grid*, *linear* or *relative* message.
+You can ignore the layout define by the parent using *ignoreLayout*. When you
+use this constraint, your element will be removed from parent layout rules,
+and follow *BlBasicLayout* instead, meaning you can place your element at
+arbitrary position within your parent element.
 
 ```smalltalk
-constraintsDo: [ :c |
-            c ignoreByLayout.
-            c ignored horizontal alignRightAt: 1.1.
-            c ignored vertical alignTopAt: 1.1 ].
+    constraintsDo: [ :c | c ignoreByLayout].
+```
+
+You can also interact with parent layout constraint using *flow*, *frame*,
+*grid*, *linear* or *relative* message. In the example below, the first element
+will use all the space of its parent, and manage the position of its children
+using *BlFrameLayout* strategy. The second element, which could act as a
+container for other sub-element, apply *BlLinearLayout* strategy, but position
+itself on his parent using the *frame* constraint.
+
+```smalltalk
+BlElement new
+    layout: BlFrameLayout new;
+    constraintsDo: [ :c |
+        c vertical matchParent.
+        c horizontal matchParent ];
+    addChild: aContainer
+
+aContainer := BlElement new
+    layout: BlLinearLayout horizontal alignCenter;
+    constraintsDo: [ :c |
+    c vertical fitContent.
+    c horizontal fitContent.
+    c frame horizontal alignCenter.
+    c frame vertical alignCenter ].
 ```
 
 ### Example

@@ -306,6 +306,12 @@ aContainer forceLayout.
 
 ![transform example](figures/transformexample.png)
 
+A few hint on using transormDo:
+
+* transformDo: can be applied at any moment during the life of an object.
+* you can use any static or pre-compute properties with transformDo:
+* if you want to use dynamic layout properties (like size) with *transformDo*:, you need to wait for layout phase to be completed.
+
 ## Bloc styles
 
 ## element custom Painting

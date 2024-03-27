@@ -328,7 +328,11 @@ cross requestFocus.
 
 ## Drag-and-drop
 
-Bloc also supports drag-and-drop.
+Bloc has also basic supports for drag-and-drop, that needs to be furthered
+improved. In the coming example, if you change the order of appearance of the
+elements, drag&drop may not work - element will not catch the appropriate event.
+This example will however show all event used with a working example.
+
 Let's examine a simple example with three bloc elements, a target and two sources.
 The target will accept an element only if the dropped one matches a given
 condition: in our example, the element background should be blue.

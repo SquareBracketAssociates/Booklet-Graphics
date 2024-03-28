@@ -15,13 +15,13 @@
 
 
 % =================================================================
-\title{Pharo Graphics}
-\author{The Pillar team}
+\title{Graphics in Pharo}
+\author{R. De Villemeur and S. Ducasse}
 \series{Square Bracket tutorials}
 
 \hypersetup{
-  pdftitle = {Pharo Graphics},
-  pdfauthor = {The Pillar team},
+  pdftitle = {Graphics in Pharo},
+  pdfauthor = {R. De Villemeur and S. Ducasse},
   pdfkeywords = {graphics, canvas}
 }
 
@@ -37,7 +37,7 @@
 \cleartoverso
 {\small
 
-  Copyright 2017 by The Pillar team.
+  Copyright 2017 by R. De Villemeur and S. Ducasse.
 
   The contents of this book are protected under the Creative Commons
   Attribution-ShareAlike 3.0 Unported license.
@@ -591,15 +591,15 @@ renderAthens
 \section{Practicing Athens drawing}
 To help you practice your Athens drawing, you can use Athens sketch, migrated from SmalltalkHub which is available at\href{https://github.com/rvillemeur/AthensSketch}{Athens Sketch: \href{https://github.com/rvillemeur/AthensSketch}{https://github.com/rvillemeur/AthensSketch}}
 
-\part{Bloc \& BlElement}
-\chapter{introduction}
+\chapter{Bloc \& BlElement}
+\section{Introduction}
 \textbf{Bloc} is a powerful and innovative graphical framework designed specifically
-for Pharo. Initially developed by the \textbf{Pharo} team, it has received valuable
+for Pharo. Initially developed by Alain Plantec, it has received large and valuable
 contributions from the Feenk team for \textbf{GToolkit} integration. These combined
 efforts are now being merged back into \textbf{Pharo}, paving the way for a
 significant step forward in its graphical capabilities.
 
-\section{Evolution Beyond Morphic}
+\section{Evolution beyond Morphic}
 \textbf{Bloc} is poised to become the primary graphical framework for Pharo,
 gradually replacing the well-established but aging Morphic framework. This
 transition promises to bring numerous advantages, including:
@@ -611,6 +611,7 @@ transition promises to bring numerous advantages, including:
     \item Improved compatibility with various platforms and technologies
 \end{itemize}
 
+\section{Installation}
 To install it in Pharo 11, simply type in the playground
 \begin{displaycode}{smalltalk}
 EpMonitor disableDuring: [
@@ -629,36 +630,38 @@ inheritance as its core design principle. This means that instead of relying
 heavily on complex inheritance hierarchies, \textbf{Bloc} encourages building user
 interface components by combining and customizing basic building blocks.
 
-\section{BlElement: The Foundation of Bloc Components}
-Every visual element within \textbf{Bloc} stems from the fundamental class\textbf{BlElement}. This versatile class serves as the foundation upon which you can
-construct more intricate components. By directly customizing and combining\textbf{BlElement} instances, you gain granular control over the appearance and
+Note that Toplo is a new skinnable widget library built on top of Bloc.
+
+\section{BlElement: The foundation of Bloc components}
+Every visual element within \textbf{Bloc} stems from the fundamental class\textcode{BlElement}. This versatile class serves as the foundation upon which you can
+construct more intricate components. By directly customizing and combining\textcode{BlElement} instances, you gain granular control over the appearance and
 behavior of your UI elements.
 
-\section{Navigating Bloc's Spatial Landscape: BlUniverse and BlSpace}
-\textbf{Bloc} introduces two key concepts for managing the visual environment:\textbf{BlUniverse} and \textbf{BlSpace}. Imagine \textbf{BlUniverse} as a container housing a
-collection of individual \textbf{BlSpace} instances. Each \textbf{BlSpace} represents a
+\subsection{Navigating Bloc's spatial landscape}
+\textbf{Bloc} introduces two key concepts for managing the visual environment:\textcode{BlUniverse} and \textcode{BlSpace}. Imagine \textcode{BlUniverse} as a container housing a
+collection of individual \textcode{BlSpace} instances. Each \textcode{BlSpace} represents a
 distinct operating system window where your Pharo application unfolds. If you
 have multiple windows open simultaneously, they'll be neatly organized within
-the \textbf{BlUniverse}, providing a clear overview of your active spaces.
+the \textcode{BlUniverse}, providing a clear overview of your active spaces.
 
-\section{Ready to Build: Creating Your First Bloc Component}\begin{displaycode}{smalltalk}
+\subsection{Ready to Build: Creating Your First Bloc Component}\begin{displaycode}{smalltalk}
 BlElement new
-geometry: BlRectangleGeometry  new;
-size: 200 @ 100;
-background: Color blue;
-openInNewSpace
+	geometry: BlRectangleGeometry  new;
+	size: 200 @ 100;
+	background: Color blue;
+	openInNewSpace
 \end{displaycode}
 
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{/Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/basicElement.png}
-\caption{basic element}
+\caption{Creating a basic element.}
 \end{center}
 \end{figure}
 
 
 \begin{enumerate}
-    \item \textbf{Start with a blank canvas:} Begin by creating a new BlElement. This serves
+    \item \textbf{Start with a blank canvas:} Begin by creating a new \textcode{BlElement}. This serves
 \end{enumerate}
 
 as the foundation for your user interface element, initially appearing
@@ -683,8 +686,7 @@ to customize its visual characteristics.
 
 visible on the screen.
 
-\chapter{element shape \& color}
-\section{geometry of BlElement}
+\section{Geometry of BlElement}
 In Bloc, the visual form and boundaries of your UI elements are determined by
 their geometries. Each element can only possess a single geometry, essentially
 acting as a blueprint for its shape and size. You can visualize an element as a
@@ -700,7 +702,7 @@ layout possibilities. Imagine building complex layouts by strategically
 arranging various elements, each defined by its unique geometry, to form a
 cohesive whole.
 
-While Alexandrie canvas provides a foundational set of building drawing
+While the Alexandrie canvas provides a foundational set of building drawing
 primitives, Bloc offers a richer library of pre-defined shapes and the
 flexibility to construct even more intricate geometries.
 
@@ -726,9 +728,9 @@ flexibility to construct even more intricate geometries.
     \item \textbf{triangle} : \textcode{BlTriangleGeometry new matchExtent: 50 @ 100; beLeft}
 \end{itemize}
 
-\section{element border}
-The geometry is like a an invisible line on which your border is painted. The
-painting is a subclass of \textbf{BlPaint}, and one of the three:
+\section{Element border}
+The geometry is like an invisible line on which your border is painted. The
+painting is a subclass of \textcode{BlPaint}, and one of the three:
 
 \begin{itemize}
     \item solid color
@@ -746,10 +748,10 @@ painting is a subclass of \textbf{BlPaint}, and one of the three:
 
 Your border opacity can be specified as well: \textcode{opacity: 0.5;}
 
-By default, your border will be a full line, but it can also be dashed, with\textbf{dash array} and \textbf{dash offset}. Dash array define the number of element, and
+By default, your border will be a full line, but it can also be dashed, with\textbf{dash array} and \textbf{dash offset}. Dash arrays define the number of element, and
 dash offset, the space between elements.
 
-You also have pre-defined option, available in a single call:
+You also have a pre-defined option, available in a single call:
 
 \begin{itemize}
     \item \textbf{dashed}
@@ -867,7 +869,7 @@ background: ((BlPaintBackground paint: fillColor asBlPaint) opacity: 0.75; yours
 \end{figure}
 
 
-\section{element effect}
+\section{Element effect}
 \textcode{BlElementEffect allSubclasses}
 \begin{displaycode}{smalltalk}
 BlElement new
@@ -887,10 +889,11 @@ BlElement new
 \end{center}
 \end{figure}
 
-
+\begin{displaycode}{smalltalk}
 effect: (BlSimpleShadowEffect
-color: (Color orange alpha: shadowAlpha)
-offset: shadowOffset);
+	color: (Color orange alpha: shadowAlpha)
+	offset: shadowOffset);
+\end{displaycode}
 \begin{displaycode}{smalltalk}
 BlElement new
         size: 300 @ 150;
@@ -903,35 +906,36 @@ BlElement new
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{/Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/gaussianshadow.png}
-\caption{gaussian shadow}
+\caption{Gaussian shadow.}
 \end{center}
 \end{figure}
 
 
-\section{element opacity}
-\textcode{element opacity:}, value between 0 and 1, 0 meaning completely transparent
-You can apply opacity to background, border, or to your hole element.
+\section{Element opacity}
+The element opacity is a value between 0 and 1, 0 meaning completely transparent.
+You can apply opacity to a background, a border, or to your whole element.
 
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{/Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/elementwitopacity.png}
-\caption{element opacity}
+\caption{Element opacity.}
 \end{center}
 \end{figure}
 
 
-\chapter{element transformation}
-You can apply transformation to a BlElement:
+\section{Element transformation}
+You can apply transformations to a \textcode{BlElement}:
 
 \begin{itemize}
     \item rotation
     \item translation
-    \item Scaling
+    \item scaling
     \item reflection
     \item etc...
 \end{itemize}
-
-transformDo: {[} :b \textbar{} b scaleBy: 0.2; translateBy: -25 @ -15 {]};
+\begin{displaycode}{smalltalk}
+element transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
+\end{displaycode}
 \begin{displaycode}{smalltalk}
 aContainer := BlElement new
                     layout: BlFrameLayout new;
@@ -963,48 +967,104 @@ aContainer forceLayout.
 \begin{figure}[htpb]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{/Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/transformexample.png}
-\caption{transform example}
+\caption{Transform example.}
 \end{center}
 \end{figure}
 
 
-A few hint on using transormDo:
+\subsection{Transform catches}
+The message \textcode{transformDo:} can be applied at any moment during the life of an object.
+You can use any static or pre-compute properties with \textcode{transformDo:} as in the following snippet.
+Here \textcode{ -25 asPoint} does not depend on the child or parent size.
+\begin{displaycode}{smalltalk}
+| child parent |
+child := BlElement new 
+background: Color lightBlue; 
+geometry: BlCircleGeometry new;
+yourself.
+ 
+child position: 100@100.
+child  transformDo: [ :t | t translateBy: -25 asPoint ].
 
-\begin{itemize}
-    \item transformDo: can be applied at any moment during the life of an object.
-    \item you can use any static or pre-compute properties with transformDo:
-    \item if you want to use dynamic layout properties (like size) with \textit{transformDo}:, you need to wait for layout phase to be completed.
-\end{itemize}
+parent := BlElement new 
+size: 200 asPoint; 
+addChild: child;
+background: Color lightRed.
 
-\chapter{Bloc styles}
-\chapter{element custom Painting}
-Bloc really favor BlElement composition to create your interface. Most of the
+parent openInSpace.
+\end{displaycode}
+
+\textbf{Important.}
+if you want to use dynamic layout properties (such as \textcode{size}) with \textcode{transformDo:}, you need to wait for layout phase to be completed using \textcode{whenLayoutedDoOnce:}.
+Compare the two examples below:
+\begin{displaycode}{smalltalk}
+| child parent |
+child := BlElement new 
+background: Color lightBlue; 
+geometry: BlCircleGeometry new;
+yourself.
+ 
+child position: 100@100.
+ transformDo: [ :t | t translateBy: child size negated / 2 ];
+
+parent := BlElement new 
+size: 200 asPoint; 
+addChild: child;
+background: Color lightRed.
+
+parent openInSpace.
+\end{displaycode}
+\begin{displaycode}{smalltalk}
+| child parent |
+child := BlElement new 
+background: Color lightBlue; 
+geometry: BlCircleGeometry new;
+yourself.
+ 
+child position: 100@100.
+
+parent := BlElement new 
+size: 200 asPoint; 
+addChild: child;
+background: Color lightRed.
+
+parent whenLayoutedDoOnce: [ 
+	child  transformDo: [ :t | t translateBy: (child size negated / 2) ]  ].
+
+parent openInSpace.
+\end{displaycode}
+
+\section{Bloc styles}
+\section{Element custom Painting}
+Bloc favors BlElement composition to create your interface. Most of the
 time, you will not have to create a custom painting of your element widget. You
 can already do a lot with existing geometry.
 
 Ultimately, you can define
 drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
-for its elements. However, Bloc element composition create a tree of elements,
+for its elements. However, Bloc element composition creates a tree of elements,
 that can be inspected, and shaped dynamically.
 
-creating and drawing your own block
-=\textgreater{} subclass BlElement
-=\textgreater{} Custom drawing is done with drawOnSpartaCanvas: method.
-=\textgreater{}
+Creating and drawing your own bloc
 
-BlElement \textgreater{}\textgreater{} aeFullDrawOn: aCanvas
-\symbol{34}Main entry point to draw myself and my children on an Alexandrie canvas.\symbol{34}
+\begin{itemize}
+    \item subclass BlElement
+    \item Custom drawing is done with drawOnSpartaCanvas: method.
+\end{itemize}
+\begin{displaycode}{smalltalk}
+BlElement >> aeFullDrawOn: aCanvas
+	"Main entry point to draw myself and my children on an Alexandrie canvas."
 
-self aeDrawInSameLayerOn: aCanvas.
+	self aeDrawInSameLayerOn: aCanvas.
 
-self aeCompositionLayersSortedByElevationDo: {[} :each \textbar{} each paintOn: aCanvas {]}.
+	self aeCompositionLayersSortedByElevationDo: [ :each | each paintOn: aCanvas ].
+\end{displaycode}
 
-Element geometry is taken care by:
-BlElement \textgreater{}\textgreater{} aeDrawGeometryOn: aeCanvas
+Element geometry is taken care by:\textcode{BlElement \textgreater{}\textgreater{} aeDrawGeometryOn: aeCanvas}
 Painting is done on an Alexandrie Canvas, then rendered on the host:
 BARenderer (BlHostRenderer) \textgreater{}\textgreater{} render: aHostSpace, display on a AeCairoImageSurface
 
-Drawing is done through method 'drawOnSpartaCanvas', which receive a sparta
+Drawing is done through method 'drawOnSpartaCanvas', which receives a sparta
 (vector) canvas as an argument.
 
 \begin{enumerate}
@@ -1013,7 +1073,7 @@ Drawing is done through method 'drawOnSpartaCanvas', which receive a sparta
     \item aeDrawGeometryOn:
 \end{enumerate}
 
-\chapter{UI Building}
+\section{UI Building}
 \textless{}\href{https://github.com/OpenSmock/Pyramid/tree/main>}{https://github.com/OpenSmock/Pyramid/tree/main\textgreater{}}
 
 

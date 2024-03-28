@@ -1,14 +1,14 @@
-# Bloc & BlElement
+## Bloc & BlElement
 
-## introduction
+### Introduction
 
 **Bloc** is a powerful and innovative graphical framework designed specifically
-for Pharo. Initially developed by the **Pharo** team, it has received valuable
+for Pharo. Initially developed by Alain Plantec, it has received large and valuable
 contributions from the Feenk team for **GToolkit** integration. These combined
 efforts are now being merged back into **Pharo**, paving the way for a
 significant step forward in its graphical capabilities.
 
-### Evolution Beyond Morphic
+### Evolution beyond Morphic
 
 **Bloc** is poised to become the primary graphical framework for Pharo,
 gradually replacing the well-established but aging Morphic framework. This
@@ -19,6 +19,8 @@ transition promises to bring numerous advantages, including:
 * Modernized development experience
 * Improved compatibility with various platforms and technologies
 
+
+### Installation
 To install it in Pharo 11, simply type in the playground
 
 ```smalltalk
@@ -38,36 +40,38 @@ inheritance as its core design principle. This means that instead of relying
 heavily on complex inheritance hierarchies, **Bloc** encourages building user
 interface components by combining and customizing basic building blocks.
 
-### BlElement: The Foundation of Bloc Components
+Note that Toplo is a new skinnable widget library built on top of Bloc.
+
+### BlElement: The foundation of Bloc components
 
 Every visual element within **Bloc** stems from the fundamental class
-**BlElement**. This versatile class serves as the foundation upon which you can
+`BlElement`. This versatile class serves as the foundation upon which you can
 construct more intricate components. By directly customizing and combining
-**BlElement** instances, you gain granular control over the appearance and
+`BlElement` instances, you gain granular control over the appearance and
 behavior of your UI elements.
 
-### Navigating Bloc's Spatial Landscape: BlUniverse and BlSpace
+#### Navigating Bloc's spatial landscape
 
 **Bloc** introduces two key concepts for managing the visual environment:
-**BlUniverse** and **BlSpace**. Imagine **BlUniverse** as a container housing a
-collection of individual **BlSpace** instances. Each **BlSpace** represents a
+`BlUniverse` and `BlSpace`. Imagine `BlUniverse` as a container housing a
+collection of individual `BlSpace` instances. Each `BlSpace` represents a
 distinct operating system window where your Pharo application unfolds. If you
 have multiple windows open simultaneously, they'll be neatly organized within
-the **BlUniverse**, providing a clear overview of your active spaces.
+the `BlUniverse`, providing a clear overview of your active spaces.
 
-### Ready to Build: Creating Your First Bloc Component
+#### Ready to Build: Creating Your First Bloc Component
 
 ```smalltalk
 BlElement new
-geometry: BlRectangleGeometry  new;
-size: 200 @ 100;
-background: Color blue;
-openInNewSpace
+	geometry: BlRectangleGeometry  new;
+	size: 200 @ 100;
+	background: Color blue;
+	openInNewSpace
 ```
 
-![basic element](figures/basicElement.png)
+![Creating a basic element.](figures/basicElement.png)
 
-1. **Start with a blank canvas:** Begin by creating a new BlElement. This serves
+1. **Start with a blank canvas:** Begin by creating a new `BlElement`. This serves
 as the foundation for your user interface element, initially appearing
 invisible.
 1. **Define its shape:** In Bloc, the element's visual representation is
@@ -78,9 +82,8 @@ to customize its visual characteristics.
 1. **Bring it to life:** Finally, open the element in a new space, making it
 visible on the screen.
 
-## element shape & color
 
-### geometry of BlElement
+### Geometry of BlElement
 
 In Bloc, the visual form and boundaries of your UI elements are determined by
 their geometries. Each element can only possess a single geometry, essentially
@@ -98,28 +101,28 @@ layout possibilities. Imagine building complex layouts by strategically
 arranging various elements, each defined by its unique geometry, to form a
 cohesive whole.
 
-While Alexandrie canvas provides a foundational set of building drawing
+While the Alexandrie canvas provides a foundational set of building drawing
 primitives, Bloc offers a richer library of pre-defined shapes and the
 flexibility to construct even more intricate geometries.
 
-![base geometry](figures/allGeometry.png)
+![Base geometries.](figures/allGeometry.png)
 
-* **Annulus** : `BlAnnulusSectorGeometry new startAngle: 225; endAngle: 360;   innerRadius: 0.3; outerRadius: 0.9);`
-* **bezier** : `BlBezierCurveGeometry controlPoints: { 5@0. 25@80. 75@30. 95@100 }`
-* **circle** : `BlCircleGeometry new matchExtent: 100 @ 50`
-* **ellipse** : `BlEllipseGeometry new matchExtent: 100 @ 50)`
-* **line** : `BlLineGeometry from: 10@10 to: 90@90`
+* **Annulus**: `BlAnnulusSectorGeometry new startAngle: 225; endAngle: 360;   innerRadius: 0.3; outerRadius: 0.9);`
+* **Bezier**: `BlBezierCurveGeometry controlPoints: { 5@0. 25@80. 75@30. 95@100 }`
+* **Circle**: `BlCircleGeometry new matchExtent: 100 @ 50`
+* **Ellipse**: `BlEllipseGeometry new matchExtent: 100 @ 50)`
+* **Line**: `BlLineGeometry from: 10@10 to: 90@90`
 * **Polygon** : `BlPolygonGeometry vertices: {(10 @ 10). (10 @ 90). (50 @ 50). (90 @ 90). (90 @ 10)}`
 * **Polyline**: `BlPolylineGeometry vertices: {(10 @ 10). (10 @ 90). (50 @ 50).(90 @ 90). (90 @ 10) }`
 * **Rectangle** : `BlRectangleGeometry  new`
-* **Rounded rectangle** : `BlRoundedRectangleGeometry cornerRadius: 20`
-* **square** : `BlSquareGeometry new matchExtent: 70 @ 70`
-* **triangle** : `BlTriangleGeometry new matchExtent: 50 @ 100; beLeft`
+* **Rounded rectangle**: `BlRoundedRectangleGeometry cornerRadius: 20`
+* **Square**: `BlSquareGeometry new matchExtent: 70 @ 70`
+* **Triangle**: `BlTriangleGeometry new matchExtent: 50 @ 100; beLeft`
 
-### element border
+### Element border
 
-The geometry is like a an invisible line on which your border is painted. The
-painting is a subclass of **BlPaint**, and one of the three:
+The geometry is like an invisible line on which your border is painted. The
+painting is a subclass of `BlPaint`, and one of the three:
 
 * solid color
 * linear gradient color
@@ -130,15 +133,15 @@ painting is a subclass of **BlPaint**, and one of the three:
 Your border opacity can be specified as well: `opacity: 0.5;`
 
 By default, your border will be a full line, but it can also be dashed, with
-**dash array** and **dash offset**. Dash array define the number of element, and
+**dash array** and **dash offset**. Dash arrays define the number of element, and
 dash offset, the space between elements.
 
-You also have pre-defined option, available in a single call:
+You also have a pre-defined option, available in a single call:
 
 * **dashed**
 * **dashed small**
 
-![border dash](figures/multipletriangledash.png)
+![Border dash.](figures/multipletriangledash.png)
 
 If the path is not closed, The style extent of your border can be defined with
 
@@ -146,26 +149,26 @@ If the path is not closed, The style extent of your border can be defined with
 * **cap round**
 * **cap butt**
 
-Last, when the line of your border cross each other, you can define the style of
+Last, when the lines of your border cross each other, you can define the style of
 the join:
 
 * **round join**
 * **bevel join**
 * **mitter join**
 
-![border join type](figures/borderjointype.png)
+![Border join type.](figures/borderjointype.png)
 
-You have two option to define your border:
+You have two options to define your border:
 
-* short call : `border: (BlBorder paint: Color orange width: 5)`
-* with a builder :`BlBorder builder dashed; paint: Color red; width: 3; build`
+* short call: `element border: (BlBorder paint: Color orange width: 5)`
+* with a builder:`element border: (BlBorder builder dashed; paint: Color red; width: 3; build)`
 
-The first one is very helpfull for solid line definition. The builder let use
-customize all the detail of your border.
+The first one is very helpful for solid line definition. The builder lets use
+customize all the details of your border.
 
-### elements bounds and outskirts
+### Elements bounds and outskirts
 
-Lets look at the diffent possible bounds of your element.
+Let's look at the different possible bounds of your element.
 
 **Layout bounds** can be defined explicitly using **size:** method or dynamicaly
 Layout bounds are considered by layout algorithms to define mutual locations
@@ -225,7 +228,7 @@ background: ((BlPaintBackground paint: fillColor asBlPaint) opacity: 0.75; yours
 
 ![background color](figures/backgroundcolortype.png)
 
-### element effect
+### Element effect
 
 `BlElementEffect allSubclasses`
 
@@ -242,9 +245,12 @@ BlElement new
 
 ![simple shadow](figures/simpleshadow.png)
 
+```
 effect: (BlSimpleShadowEffect
-color: (Color orange alpha: shadowAlpha)
-offset: shadowOffset);
+	color: (Color orange alpha: shadowAlpha)
+	offset: shadowOffset);
+```
+
 
 ```smalltalk
 BlElement new
@@ -255,26 +261,29 @@ BlElement new
         effect: (BlGaussianShadowEffect color: Color yellow offset: 10@20 width: 5)
 ```
 
-![gaussian shadow](figures/gaussianshadow.png)
+![Gaussian shadow.](figures/gaussianshadow.png)
 
-### element opacity
+### Element opacity
 
-`element opacity:`, value between 0 and 1, 0 meaning completely transparent
-You can apply opacity to background, border, or to your hole element.
+The element opacity is a value between 0 and 1, 0 meaning completely transparent.
+You can apply opacity to a background, a border, or to your whole element.
 
-![element opacity](figures/elementwitopacity.png)
+![Element opacity.](figures/elementwitopacity.png)
 
-## element transformation
+### Element transformation
 
-You can apply transformation to a BlElement:
+You can apply transformations to a `BlElement`:
 
 * rotation
 * translation
-* Scaling
+* scaling
 * reflection
 * etc...
 
-transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
+```
+element transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
+```
+
 
 ```smalltalk
 aContainer := BlElement new
@@ -304,51 +313,117 @@ aContainer addChild: node.
 aContainer forceLayout.
 ```
 
-![transform example](figures/transformexample.png)
+![Transform example.](figures/transformexample.png)
 
-A few hint on using transormDo:
+#### Transform catches
 
-* transformDo: can be applied at any moment during the life of an object.
-* you can use any static or pre-compute properties with transformDo:
-* if you want to use dynamic layout properties (like size) with *transformDo*:, you need to wait for layout phase to be completed.
+The message `transformDo:` can be applied at any moment during the life of an object.
+You can use any static or pre-compute properties with `transformDo:` as in the following snippet.
+Here ` -25 asPoint` does not depend on the child or parent size.
 
-## Bloc styles
+```
+| child parent |
+child := BlElement new 
+background: Color lightBlue; 
+geometry: BlCircleGeometry new;
+yourself.
+ 
+child position: 100@100.
+child  transformDo: [ :t | t translateBy: -25 asPoint ].
 
-## element custom Painting
+parent := BlElement new 
+size: 200 asPoint; 
+addChild: child;
+background: Color lightRed.
 
-Bloc really favor BlElement composition to create your interface. Most of the
+parent openInSpace.
+```
+
+**Important.**
+if you want to use dynamic layout properties (such as `size`) with `transformDo:`, you need to wait for layout phase to be completed using `whenLayoutedDoOnce:`.
+Compare the two examples below:
+
+```
+| child parent |
+child := BlElement new 
+background: Color lightBlue; 
+geometry: BlCircleGeometry new;
+yourself.
+ 
+child position: 100@100.
+ transformDo: [ :t | t translateBy: child size negated / 2 ];
+
+parent := BlElement new 
+size: 200 asPoint; 
+addChild: child;
+background: Color lightRed.
+
+parent openInSpace.
+```
+
+
+
+```
+| child parent |
+child := BlElement new 
+background: Color lightBlue; 
+geometry: BlCircleGeometry new;
+yourself.
+ 
+child position: 100@100.
+
+parent := BlElement new 
+size: 200 asPoint; 
+addChild: child;
+background: Color lightRed.
+
+parent whenLayoutedDoOnce: [ 
+	child  transformDo: [ :t | t translateBy: (child size negated / 2) ]  ].
+
+parent openInSpace.
+```` 
+
+
+
+
+### Bloc styles
+
+### Element custom Painting
+
+Bloc favors BlElement composition to create your interface. Most of the
 time, you will not have to create a custom painting of your element widget. You
 can already do a lot with existing geometry.
 
 Ultimately, you can define
 drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
-for its elements. However, Bloc element composition create a tree of elements,
+for its elements. However, Bloc element composition creates a tree of elements,
 that can be inspected, and shaped dynamically.
 
- creating and drawing your own block
-=> subclass BlElement
-=> Custom drawing is done with drawOnSpartaCanvas: method.
-=>
+Creating and drawing your own bloc
+- subclass BlElement
+- Custom drawing is done with drawOnSpartaCanvas: method.
 
+```
 BlElement >> aeFullDrawOn: aCanvas
-"Main entry point to draw myself and my children on an Alexandrie canvas."
+	"Main entry point to draw myself and my children on an Alexandrie canvas."
 
-self aeDrawInSameLayerOn: aCanvas.
+	self aeDrawInSameLayerOn: aCanvas.
 
-self aeCompositionLayersSortedByElevationDo: [ :each | each paintOn: aCanvas ].
+	self aeCompositionLayersSortedByElevationDo: [ :each | each paintOn: aCanvas ].
+```
 
 Element geometry is taken care by:
-BlElement >> aeDrawGeometryOn: aeCanvas
+`BlElement >> aeDrawGeometryOn: aeCanvas`
 Painting is done on an Alexandrie Canvas, then rendered on the host:
 BARenderer (BlHostRenderer) >> render: aHostSpace, display on a AeCairoImageSurface
 
-Drawing is done through method 'drawOnSpartaCanvas', which receive a sparta
+Drawing is done through method 'drawOnSpartaCanvas', which receives a sparta
 (vector) canvas as an argument.
 
 1. aeDrawChildrenOn:
 2. aeDrawOn:
 3. aeDrawGeometryOn:
 
-## UI Building
+### UI Building
 
 <https://github.com/OpenSmock/Pyramid/tree/main>

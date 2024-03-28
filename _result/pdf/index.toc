@@ -23,28 +23,23 @@
 \contentsline {subsection}{Drawing using a mask}{10}{section*.15}%
 \contentsline {section}{\numberline {1.6}Some example}{10}{section.1.6}%
 \contentsline {section}{\numberline {1.7}Practicing Athens drawing}{12}{section.1.7}%
-\needspace {6\baselineskip }
-\contentsline {part}{\partnumberline {I}Bloc \& BlElement}{13}{part.1}%
 \needspace {3\baselineskip }
-\contentsline {chapter}{\chapternumberline {2}introduction}{15}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Evolution Beyond Morphic}{15}{section.2.1}%
-\contentsline {section}{\numberline {2.2}BlElement: The Foundation of Bloc Components}{16}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Navigating Bloc's Spatial Landscape: BlUniverse and BlSpace}{16}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Ready to Build: Creating Your First Bloc Component}{16}{section.2.4}%
-\needspace {3\baselineskip }
-\contentsline {chapter}{\chapternumberline {3}element shape \& color}{19}{chapter.3}%
-\contentsline {section}{\numberline {3.1}geometry of BlElement}{19}{section.3.1}%
-\contentsline {section}{\numberline {3.2}element border}{20}{section.3.2}%
-\contentsline {section}{\numberline {3.3}elements bounds and outskirts}{22}{section.3.3}%
-\contentsline {section}{\numberline {3.4}element background}{23}{section.3.4}%
-\contentsline {section}{\numberline {3.5}element effect}{24}{section.3.5}%
-\contentsline {section}{\numberline {3.6}element opacity}{25}{section.3.6}%
-\needspace {3\baselineskip }
-\contentsline {chapter}{\chapternumberline {4}element transformation}{27}{chapter.4}%
-\needspace {3\baselineskip }
-\contentsline {chapter}{\chapternumberline {5}Bloc styles}{29}{chapter.5}%
-\needspace {3\baselineskip }
-\contentsline {chapter}{\chapternumberline {6}element custom Painting}{31}{chapter.6}%
-\needspace {3\baselineskip }
-\contentsline {chapter}{\chapternumberline {7}UI Building}{33}{chapter.7}%
-\contentsline {chapter}{Bibliography}{35}{chapter*.17}%
+\contentsline {chapter}{\chapternumberline {2}Bloc \& BlElement}{13}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{13}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Evolution beyond Morphic}{13}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Installation}{13}{section.2.3}%
+\contentsline {section}{\numberline {2.4}BlElement: The foundation of Bloc components}{14}{section.2.4}%
+\contentsline {subsection}{Navigating Bloc's spatial landscape}{14}{section*.16}%
+\contentsline {subsection}{Ready to Build: Creating Your First Bloc Component}{14}{section*.17}%
+\contentsline {section}{\numberline {2.5}Geometry of BlElement}{15}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Element border}{17}{section.2.6}%
+\contentsline {section}{\numberline {2.7}elements bounds and outskirts}{18}{section.2.7}%
+\contentsline {section}{\numberline {2.8}element background}{19}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Element effect}{20}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Element opacity}{22}{section.2.10}%
+\contentsline {section}{\numberline {2.11}Element transformation}{22}{section.2.11}%
+\contentsline {subsection}{Transform catches}{23}{section*.18}%
+\contentsline {section}{\numberline {2.12}Bloc styles}{25}{section.2.12}%
+\contentsline {section}{\numberline {2.13}Element custom Painting}{25}{section.2.13}%
+\contentsline {section}{\numberline {2.14}UI Building}{25}{section.2.14}%
+\contentsline {chapter}{Bibliography}{27}{chapter*.19}%

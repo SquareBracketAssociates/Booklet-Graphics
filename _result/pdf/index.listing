@@ -1,6 +1,0 @@
-BlElement >> aeFullDrawOn: aCanvas
-	"Main entry point to draw myself and my children on an Alexandrie canvas."
-
-	self aeDrawInSameLayerOn: aCanvas.
-
-	self aeCompositionLayersSortedByElevationDo: [ :each | each paintOn: aCanvas ].

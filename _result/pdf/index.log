@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.15.0 (TeX Live 2022)  (format=lualatex 2022.5.29)  7 JAN 2023 10:57
+This is LuaHBTeX, Version 1.15.0 (TeX Live 2022)  (format=lualatex 2022.5.29)  28 MAR 2024 08:38
  restricted system commands enabled.
 **index.tex
 (./index.tex
@@ -2436,8 +2436,8 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <9> on input line 64.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 64.
-<_support/latex/sbabook/CreativeCommons-BY-SA.pdf, id=73, 120.45pt x 42.1575pt>
-
+<_support/latex/sbabook/CreativeCommons-BY-SA.pdf, id=173, 120.45pt x 42.1575pt
+>
 File: _support/latex/sbabook/CreativeCommons-BY-SA.pdf Graphic file (type pdf)
 <use _support/latex/sbabook/CreativeCommons-BY-SA.pdf>
 Package luatex.def Info: _support/latex/sbabook/CreativeCommons-BY-SA.pdf  used
@@ -2465,6 +2465,8 @@ LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
 (Font)              scaled to size 8.31833pt on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 3.
+LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
+(Font)              scaled to size 9.10857pt on input line 27.
 )
 LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
 (Font)              scaled to size 7.4865pt on input line 91.
@@ -2490,22 +2492,22 @@ Package fontspec Info: OpenSans scale = 0.8485381298040939.
 
 Package fontspec Info: OpenSans scale = 0.8485381298040939.
 
-luaotfload | aux : font no 105 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 106 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: OpenSans/B scale = 0.8318416072208472.
 
-luaotfload | aux : font no 111 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 112 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: OpenSans/I scale = 0.8485381298040939.
 
-luaotfload | aux : font no 112 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 113 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: OpenSans/BI scale = 0.8318416072208472.
 
-luaotfload | aux : font no 113 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 114 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: Font family 'OpenSans(1)' created for font 'Open Sans'
@@ -2547,22 +2549,22 @@ Package fontspec Info: OpenSans scale = 0.8485387803936084.
 
 Package fontspec Info: OpenSans scale = 0.8485387803936084.
 
-luaotfload | aux : font no 118 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 119 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: OpenSans/B scale = 0.8318417540343417.
 
-luaotfload | aux : font no 124 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 125 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: OpenSans/I scale = 0.8485387803936084.
 
-luaotfload | aux : font no 125 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 126 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: OpenSans/BI scale = 0.8318417540343417.
 
-luaotfload | aux : font no 126 (nil) does not define feature smcp for script lat
+luaotfload | aux : font no 127 (nil) does not define feature smcp for script lat
 n with language dflt
 
 Package fontspec Info: Font family 'OpenSans(2)' created for font 'Open Sans'
@@ -2598,62 +2600,331 @@ Overfull \hbox (3.03711pt too wide) in paragraph at lines 97--101
 c-tor and raster graph-ics. Raster 
  []
 
+\tcb@out=\write6
 
+\openout6 = index.listing
+(./index.listing)
 warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 [1
 
 
 ]
-LaTeX Font Info:    Font shape `TU/OpenSans(0)/m/n' will be
-(Font)              scaled to size 6.78833pt on input line 129.
-
-Overfull \hbox (41.04004pt too wide) in paragraph at lines 129--130
-\TU/GentiumBookBasic(0)/m/n/10 grated from SmalltalkHub that is avail-able at[]
-Athens Sketch: https://github.com/rville- 
- []
-
 LaTeX Font Info:    Font shape `TU/FiraMono(4)/m/n' will be
-(Font)              scaled to size 6.9065pt on input line 132.
-\tcb@out=\write6
+(Font)              scaled to size 8.63312pt on input line 169.
 
-\openout6 = index.listing
-(./index.listing)
 warning  (pdf backend): ignoring duplicate destination with the name 'page.2'
 [2]
-Underfull \hbox (badness 10000) in alignment at lines 178--191
+LaTeX Font Info:    Font shape `TU/OpenSans(0)/m/n' will be
+(Font)              scaled to size 10.1825pt on input line 186.
+LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
+(Font)              scaled to size 9.982pt on input line 186.
+
+\openout6 = index.listing
+ (./index.listing) [3]
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing) [4
+]
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing) [5]
+\openout6 = index.listing
+ (./index.listing)
+Overfull \hbox (8.41411pt too wide) in alignment at lines 354--361
 [][][]
  []
 
-LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
-(Font)              scaled to size 6.65466pt on input line 197.
+[6]
+Underfull \hbox (badness 10000) in alignment at lines 361--368
+[][][]
+ []
+
 
 \openout6 = index.listing
 (./index.listing)
+\openout6 = index.listing
+ (./index.listing) [7]
+\openout6 = index.listing
+ (./index.listing) [8]
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing) [9]
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing) [10]
+\openout6 = index.listing
+
+(./index.listing) [11]
+Overfull \hbox (49.20898pt too wide) in paragraph at lines 592--593
+\TU/GentiumBookBasic(0)/m/n/10 grated from SmalltalkHub which is avail-able at[
+]Athens Sketch: []https://github.com/rville- 
+ []
+
+[12]
 LaTeX Font Info:    Font shape `TU/OpenSans(0)/m/n' will be
-(Font)              scaled to size 10.1825pt on input line 207.
+(Font)              scaled to size 14.66278pt on input line 594.
+LaTeX Font Info:    Font shape `TU/OpenSans(0)/m/n' will be
+(Font)              scaled to size 17.59874pt on input line 594.
+ [13
+
+] [14]
+
+Package fontspec Info: OpenSans scale = 0.8485381298040939.
 
 
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 207.
+Package fontspec Info: OpenSans scale = 0.8485387803936084.
 
 
 \openout6 = index.listing
-(./index.listing) [3]
-LaTeX Font Info:    Font shape `TU/OpenSans(0)/b/n' will be
-(Font)              scaled to size 9.982pt on input line 232.
+ (./index.listing) [15
 
-Underfull \hbox (badness 10000) in alignment at lines 246--257
-[][]
+]
+Overfull \hbox (5.88867pt too wide) in paragraph at lines 633--636
+\TU/GentiumBookBasic(0)/m/n/10 Ev-ery vi-sual el-e-ment within \TU/GentiumBookB
+asic(0)/b/n/10 Bloc \TU/GentiumBookBasic(0)/m/n/10 stems from the fun-da-men-tal
+ class\TU/GentiumBookBasic(0)/b/n/10 BlElement\TU/GentiumBookBasic(0)/m/n/10 . 
+
  []
 
-[4] (./index.bbl [5] [6
+
+Overfull \hbox (5.15625pt too wide) in paragraph at lines 633--636
+\TU/GentiumBookBasic(0)/m/n/10 more in-tri-cate com-po-nents. By di-rectly cus-t
+omiz-ing and com-bin-ing\TU/GentiumBookBasic(0)/b/n/10 BlElement 
+ []
+
+
+Overfull \hbox (26.5039pt too wide) in paragraph at lines 638--643
+\TU/GentiumBookBasic(0)/b/n/10 Bloc \TU/GentiumBookBasic(0)/m/n/10 in-tro-duces two key con-cepts for man-ag-ing the vi-sual en-vi-ron-ment:\TU/GentiumBookBasic(0)/b/n/10 BlUniverse 
+ []
+
+
+\openout6 = index.listing
+(./index.listing)
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/basicElement.png, id=603, 486.31688pt x 200.24812p
+t>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/basicElement.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/basicElement.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/basicElement.png  used on 
+input line 654.
+(luatex.def)             Requested size: 325.0pt x 133.82332pt.
+ [16] [17</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bo
+oklet-Graphics/Chapters/bloc/figures/basicElement.png>]
+[18
+
+]
+
+Package fontspec Info: OpenSans scale = 0.8485381298040939.
+
+
+Package fontspec Info: OpenSans scale = 0.8485387803936084.
+
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/allGeometry.png, id=627, 553.06625pt x 409.53pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/allGeometry.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/allGeometry.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/allGeometry.png  used on i
+nput line 709.
+(luatex.def)             Requested size: 325.0pt x 240.65201pt.
+ [19] [20</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bo
+oklet-Graphics/Chapters/bloc/figures/allGeometry.png>]
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/bordercolortype.png, id=636, 308.15125pt x 123.461
+24pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/bordercolortype.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/bordercolortype.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/bordercolortype.png  used 
+on input line 741.
+(luatex.def)             Requested size: 325.0pt x 130.2221pt.
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/multipletriangledash.png, id=637, 1380.15625pt x 4
+83.8075pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/multipletriangledash.png Graphic file (type p
+ng)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/multipletriangledash.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/multipletriangledash.png  
+used on input line 761.
+(luatex.def)             Requested size: 325.0pt x 113.92363pt.
+ [21</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet
+-Graphics/Chapters/bloc/figures/bordercolortype.png></Users/ducasse/Workspace/Fi
+rstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/
+multipletriangledash.png>]
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/borderjointype.png, id=642, 1380.15625pt x 481.8pt
+>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/borderjointype.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/borderjointype.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/borderjointype.png  used o
+n input line 786.
+(luatex.def)             Requested size: 325.0pt x 113.45091pt.
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/multipletriangleoutskirts.png, id=643, 480.79625pt
+ x 182.6825pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/multipletriangleoutskirts.png Graphic file (t
+ype png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/multipletriangleoutskirts.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/multipletriangleoutskirts.
+png  used on input line 825.
+(luatex.def)             Requested size: 325.0pt x 123.48932pt.
+ [22</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet
+-Graphics/Chapters/bloc/figures/borderjointype.png>]
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index
+.listing)
+\openout6 = index.listing
+ (./index.listing)
+\openout6 = index.listing
+ (./index.listing)
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/backgroundcolortype.png, id=648, 408.52625pt x 126
+.4725pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/backgroundcolortype.png Graphic file (type pn
+g)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/backgroundcolortype.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/backgroundcolortype.png  u
+sed on input line 864.
+(luatex.def)             Requested size: 325.0pt x 100.6204pt.
+
+\openout6 = index.listing
+ (./index.listing)
+[23</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-
+Graphics/Chapters/bloc/figures/multipletriangleoutskirts.png>]
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/simpleshadow.png, id=665, 211.79124pt x 121.45375p
+t>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/simpleshadow.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/simpleshadow.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/simpleshadow.png  used on 
+input line 885.
+(luatex.def)             Requested size: 325.0pt x 186.38141pt.
+
+\openout6 = index.listing
+
+(./index.listing) [24</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/Ph
+aroBooks2/Booklet-Graphics/Chapters/bloc/figures/backgroundcolortype.png></Users
+/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/C
+hapters/bloc/figures/simpleshadow.png>]
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/gaussianshadow.png, id=679, 318.18875pt x 177.6637
+6pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/gaussianshadow.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/gaussianshadow.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/gaussianshadow.png  used o
+n input line 905.
+(luatex.def)             Requested size: 325.0pt x 181.46674pt.
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/elementwitopacity.png, id=680, 451.6875pt x 150.56
+25pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/elementwitopacity.png Graphic file (type png)
+
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/elementwitopacity.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/elementwitopacity.png  use
+d on input line 917.
+(luatex.def)             Requested size: 325.0pt x 108.33827pt.
+ [25</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet
+-Graphics/Chapters/bloc/figures/gaussianshadow.png></Users/ducasse/Workspace/Fir
+stCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/e
+lementwitopacity.png>] [26
+
+]
+
+Package fontspec Info: OpenSans scale = 0.8485381298040939.
+
+
+Package fontspec Info: OpenSans scale = 0.8485387803936084.
+
+
+\openout6 = index.listing
+
+(./index.listing) [27]
+</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet-Gr
+aphics/Chapters/bloc/figures/transformexample.png, id=722, 182.6825pt x 173.648
+74pt>
+File: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookl
+et-Graphics/Chapters/bloc/figures/transformexample.png Graphic file (type png)
+<use /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Bookle
+t-Graphics/Chapters/bloc/figures/transformexample.png>
+Package luatex.def Info: /Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writin
+g/PharoBooks2/Booklet-Graphics/Chapters/bloc/figures/transformexample.png  used
+ on input line 965.
+(luatex.def)             Requested size: 325.0pt x 308.9719pt.
+ [28</Users/ducasse/Workspace/FirstCircle/MyBooks/Bk-Writing/PharoBooks2/Booklet
+-Graphics/Chapters/bloc/figures/transformexample.png>]
+
+Package fontspec Info: OpenSans scale = 0.8485381298040939.
+
+
+Package fontspec Info: OpenSans scale = 0.8485387803936084.
+
+
+[29
+
+] [30
+
+]
+
+Package fontspec Info: OpenSans scale = 0.8485381298040939.
+
+
+Package fontspec Info: OpenSans scale = 0.8485387803936084.
+
+ [31] [32
+
+]
+
+Package fontspec Info: OpenSans scale = 0.8485381298040939.
+
+
+Package fontspec Info: OpenSans scale = 0.8485387803936084.
+
+ (./index.bbl [33] [34
 
 ]
 bibitemlist
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
-) [7] [8
+) [35] [36
 
 ]
 The property list \polyglossia@langsetup contains the pairs (without outer
@@ -2700,32 +2971,35 @@ braces):
 LaTeX Info: Redefining \rmfamily on input line 21.
 LaTeX Info: Redefining \sffamily on input line 21.
 LaTeX Info: Redefining \ttfamily on input line 21.
-luaotfload | aux : font no 67 (nil) defines no feature for script latn with lang
+luaotfload | aux : font no 53 (nil) defines no feature for script latn with lang
 uage eng)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `index.out' has not changed.
-(rerunfilecheck)             Checksum: FB5C640FADB332A29385D20B97DA1B81;2609.
+(rerunfilecheck)             Checksum: D47346FC7144B45C6EE6E1073481E0F8;6692.
 )
 
 Here is how much of LuaTeX's memory you used:
- 34650 strings out of 477785
- 100000,1373583 words of node,token memory allocated
- 1230 words of node memory still in use:
-   3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 7 attribute, 208 glue_spec
-, 7 attribute_list, 3 write, 1 pdf_action nodes
-   avail lists: 1:1,2:1389,3:403,4:40,5:714,6:67,7:5307,8:57,9:1983,10:8,11:349
- 53828 multiletter control sequences out of 65536+600000
- 133 fonts using 16923447 bytes
- 103i,13n,135p,428b,1139s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</Users/ducasse/Library/Fonts/OpenSans-Bold.ttf></Users/ducasse/Library/Fonts/Fi
-raMono-Regular.otf></usr/local/texlive/2022/texmf-dist/fonts/truetype/public/gen
-tium-tug/GenBkBasB.ttf></usr/local/texlive/2022/texmf-dist/fonts/truetype/public
-/gentium-tug/GenBkBasR.ttf></Users/ducasse/Library/Fonts/OpenSans-Regular.ttf>
-Output written on index.pdf (12 pages, 99317 bytes).
+ 35674 strings out of 477785
+ 305232,1373583 words of node,token memory allocated
+ 1255 words of node memory still in use:
+   3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 9 attribute, 209 glue_spec
+, 9 attribute_list, 3 write, 3 pdf_action nodes
+   avail lists: 1:2,2:5790,3:737,4:70,5:7595,6:120,7:9723,8:110,9:16501,10:27,11
+:1001
+ 54137 multiletter control sequences out of 65536+600000
+ 137 fonts using 17472343 bytes
+ 103i,13n,135p,428b,1172s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2022/texmf-dist/fonts/truetype/public/gentium-tug/GenBkBasI.
+ttf></Users/ducasse/Library/Fonts/OpenSans-Bold.ttf></Users/ducasse/Library/Font
+s/FiraMono-Regular.otf></usr/local/texlive/2022/texmf-dist/fonts/truetype/public
+/gentium-tug/GenBkBasB.ttf></usr/local/texlive/2022/texmf-dist/fonts/truetype/pu
+blic/gentium-tug/GenBkBasR.ttf></Users/ducasse/Library/Fonts/OpenSans-Regular.tt
+f>
+Output written on index.pdf (40 pages, 323270 bytes).
 
-PDF statistics: 205 PDF objects out of 1000 (max. 8388607)
- 51 named destinations out of 1000 (max. 131072)
- 136 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 824 PDF objects out of 1000 (max. 8388607)
+ 447 named destinations out of 1000 (max. 131072)
+ 336 words of extra memory for PDF output out of 10000 (max. 100000000)
 

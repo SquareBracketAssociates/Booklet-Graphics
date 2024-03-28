@@ -1,10 +1,12 @@
-# introduction
+## About text 
+
+### Introduction
 
 Bloc comes with a full API to deal with text. Not only you can deal with
 raw text, but you can apply styles as well.
 
-Before being displayed, you define your text as an instance of **BlRopedText**,
-which you can then style with **attributes** like:
+Before being displayed, you define your text as an instance of `BlRopedText`,
+which you can then style with **attributes** such as:
 
 - font name
 - font size
@@ -24,7 +26,7 @@ label text: labelText.
 label openInNewSpace
 ```
 
-Another way to define attributes, is to pass them as
+Another way to define attributes is to pass them as
 a collection:
 
 ```smalltalk
@@ -37,7 +39,7 @@ BlTextElement new
 
 Take a look at `BlText` method for a full list of available text attributes.
 
-Font are managed directly by Alexandrie. To get the list of available font,
+Fonts are managed directly by Alexandrie. To get the list of available fonts,
 take a look at the result of `AeFontManager globalInstance familyNames`
 
 text is like a collection, and you can apply different attributes to different
@@ -67,15 +69,13 @@ part of your text:
 
 ![multiple attributes](figures/multipleTextAttributes.png)
 
-## Text size and position
 
-### text size
+### Text size
 
-#### nomenclature (for horizontal text layout)
-
-The size of your text will depend of the font you have selected. This font will
-constraint aspect of the size of letter, word and text. Let's familiarize
-yourself with those basic measure. Bloc will get those measure (in `BATextParagraphSpan >> measure`)
+The size of your text will depend on the font you have selected. This font will
+constrain aspect of the size of letters, words, and text. 
+Let's familiarize ourselves with those basic measures. 
+Bloc will get the measures (in `BATextParagraphSpan >> measure`)
 to get the size of your text, and position it into your element.
 
 **width**
@@ -104,37 +104,37 @@ to get the size of your text, and position it into your element.
 **baseline**
 :    line upon which most letters sit and below which descenders extend.
 
-![typograpy figure](figures/2880px-Typography_Line_Terms.svg.png)
+![Typograpy.](figures/2880px-Typography_Line_Terms.svg.png)
 
-Reference:
+References:
 
 - [wikipedia](https://en.wikipedia.org/wiki/Ascender_(typography))
 - [freetype](https://freetype.org/freetype2/docs/tutorial/step2.html)
 
-Internally, your text will be splitted into a collection of *spans*. A span is
-an homogeneous styled piece of text where every character has the same set of
+Internally, your text will be split into a collection of *spans*. 
+A span is a homogeneous styled piece of text where every character has the same set of
 attributes.
 
-### text bounds
+### Text bounds
 
-Text can after be rendered as **BlTextElement**, which will take care of
+Text can after be rendered as `BlTextElement`, which will take care of
 displaying properly the text with all properties defined on it.
 
-Once you have a **BlTextElement**, all properties of **BlElement** apply. You
-can add your element to any existing **BlElement**, and integrate it easily in
+Once you have a `BlTextElement`, all properties of `BlElement` apply. 
+You can add your element to any existing `BlElement`, and integrate it easily in
 your graphical interface; it'll follow the same layout rules.
 
-*BlTextElement* have 3 available measure by default that will determines its bounds.
+`BlTextElement` has 3 available measures by default that determine its bounds.
 
-- tight measurement: Exact width and height of the glyphs used.
+- tight measurement: Exact width and height of the used glyphs.
 - label measurement: Same width that tight measurement. The height will add to itself the *ascent* and *descent* of the glyph.
-- editor measurement. Same height than label measurement. The width will add to itself the *advance* of the glyph
+- editor measurement. Same height as label measurement. The width will add to itself the *advance* of the glyph
 
 ![text measure](figures/textMeasure.png)
 
-By default, *BlTextElement* will follow the *tightMeasurement* mesaure.
+By default, *BlTextElement* will follow the *tightMeasurement* measure.
 
-## example
+### Examples
 
 Rectangle surrounded by number:
 

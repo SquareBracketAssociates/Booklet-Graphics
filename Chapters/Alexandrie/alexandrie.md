@@ -207,7 +207,7 @@ Limit on the ratio of the miter length to the width used to draw a miter join it
 
 The miter limit ratio is used to define when the limit is exceeded, if so the join is converted from a miter to a bevel. `useLineJoinMiter; miterLimit: 3;`
 
-![Another line join example.](figures/linejoin2.png width=60&label=linejoin2)
+![Another line join example.](figures/linejoin2.png width=30&label=linejoin2)
 
 ### Fill
 
@@ -219,7 +219,7 @@ If you want to keep your path for both *stroke* and *fill* operations, you
 should use the `strokePreserve` or `fillPreserve` messages.
 
 ```smalltalk
-"fill first and stroke second. The color of stroke appears on the top of fill"
+"fill first and stroke second. The color of the stroke appears on the top of fill"
 context
 	moveTo: 25 @ 25;
 	lineTo: 50 @ 37.75;
@@ -239,23 +239,21 @@ context
 	stroke.
 ```
 
-![Example of stroke and fill.](figures/strokAndFill.png width=60&label=strokefill)
+![Example of stroke and fill.](figures/strokAndFill.png width=40&label=strokefill)
 
 ### Color
 
-You can select different color style to paint your path:
+You can select different color styles to paint your path: a color, a linear gradient, a radial gradient and a bitmap.
 
 #### Single color.
   
 ```smalltalk
-"plain color fill"
 context sourceColor: (Color yellow alpha: 0.2);
 ```
 
 #### Linear gradient.
 
 ```smalltalk
-"linear gradient fill"
 gradient := AeCairoLinearGradientPattern
 	from: 0 @ 0
 	to: 100 @ 100
@@ -268,7 +266,6 @@ context source: gradient;
 #### Radial gradient.
 
 ```smalltalk
-"Radial gradient fill"
 gradient := AeCairoRadialGradientPattern
 	innerCenter: 50 @ 50
 	innerRadius: 50
@@ -296,13 +293,14 @@ Figure *@colorpaint@* presents a full example with all color possibilities.
 
 ### Transformation
 
-Your path can be transformed in multiple way before being applied to your
+Your path can be transformed in multiple ways before being applied to your
 destination, by manipulating the transformation matrix.
 
 * `translateBy:` Modifies the current transformation matrix by translating the user-space origin by a Point.
 * `scaleBy:` modifies the current transformation matrix by scaling the X and Y user-space axes. The scaling of the axes takes place after any existing transformation of user space.
 * `rotateByRadians:` modifies the current transformation matrix by rotating the user-space axes by angle radians.
 * `setIdentityMatrix` resets the current transformation matrix by setting it equal to the identity matrix.
+
 
 ### Mask and clip
 
@@ -311,12 +309,13 @@ a second source pattern or surface. Where the pattern or surface is opaque,
 the current source is transferred to the destination.
 Where the pattern or surface is transparent, nothing is transferred.
 
+The following snippet paints the background in purple and lets the mask appear in alpha.
+
 ```smalltalk
 form := PolymorphSystemSettings pharoLogoForm.
 pattern := AeCairoSurfacePattern surface:
-                (AeCairoImageSurface fromForm: form).
+		(AeCairoImageSurface fromForm: form).
 
-"paint the background in purple, and let the mask appear in alpha"
 context
 	sourceColor: (Color purple alpha: 0.5);
 	mask: pattern;
@@ -331,11 +330,11 @@ The `clip` establishes a new clip region by intersecting with the current path
 by effectively masking out any changes to the surface that are outside the
 current clip region.
 
-Here, we clip a circle in the middle of our picture, which only shows part of the Pharo logo.
+In the following snippet, we clip a circle in the middle of our picture which only shows part of the Pharo logo (as shown in Fig. *@clip@*).
 
 ```smalltalk
 form := AeCairoImageSurface fromForm:
-            PolymorphSystemSettings pharoLogoForm.
+		PolymorphSystemSettings pharoLogoForm.
 
 context
 	sourceColor: (Color purple alpha: 0.5);
@@ -355,6 +354,9 @@ context paint.
 
 
 ### Conclusion
+
+Alexandrie is the foundation for the graphics Pharo layer. In addition, it lets 
+the programmer draws low-level graphics.
 
 
 

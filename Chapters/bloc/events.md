@@ -16,7 +16,7 @@ equivalent of `$a asKeyCombination`
 It's used ultimately by BlKeyCombinationBuilder to build keyboard shortcut
 in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
 
-### combination from Bloc framework
+### Combination from Bloc framework
 
 Bloc come with its own keymapping framework.
 BlShortcutWithAction would be the equivalent of KMKeymap.
@@ -25,7 +25,7 @@ BlShortcutWithAction new
     combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
     action: [ flag := true ].
 
-## event handling
+### Event handling
 
 ```smalltalk
 BlElement new 
@@ -60,7 +60,7 @@ Other syntax: `addEventHandlerOn: BlMouseOverEvent   do: [ :e | a background: Co
 addEventHandler: BlPullHandler new disallowOutOfBounds;
 ```
 
-## keyboard
+### Keyboard
 
 ```smalltalk
 addShortcut: (BlShortcutWithAction new
@@ -68,7 +68,7 @@ addShortcut: (BlShortcutWithAction new
       action: [ :anEvent :aShortcut | self inform: 'Triggered ', aShortcut combination asString ]);
 ```
 
-## introductive example
+### Introductive example
 
 ```smalltalk
 eventExample
@@ -104,11 +104,11 @@ toto when: BlMouseEnterEvent do: [ :anEvent |
 ^toto
 ```
 
-## other example
+### Other example
 
 ```smalltalk
 eventExampleMouseMove
-<gtExample>
+
 |surface elt|
 elt := BlElement new size:20@20;
 geometry: ( BlPolygon
@@ -144,7 +144,7 @@ surface when: BlMouseLeaveEvent do: [ :anEvent |
 ^surface
 ```
 
-## events definition
+### Events definition
 
 The announcement framwork is an event notification framework. Compared to
 "traditional" Smalltalk event systems in this new framework, an event is a real

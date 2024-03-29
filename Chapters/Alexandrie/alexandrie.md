@@ -1,4 +1,4 @@
-# Alexandrie
+## Alexandrie
 
 In the realm of computer graphics, two fundamental approaches reign: **vector graphics** and **raster graphics**. 
 
@@ -22,12 +22,15 @@ quality. They are ideal for logos, illustrations, technical drawings, and any
 application where maintaining sharp lines and details is crucial.
 
 Historically, Pharo employed two distinct libraries for graphical rendering:
-**FormCanvas**, utilizing a bitmap-based approach, and **Athens**, specializing
+**FormCanvas**, utilizing a bitmap-based approach, and **Athens**, specialized
 in vector graphics. However, the introduction of **Bloc** marks a significant
 shift, ushering in **Alexandrie**, a cutting-edge vector graphics API
 specifically designed for the Pharo environment. It leverages the
 well-established [Cairo graphic library](https://www.cairographics.org/) for the
-critical rasterization process
+critical rasterization process.
+
+
+### A complete example
 
 Here's a full example. You should be able to understand it before the end of this
 chapter.
@@ -42,7 +45,6 @@ context := surface newContext.
 context
     sourceColor: (Color red alpha: 0.6);
     paint.
-
 
 "green rectangle"
 context
@@ -79,7 +81,7 @@ context
     sourceColor: Color magenta;
     stroke.
 
-"some text in white blending in the background"
+"Some text in white blending in the background"
 fontFace := AeCairoFreetypeFontFace newForFace:
                 (AeSourceSansPro_Regular firstFaceUsing:
                         AeFTLibrary newInitialized).
@@ -98,16 +100,16 @@ context
 ^ surface asForm
 ```
 
-![multiple figure](figures/multiplefigure.png)
+![Multiple figures drawn by Alexandrie.](figures/multiplefigure.png)
 
-## Destination
+### Destination
 
 The destination is the **surface** on which you're drawing. It may be tied to an
 array of pixels like in this tutorial, or it might be tied to SVG or PDF file,
 or something else. This surface collects the elements of your graphic as you
 apply them, allowing you to build up a complex work as though painting on a
-canvas. Most of the time, you'll want to draw on an Image surface. This will
-create a new rectangle surface with 32 bit alpha color.
+canvas. Most of the time, you'll want to draw on an image surface (`AeCairo\-Image\-Surface`). This will
+create a new rectangle surface with 32-bit alpha color.
 
 ```smalltalk
 AeCairoImageSurface
@@ -115,10 +117,10 @@ AeCairoImageSurface
     format: AeCairoSurfaceFormat argb32.
 ```
 
-Once your drawing is done, you can render your image on a bitmap with
-`surface asForm`
+Once your drawing is done, you can render your image on a bitmap with the expression: 
+`surface asForm`.
 
-## Context
+### Context
 
 The context keeps track of everything that you want to draw.
 It's attached to one surface destination and tracks several variables like line
@@ -130,27 +132,28 @@ you need to create the context, like this:
 context := surface newContext.
 ```
 
-You can apply many properties to your context like
+You can apply many properties to your context such as path, color,  
+SD: what
 
-## Path
+### Path
 
-The path express the shape you want to draw with a virtual pen. It's then applied
-to the destination using the **paint** message.
+The path expresses the shape you want to draw with a virtual pen. It's then applied
+to the destination using the `paint` message.
 
-It's expressed with simple primitive
+It's expressed with simple primitives:
+* `moveTo:` moves to the specified location.
+* `relativeMoveTo:` moves to the specified location, relative to your starting point.
+* `lineTo:` adds a line to a specified location.
+* `relativeLineTo:` adds a line, but the location is relative to your starting point.
+* `arcCenter:radius:startAngle: endAngle:` adds a circle with center, radius, start and end angle, clockwise.
+* `arcNegativeCenter:radius:startAngle:endAngle:` similar to arcCenter, but counter-clockwise.
+* `curveVia:via:to:` creates a Bezier curve with 3 points.
+* `closePath` connects your last path point to the beginning path point.
 
-* **moveTo:** Move to specified location
-* **relativeMoveTo:** move to specified location, relative from your starting point.
-* **lineTo:** add a line to a specified location
-* **relativeLineTo:** add a line, but location is relative from your starting point.
-* **arcCenter:radius:startAngle: endAngle:** add a circle with center, radius, start and end angle, clockwise.
-* **arcNegativeCenter:radius:startAngle:endAngle:** like arcCenter, but counter-clockwise.
-* **curveVia:via:to:** Bezier curve with 3 points.
-* **closePath** will connect your last path point to beginning path point.
+You can find more methods in the class `AeCairoContext`.
 
-You can find more method in **AeCairoContext / API - Path** protocol
-
-Here is a full example
+#### Example.
+Here is a full example which results in Fig. *linepath*.
 
 ```smalltalk
 context
@@ -162,16 +165,13 @@ context
     curveVia: 50 @ 60 via: 50 @ 90 to: 25 @ 75;
     closePath;
     sourceColor: Color red;
-    stroke.
+    stroke
 ```
 
-which result in:
+![Line path.](figures/linepath.png label=linepath&width=30)
 
-![line path](figures/linepath.png)
 
-## painting
-
-### Stroke
+### Stroke painting
 
 The **stroke** operation takes a virtual pen along the path in a thin line,
 according to the pen's line *width*, *dash* style, and line *caps*.
@@ -183,24 +183,24 @@ Each value provides the length of alternate 'on' and 'off' portions of the strok
 The offset specifies an offset into the pattern at which the stroke begins, like
 `dash: (AeFFIDoubleArray newFrom: #( 2 5 2 10 )) offset: 0;`
 
-Some example of different line dash. If you don't specify any, you'll have a
+Some examples of different line dashes. If you don't specify any, you'll have a
 straight line.
 
-![line dash](figures/linedash.png)
+![Line dash.](figures/linedash.png label=linedash&width=40)
 
-Line can be terminated using **useLineCapButt**, **useLineCapRound** or **useLineCapSquare** parameter
+Line can be terminated using `useLineCapButt`, `useLineCapRound` or `useLineCapSquare` parameter (see Fig. *@linecap@*:
 
-* butt: start(stop) the line exactly at the start(end) point
-* round: use a round ending, the center of the circle is the end point
-* square: use squared ending, the center of the square is the end point
+* butt: starts(stops) the line exactly at the start(end) point.
+* round: uses a round ending, the center of the circle is the end point.
+* square: uses a squared ending, the center of the square is the end point.
 
-![line cap](figures/linecap.png)
+![Different line caps.](figures/linecap.png label=linecap&width=40)
 
-Line can be joined using **useLineJoinRound**, **useLineJoinMiter** or **useLineJoinBevel** drawing.
+Lines can be joined using `useLineJoinRound`, `useLineJoinMiter` or `useLineJoinBevel` drawing.
 
-* mitter: use a sharp (angled) corner.
-* round: use a rounded join, the center of the circle is the joint point
-* bevel: use a cut-off join, the join is cut off at half the line width from the joint point
+* mitter: uses a sharp (angled) corner.
+* round: uses a rounded join, the center of the circle is the joint point.
+* bevel: uses a cut-off join, the join is cut off at half the line width from the joint point.
 
 ![line join](figures/linejoin.png)
 
@@ -212,7 +212,7 @@ exceeded, if so the join is converted from a miter to a bevel.
 
 ![line join2](figures/linejoin2.png)
 
-### Fill
+#### Fill
 
 The **fill** operation instead uses the path like the lines of a coloring
 book, and fill it with selected color scheme.
@@ -245,7 +245,7 @@ context
 
 ![stroke and fill](figures/strokAndFill.png)
 
-### color
+#### Color
 
 You can select different color style to paint your path:
 
@@ -300,7 +300,7 @@ A full example with all color possibilities:
 
 ![color paint](figures/fillPaint.png)
 
-## transformation
+### Transformation
 
 Your path can be transformed in multiple way before being applied to your
 destination, by manipulating the transformation matrix.
@@ -310,9 +310,7 @@ destination, by manipulating the transformation matrix.
 * **rotateByRadians:** Modifies the current transformation matrix by rotating the user-space axes by angle radians.
 * **setIdentityMatrix** Resets the current transformation matrix by setting it equal to the identity matrix.
 
-## Mask and clip
-
-### Mask
+### Mask and clip
 
 The **mask** operations allow transfer according to the transparency/opacity of
 a second source pattern or surface. Where the pattern or surface is opaque,
@@ -359,3 +357,7 @@ context paint.
 ```
 
 ![clip](figures/clip.png)
+
+### Conclusion
+
+

@@ -1,6 +1,7 @@
 
 <!inputFile|path=Chapters/Alexandrie/alexandrie.md!>
 
+<!inputFile|path=Chapters/bloc/introdudction.md!>
 <!inputFile|path=Chapters/bloc/bloc.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
 

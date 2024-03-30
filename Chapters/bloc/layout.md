@@ -1,6 +1,6 @@
-# Bloc Layout
+## Layout in Bloc
 
-## introduction
+### Introduction
 
 Widgets aren't just simple components; they're complex assemblies of various
 elements. To create more intricate block elements, you'll need to blend them
@@ -16,9 +16,9 @@ visual properties, like background, border, geometry, etc. The final appearance
 depends on the graphical properties of each element and how they're arranged
 together in the layout.
 
-![multiple element](figures/multipleElements.png)
+![Multiple element.](figures/multipleElements.png)
 
-![element tree](figures/blelementtreestructure.png)
+![Element tree.](figures/blelementtreestructure.png)
 
 Layout constitutes a fundamental aspect of *Bloc*. Rather than constructing your
 entire widget within a single *drawing* method, it advocates for the creation of
@@ -31,14 +31,14 @@ dimensions of the parent element itself.
 When defining layout, 2 parts must be combined to play together: *parent* and
 *children* elements.
 
-* Parent define which layout strategy to apply to their children
-* children specify which constraints they will follow, which could impact their
+- Parent define which layout strategy to apply to their children
+- children specify which constraints they will follow, which could impact their
 position and their size.
 
-Layout are defined by their *type* and they *constraints*. Type are usually
+Layouts are defined by their *type* and they *constraints*. Type are usually
 defined by at the parent level with **layout** method, while you can specify
 contraints to your child element using the **constraintsDo:** message, which
-support a set of attributes which define the visual properties of the layout. A
+supports a set of attributes which define the visual properties of the layout. A
 small set of constraints, like padding, margin or minimal and maximum
 dimensions, are common among all the layouts. Constraints allows you to clearly
 defined the size and the position of your element withing its parent.
@@ -49,16 +49,16 @@ is computed. In bloc, the layout is computed from a dedicated space Phase,
 applied on each pulse. Have a look at BlSpaceFrame and BlSpaceFramePhase and its
 subclasses.
 
-To easy this kind of script one can use *#whenLayoutedDoOnce:* which arms a one
+To ease this kind of script one can use *#whenLayoutedDoOnce:* which arms a one
 shot event handler that reacts to the *BlElementLayoutComputedEvent* event.
 
-### element combination
+### Element combination
 
-Elements can be combined with the **addChild:** method. You can add multiple
-elements at once with **addChildren:**. You can of course remove sub-element
-with **removeChild:** and **removeChildren:** method.
+Elements can be combined with the `addChild:` method. You can add multiple
+elements at once with `addChildren:`. You can of course remove sub-element
+with `removeChild:` and `removeChildren:` method.
 
-Look at **children add/remove** protocol of *BlElement* for all available method
+Look at **children add/remove** protocol of `BlElement` for all available method
 to manage addition and removal of the elements composing your widget.
 
 ### space around elements
@@ -66,123 +66,121 @@ to manage addition and removal of the elements composing your widget.
 Before jumping on the defintion of the position of each element, you can already
 define how close your element will be from each other, with those 2 properties
 
-* **padding:** space between the element and its children.
-* **margin:** space between the element and its parent
+- `padding:` space between the element and its children.
+- `margin:` space between the element and its parent
 
 Constraint can apply to margin and padding as well,
 as `constraintsDo: [ :c | c margin: (BlInsets all: 10) ])`
-
+	
 ```smalltalk
-    container := BlElement new
-                 "no dynamic constraints, we specify element size"
-                size: 400 @ 400;
-                border: (BlBorder paint: Color red width: 1);
-                background: (Color red alpha: 0.2);
-                layout: BlFlowLayout horizontal alignCenter.
+container := BlElement new
+	"no dynamic constraints, we specify element size"
+	size: 400 @ 400;
+	border: (BlBorder paint: Color red width: 1);
+	background: (Color red alpha: 0.2);
+	layout: BlFlowLayout horizontal alignCenter.
 
-    element := BlElement new
-                   border: (BlBorder paint: Color blue width: 1);
-                   background: (Color blue alpha: 0.2);
-                   margin: (BlInsets all: 15);
-                   padding: (BlInsets all: 35);
-                      "element has a child, specify its layoutSpec: "
-                   layout: BlFlowLayout horizontal alignCenter;
-                     "dynamic size computed relatively to its parent"
-                   constraintsDo: [ :c |
-                       c horizontal matchParent.
-                       c vertical matchParent ].
-    container addChild: element.
+element := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 15);
+	padding: (BlInsets all: 35);
+	"element has a child, specify its layoutSpec: "
+	layout: BlFlowLayout horizontal alignCenter;
+	"dynamic size computed relatively to its parent"
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent ].
+container addChild: element.
 
-    child := BlElement new
-                 border: (BlBorder paint: Color yellow width: 1);
-                 background: (Color yellow alpha: 0.2);
-                    "dynamic size computed relatively to its parent"
-                 constraintsDo: [ :c |
-                     c horizontal matchParent.
-                     c vertical matchParent ].
-    element addChild: child.
+child := BlElement new
+	border: (BlBorder paint: Color yellow width: 1);
+	background: (Color yellow alpha: 0.2);
+	"dynamic size computed relatively to its parent"
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent ].
+element addChild: child.
 ```
 
-In this figure, we have 3 elements on top of each others. The purple one
-has a margin of 15 pixel with the red one and a padding of 35 pixel with the
+In this figure, we have 3 elements on top of each other. The purple one
+has a margin of 15 pixels with the red one and a padding of 35 pixels with the
 yellow one.
 
-![margin and padding example](figures/marginAndPadding.png)
+![Margin and padding example.](figures/marginAndPadding.png width=60&label=padding1)
 
 Margin and padding can be applied to all insets for your figures, but need to
 be adapted to your element geometry. The same example but using triangle
 geometry will show you the difference.
 
-![margin and padding example](figures/marginAndPaddingwithtriangle.png)
+![Margin and padding example.](figures/marginAndPaddingwithtriangle.png width=60&label=padding2)
 
-### element size
+### Element size
 
-Size can be determined **statically** or **dynamically**. Attention, If you
-don't use dynamic size, you **must** define it with **size:**. The overall
-bounds of the element is not deduced from its geometry, and its default size
-will be *50@50*, which will certainly be different from *your* own element.
+Size can be determined **statically** or **dynamically**.
+ Attention, If you don't use dynamic size, you **must** define it with the message `size:`. 
+ The overall bounds of the element are not deduced from its geometry, and its default size
+will be `50@50`, which will certainly be different from *your* own element.
 
-If you use **size:**, the size of the element will be static.
+If you use `size:`, the size of the element will be static.
 `element size: aPoint` is a synonym for
 
 ```smalltalk
 constraintsDo: [ :c |
-    c horizontal exact: aPoint x.
-    c vertical exact: aPoint y ];
+	c horizontal exact: aPoint x.
+	c vertical exact: aPoint y ];
 ```
 
-If you use the constraints **matchParent** or **fitContent** in child
-definition, the size of the element will be computed dynamically, dependent of
-its parent constraints and child space.
+If you use the constraints `matchParent` or `fitContent` in a child definition, the size of the element will be computed dynamically, dependent on its parent constraints and child space.
 
-* **matchParent**: Child size will fill space left available in parent element.
-* **fitContent** : parent size will depend of the space used by child.
+* `matchParent`: Child size will fill space left available in parent element.
+* `fitContent` : parent size will depend on the space used by its children.
 
 ```smalltalk
 constraintsDo: [ :c |
-    c horizontal matchParent.
-    c vertical fitContent ];
+	c horizontal matchParent.
+	c vertical fitContent ];
 ```
 
 **Beware to not mix those properties** between parent and child.
-If your child try to mach its parent, while its parent try to fit its child
+If your child tries to mach its parent, while its parent tries to fit its child's
 content, the size will be 0 plus the border width.
 
-when the parent uses "fit content" and the child uses "match parent", there is
+When the parent uses "fit content" and the child uses "match parent", there is
 no way to determine the size. In such cases, the size of both the parent and
 the child will be 0@0.
 
 ## Layout strategy and constraints
 
-Layout define the way children are positioned inside their parent element. This
+A layout defines the way children are positioned inside their parent element. This
 position is deduced from the layout strategy used. If you don't specify which
-layout your parent element will use, it'll default to **BlBasicLayout** strategy.
+layout your parent element will use, it'll default to `BlBasicLayout` strategy.
 
-You can add element with **addChild:**, and the will be disposed according the
+You can add an element with `addChild:` and it will be placed according the
 the layout specified.
 
-A small list of layout included in Pharo Image.
+A small list of layout is included in Pharo Image:
 
-* BlBasicLayout
-* BlLinearLayout
-* BlFlowLayout
-* BlGridLayout
-* BlFrameLayout
-* BlZoomLayout
-* BlProportionalLayout
+* `BlBasicLayout`
+* `BlLinearLayout`
+* `BlFlowLayout`
+* `BlGridLayout`
+* `BlFrameLayout`
+* `BlZoomLayout`
+* `BlProportionalLayout`
 
-The list of all layout available: `BlLayout allSubclasses`
+The list of all layouts available: `BlLayout allSubclasses`
 
 Each layout has a dedicated constraint object, an instance of
-*BlLayoutCommonConstraints*, that contains layout universal constraints.
-Constraints are associated with the layout defined by parent element.
+`BlLayoutCommonConstraints`, which contains layout universal constraints.
+Constraints are associated with the layout defined by the parent element.
 Each type of layout can further define its own specific constraints by creating
-a subclass of **BlLayoutConstraints**.
+a subclass of `BlLayoutConstraints`.
 
-**Example:**
+### Example
 
-* parent element use layout type *BlLinearLayout*
-* children constraints are detailed by *BlLinearLayoutConstraints*
+- parent element uses layout type `BlLinearLayout`
+- children constraints are detailed by `BlLinearLayoutConstraints`
 
 You can define constraints at the parent element level when specifying layout
 type: `layout: BlLinearLayout horizontal alignCenter;`
@@ -197,13 +195,13 @@ of their position constraints. You'll find some example below.
 
 ### Ignoring or interacting with parent layout
 
-You can ignore the layout define by the parent using *ignoreLayout*. When you
+You can ignore the layout defined by the parent using `ignoreLayout`. When you
 use this constraint, your element will be removed from parent layout rules,
 and follow *BlBasicLayout* instead, meaning you can place your element at
 arbitrary position within your parent element.
 
 ```smalltalk
-    constraintsDo: [ :c | c ignoreByLayout].
+	constraintsDo: [ :c | c ignoreByLayout].
 ```
 
 You can also interact with parent layout constraint using *flow*, *frame*,
@@ -260,24 +258,24 @@ layout strategy"
 
 ```smalltalk
     root := BlElement new
-                border: (BlBorder paint: Color red width: 1);
-                background: (Color red alpha: 0.2);
-                "not necessary, except for reminder, this is the default layout"
-                  "layout: BlBasicLayout new;"
-                constraintsDo: [ :c |
-                    c horizontal matchParent.
-                    c vertical matchParent ].
+	border: (BlBorder paint: Color red width: 1);
+	background: (Color red alpha: 0.2);
+	"not necessary, except for reminder, this is the default layout"
+	  "layout: BlBasicLayout new;"
+	constraintsDo: [ :c |
+	    c horizontal matchParent.
+	    c vertical matchParent ].
 
     elt1 := BlElement new
-                border: (BlBorder paint: Color blue width: 1);
-                size: 40 @ 80;
-                background: (Color blue alpha: 0.2);
-                position: 50 @ 40.
+	border: (BlBorder paint: Color blue width: 1);
+	size: 40 @ 80;
+	background: (Color blue alpha: 0.2);
+	position: 50 @ 40.
     elt2 := BlElement new
-                border: (BlBorder paint: Color yellow width: 1);
-                size: 40 @ 80;
-                background: (Color yellow alpha: 0.2);
-                position: 60 @ 60.
+	border: (BlBorder paint: Color yellow width: 1);
+	size: 40 @ 80;
+	background: (Color yellow alpha: 0.2);
+	position: 60 @ 60.
 
     root addChildren: {
             elt1.
@@ -314,18 +312,18 @@ move to next line if necessary
 
 ```smalltalk
 root := BlElement new
-                border: (BlBorder paint: Color red width: 1);
-                background: (Color red alpha: 0.2);
-                layout: BlLinearLayout horizontal ;
-                  constraintsDo: [ :c |
-                       c horizontal fitContent.
-                       c vertical fitContent  ].
+	border: (BlBorder paint: Color red width: 1);
+	background: (Color red alpha: 0.2);
+	layout: BlLinearLayout horizontal ;
+	  constraintsDo: [ :c |
+	       c horizontal fitContent.
+	       c vertical fitContent  ].
     
     50 timesRepeat:  [  |elt| elt := BlElement new border: (BlBorder paint: Color blue width: 1);
-                    size: 40@80;
-                   background: (Color blue alpha: 0.2);
-                   margin: (BlInsets all: 5);
-                   padding: (BlInsets all: 5).
+	    size: 40@80;
+	   background: (Color blue alpha: 0.2);
+	   margin: (BlInsets all: 5);
+	   padding: (BlInsets all: 5).
 
             root addChild: elt. ].
 ```
@@ -359,21 +357,21 @@ match the space needed to display all its children.
 
 ```smalltalk
 root := BlElement new
-                border: (BlBorder paint: Color red width: 1);
-                background: (Color red alpha: 0.2);
-                layout: BlFlowLayout horizontal;
-                constraintsDo: [ :c |
-                       c horizontal matchParent .
-                       c vertical fitContent  ].
+	border: (BlBorder paint: Color red width: 1);
+	background: (Color red alpha: 0.2);
+	layout: BlFlowLayout horizontal;
+	constraintsDo: [ :c |
+	       c horizontal matchParent .
+	       c vertical fitContent  ].
 
 
     50 timesRepeat: [
         | elt |
         elt := BlElement new
-                   size: 40 @ 80;
-                   border: (BlBorder paint: Color blue width: 1);
-                   background: (Color blue alpha: 0.2);
-                   margin: (BlInsets all: 5).
+	   size: 40 @ 80;
+	   border: (BlBorder paint: Color blue width: 1);
+	   background: (Color blue alpha: 0.2);
+	   margin: (BlInsets all: 5).
         root addChild: elt ].
 ```
 
@@ -416,56 +414,56 @@ Public API and Key Messages
 ```smalltalk
     e1 := BlElement new
               constraintsDo: [ :c |
-                  c horizontal matchParent.
-                  c vertical matchParent ];
+	  c horizontal matchParent.
+	  c vertical matchParent ];
               background: (Color red alpha: 0.2);
               border: (BlBorder paint: Color red width: 1).
 
     e2 := BlElement new
               constraintsDo: [ :c |
-                  c horizontal matchParent.
-                  c vertical matchParent ];
+	  c horizontal matchParent.
+	  c vertical matchParent ];
               background: (Color yellow alpha: 0.2);
               border: (BlBorder paint: Color yellow width: 1).
     e3 := BlElement new
               constraintsDo: [ :c |
-                  c horizontal matchParent.
-                  c vertical matchParent ];
+	  c horizontal matchParent.
+	  c vertical matchParent ];
               background: (Color blue alpha: 0.2);
               border: (BlBorder paint: Color blue width: 1).
 
     e4 := BlElement new
               constraintsDo: [ :c |
-                  c horizontal matchParent.
-                  c vertical matchParent ];
+	  c horizontal matchParent.
+	  c vertical matchParent ];
               background: (Color green alpha: 0.2);
               margin: (BlInsets all: 5);
               border: (BlBorder paint: Color green width: 1).
 
     e5 := BlElement new
               constraintsDo: [ :c |
-                  c horizontal matchParent.
-                  c vertical matchParent.
-                  c grid horizontal span: 4 ];
+	  c horizontal matchParent.
+	  c vertical matchParent.
+	  c grid horizontal span: 4 ];
               background: (Color purple alpha: 0.2);
               border: (BlBorder paint: Color purple width: 1).
 
     container := BlElement new
-                     layout: (BlGridLayout new
-                              columnCount: 4;
-                              cellSpacing: 10);
-                     background: Color veryLightGray;
-                     border: (BlBorder paint: Color gray width: 3);
-                     constraintsDo: [ :c |
-                         c horizontal matchParent.
-                         c vertical matchParent ];
-                     addChildren: {
-                             e1.
-                             e2.
-                             e3.
-                             e4.
-                             e5 };
-                     yourself.
+	     layout: (BlGridLayout new
+	              columnCount: 4;
+	              cellSpacing: 10);
+	     background: Color veryLightGray;
+	     border: (BlBorder paint: Color gray width: 3);
+	     constraintsDo: [ :c |
+	         c horizontal matchParent.
+	         c vertical matchParent ];
+	     addChildren: {
+	             e1.
+	             e2.
+	             e3.
+	             e4.
+	             e5 };
+	     yourself.
 ```
 
 ![grid layout](figures/gridlayout.png)
@@ -528,21 +526,21 @@ One children
 
 ```smalltalk
 container := BlElement new
-                     background: (Color red alpha: 0.2);
-                     border: (BlBorder paint: Color red width: 1);
-                     layout: BlFrameLayout new;
-                     constraintsDo: [ :c |
-                         c horizontal matchParent.
-                         c vertical matchParent ].
+	     background: (Color red alpha: 0.2);
+	     border: (BlBorder paint: Color red width: 1);
+	     layout: BlFrameLayout new;
+	     constraintsDo: [ :c |
+	         c horizontal matchParent.
+	         c vertical matchParent ].
 
     child := BlElement new
-                 size: 400 @ 400;
-                 clipChildren: false;
-                 background: (Color blue alpha: 0.2);
-                 border: (BlBorder paint: Color blue width: 1);
-                 constraintsDo: [ :c |
-                     c frame horizontal alignCenter.
-                     c frame vertical alignCenter  ].
+	 size: 400 @ 400;
+	 clipChildren: false;
+	 background: (Color blue alpha: 0.2);
+	 border: (BlBorder paint: Color blue width: 1);
+	 constraintsDo: [ :c |
+	     c frame horizontal alignCenter.
+	     c frame vertical alignCenter  ].
 
     container addChild: child.
 ```
@@ -564,8 +562,8 @@ root := BlElement new
             background: (Color red alpha: 0.2);
             layout: BlFrameLayout new;
             constraintsDo: [ :c |
-                c horizontal matchParent.
-                c vertical matchParent ].
+	c horizontal matchParent.
+	c vertical matchParent ].
 
 "weight can only be used if the size, or if fitContent are not specified"
 elt1 := BlElement new
@@ -573,10 +571,10 @@ elt1 := BlElement new
             background: Color random;
             margin: (BlInsets all: 5);
             constraintsDo: [ :c |
-                c frame horizontal alignLeft weight: 0.2.
-                c frame vertical alignTop weight: 0.2.
-                c horizontal matchParent.
-                c vertical matchParent ];
+	c frame horizontal alignLeft weight: 0.2.
+	c frame vertical alignTop weight: 0.2.
+	c horizontal matchParent.
+	c vertical matchParent ];
             addChild: (BlTextElement new text: 'left top' asRopedText).
 root addChild: elt1.
 
@@ -594,8 +592,8 @@ root := BlElement new
             background: (Color red alpha: 0.2);
             layout: BlFrameLayout new;
             constraintsDo: [ :c |
-                c horizontal matchParent.
-                c vertical matchParent ].
+	c horizontal matchParent.
+	c vertical matchParent ].
 
 elt1 := BlElement new
             size: 80 @ 80;
@@ -603,8 +601,8 @@ elt1 := BlElement new
             background: Color random;
             margin: (BlInsets all: 5);
             constraintsDo: [ :c |
-                c frame horizontal alignLeft.
-                c frame vertical alignTop ];
+	c frame horizontal alignLeft.
+	c frame vertical alignTop ];
             addChild: (BlTextElement new text: 'left top' asRopedText).
 root addChild: elt1.
 
@@ -638,12 +636,12 @@ zoom := BlElement new
             geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
             padding: (BlInsets all: 10);
             layout: (BlZoomableLayout new
-                        addLayout: BlFrameLayout new;
-                        defaultScale: 5;
-                        animationDuration: 2 second);
+	        addLayout: BlFrameLayout new;
+	        defaultScale: 5;
+	        animationDuration: 2 second);
             constraintsDo: [ :c |
-                        c vertical fitContent.
-                        c horizontal fitContent ];
+	        c vertical fitContent.
+	        c horizontal fitContent ];
             addChild: elt;
             yourself.
 zoom openInNewSpace 
@@ -653,29 +651,29 @@ zoom openInNewSpace
 
 ```smalltalk
     elt := BlElement new
-                size: 200@200;
+	size: 200@200;
                background: (Color blue alpha: 0.2);
                border: (BlBorder paint: Color blue width: 1);
         constraintsDo: [ :c | c accountTransformation ].
 
     container := BlElement new
-                     background: Color white;
-                     border: (BlBorder paint: Color gray width: 1);
-                     geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-                     padding: (BlInsets
-                              top: 10
-                              left: 10
-                              bottom: 10
-                              right: 10);
-                     layout: (BlZoomableLayout new
-                              addLayout: BlFrameLayout new;
-                              defaultScale: 2;
-                              animationDuration: 1 second);
-                     constraintsDo: [ :c |
-                         c vertical fitContent.
-                         c horizontal fitContent ];
-                     addChild: elt;
-                     yourself.
+	     background: Color white;
+	     border: (BlBorder paint: Color gray width: 1);
+	     geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+	     padding: (BlInsets
+	              top: 10
+	              left: 10
+	              bottom: 10
+	              right: 10);
+	     layout: (BlZoomableLayout new
+	              addLayout: BlFrameLayout new;
+	              defaultScale: 2;
+	              animationDuration: 1 second);
+	     constraintsDo: [ :c |
+	         c vertical fitContent.
+	         c horizontal fitContent ];
+	     addChild: elt;
+	     yourself.
 ```
 
 As this example is dynamic, it's better if you look at the example or try this

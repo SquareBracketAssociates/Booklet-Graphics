@@ -1,4 +1,4 @@
-# Toplo widget - highlevel
+## Toplo widget - highlevel
 
 ```smalltalk
 Metacello new
@@ -8,9 +8,9 @@ Metacello new
     load
 ```
 
-Toplo include bloc widget
+Toplo defines bloc widgets
 
-## Theme
+### Theme
 
 Define elementary properties that can be used by widgets:
 
@@ -19,28 +19,24 @@ Define elementary properties that can be used by widgets:
 - icons
 - etc...
 
-## skins
+### skins
 
 Toplo widgets interact with skins for the look.
-*Skins rely on theme for elementary properties (colors, font, sizes…).*
+Skins relies on theme for elementary properties (colors, font, sizes…).
 
 Additionally, a skin can add animations and more.
 
 ToButton >> defaultSkin
 
-ToButtonSkin can be customized with the *type:* message, dependant of the button you want
+ToButtonSkin can be customized with the `type:` message, dependent on the button you want
 to create:
 
-- ToButtonDefaultType
-- ToButtonLinkType
-- ToButtonTextType
+- `ToButtonDefaultType`
+- `ToButtonLinkType`
+- `ToButtonTextType`
 - etc.
 
-## Behaviour
-
-Created using method, factorized using Traits
-
-## Spec styles
+### Spec styles
 
 The idea behind styling in spec is that each backend will have its own way of define styling
 a toplo skin can be taken as a "stylesheet"
@@ -103,9 +99,9 @@ self flag: 'Leads to ToSpaceFrameSkinInstallationPhase installation in space fra
 
 For viewing the whole stack, put a breakpoint in `addChildren:` in ToCheckBox.
 
-1. BlSpace generate a pulse,  and send *checkSkinInstallation* to its root and its children (ToCheckBox instance).
+1. BlSpace generate a pulse,  and send `checkSkinInstallation` to its root and its children (ToCheckBox instance).
 
-1. On each children, this will call *launchSkinInstallation* if *privateSkin* is not nill
+1. On each children, this will call *launchSkinInstallation* if `privateSkin` is not nill
 
 `ToCheckBoxSkin (ToWidgetSkin) >> launchSkinInstallationIn:` on *ToCheckBox*
 -> (double dispatch) `anElement switchToSkinState: ToInitialState` new will raise an event *ToElementStateChangedEvent* with element state.

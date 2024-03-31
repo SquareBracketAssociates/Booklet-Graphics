@@ -1,17 +1,19 @@
 
-## Low - Level 
+#Low - Level 
 <!inputFile|path=Chapters/Alexandrie/alexandrie.md!>
 <!inputFile|path=Chapters/Alexandrie/text_harfbuzz.md!>
 
-## Bloc
+# Bloc
 <!inputFile|path=Chapters/bloc/introduction.md!>
 <!inputFile|path=Chapters/bloc/bloc.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
 
 
-## Toplo
+# Toplo
 
 <!inputFile|path=Chapters/toplo/stylesheet.md!>
-## Old libraries
+
+
+#Old libraries
 
 <!inputFile|path=Chapters/Athens/Athens.md!>

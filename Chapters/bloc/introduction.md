@@ -3,7 +3,7 @@
 Bloc introduction to be written
 This chapter is heavily inspired by [morphic introduction](https://github.com/SquareBracketAssociates/NewPharoByExample9/blob/master/Chapters/Morphic/Morphic.pillar)
 
-## BlElement
+### BlElement
 
 All of the objects that you see on the screen when you run Pharo are
 `BlElemment`s, that is, they are instances of subclasses of class `BlElement`.
@@ -96,7 +96,7 @@ The balloon is added inside joe following default layout rules. More on that lat
 
 ![Balloon as child.](figures/balloonandelementaschild.png)
 
-## Creating your own bloc element
+### Creating your own bloc element
 
 BlElement offers you various method to customize their appearance. As an example,
 Let's use this knowledge to create a cross-shaped bloc element.

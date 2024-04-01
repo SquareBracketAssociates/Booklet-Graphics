@@ -1,5 +1,7 @@
 ## Notes about BitBlt
 
+This document contains some notes collected from diverse sources about BitBlt.
+
 ### Introduction
 
 A basic operation on *Forms*, referred to as `BitBlt`, supports a wide range of
@@ -119,11 +121,12 @@ dst.R dst.G = color.G * mask.G * colorAlpha + (1 - (mask.G* colorAlpha)) *
 dst.G dst.B = color.B * mask.B * colorAlpha + (1 - (mask.B* colorAlpha)) *
 dst.B)
 ```
-### Source
 
+### Sources
 
 Smalltalk 80 blue book - p332 and later.
-[wikipedia](https://en.wikipedia.org/wiki/Blitter)
-https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00078.htm
-https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00066.htm
-https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00069.htm
+
+- https://en.wikipedia.org/wiki/Blitter
+- https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00078.htm
+- https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00066.htm
+- https://fmfi-uk.hq.sk/Informatika/Smalltalk/Online%20Book/english/sqk/sqk00069.htm

@@ -1,7 +1,8 @@
 ## Bloc
 
 Bloc introduction to be written
-This chapter is heavily inspired by [morphic introduction](https://github.com/SquareBracketAssociates/NewPharoByExample9/blob/master/Chapters/Morphic/Morphic.pillar)
+
+This chapter is heavily inspired by [morphic introduction](https://github.com/SquareBracketAssociates/NewPharoByExample9/blob/master/Chapters/Morphic/Morphic.pillar).
 
 ### BlElement
 
@@ -28,9 +29,13 @@ inspect.
 Of course, it is possible to define elements that are more interesting
 graphical representations than the one that you have just seen.
 
-Now execute:
-`BlElement new size: 20@20; background: (BlBackground paint: Color orange)`
-in a Playground. Instead of the string-like element, you get an orange square.
+Now execute in a Playground:
+
+```
+BlElement new size: 20@20; background: (BlBackground paint: Color orange)
+```
+
+Instead of the string-like element, you get an orange square.
 
 ![Basic element inspect.](figures/basicelementinspect.png)
 
@@ -44,12 +49,8 @@ Every bloc element, when opened on the screen has a position and a
 size. If they are irregularly shaped, their position and size are
 those its *bounds*.
 
-- The `position` method returns a `Point` that describes the location of
-the bloc element upper-left corner of its bounding box. The origin of the
-coordinate system is the parent's upper left corner, with *y* coordinates
-increasing *down* the screen and *x* coordinates increasing to the right.
-- The `extent` method also returns a point, but this point specifies the width
-and height of the bloc element rather than a location.
+- The `position` method returns a `Point` that describes the location of the bloc element upper-left corner of its bounding box. The origin of the coordinate system is the parent's upper left corner, with *y* coordinates increasing *down* the screen and *x* coordinates increasing to the right.
+- The `extent` method also returns a point, but this point specifies the width and height of the bloc element rather than a location.
 
 Type the following code into a playground and **Do it**:
 
@@ -66,7 +67,7 @@ execute `joe position: (self position + (10@3))` repeatedly.
 
 It is possible to do a similar thing with size. `self extent` answers joe's
 size; to have joe grow, execute `self size: (self extent * 1.1)`. To change
-the color of a morph, send it the **color:** message with the desired **Color**
+the color of a morph, send it the `color:` message with the desired `Color`
 object as argument, for instance, `self background: (BlBackground paint: Color orange)`.
 To add transparency, try `self background: (BlBackground paint: (Color orange alpha: 0.2))`.
 
@@ -75,7 +76,7 @@ To add transparency, try `self background: (BlBackground paint: (Color orange al
 One way of creating new graphical representations is by placing one
 bloc element inside another. This is called *composition*; Bloc elements can be
 composed to any depth. You can place a morph inside another by sending the
-message `addChild:` to the container morph. This is what happened when you send
+message `addChild:` to the container morph. This is what happens when you send
 the message `openInNewSpace`. Your element is added to the *space* element.
 
 Try adding an element to another one as follows:
@@ -94,11 +95,11 @@ joe.
 
 The balloon is added inside joe following default layout rules. More on that later.
 
-![Balloon as child.](figures/balloonandelementaschild.png)
+![Balloon as child.](figures/balloonandelementaschild.png width=50)
 
 ### Creating your own bloc element
 
-BlElement offers you various method to customize their appearance. As an example,
+BlElement offers you various methods to customize their appearance. As an example,
 Let's use this knowledge to create a cross-shaped bloc element.
 
 ```smalltalk
@@ -196,7 +197,7 @@ cross addShortcut: (BlShortcutWithAction new
 ```
 
 We have written this method so that you can move the morph using the arrow keys.
-To discover the key values, you can open add this method to your element
+To discover the key values, you can open and add this method to your element.
 
 ```smalltalk
 cross addEventHandler: (BlEventHandler
@@ -209,10 +210,10 @@ To ensure your cross has the focus, send the message
 
 ### Bloc animations
 
-Bloc provides the base of an animation system with **BlAnimation** class. You
+Bloc provides the base of an animation system with `BlAnimation` class. You
 can create your own animation by subclassing and customizing this class. Here,
-we'll use pre-defined animation by using **BlNumberTransition**, which allow us
-to create animation by defining specific value within a number range and specific
+we'll use pre-defined animation by using `BlNumberTransition`, which allows us
+to create animation by defining specific values within a number range and specific
 time interval.
 
 Make your cross blink by defining this method as follows:
@@ -453,7 +454,7 @@ space show.
 ^ space
 ```
 
-## A complete example
+### A complete example (TBD)
 
 Let's design a bloc element to roll a die.
 Clicking on it will display the values of all sides of the die in a quick loop,

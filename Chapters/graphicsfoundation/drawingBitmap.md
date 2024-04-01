@@ -1,13 +1,13 @@
-# drawing with bitmap canvas
+## Drawing with bitmap canvas
 
-One can manage the Form pixel by pixel. However, you would quickly start to implement primitive to help drawing line, circles, elipses, border, and fill the geometric mesh you would have just created.
+One can manage the Form pixel by pixel. However, you would quickly start to implement primitive to help draw lines, circles, ellipses, and border, and fill the geometric mesh you would have just created.
 
-Don't look any further, the problem has already been solved, with the Canvas object. In Pharo, it's more specifically a FormCanvas object, a Canvas that interact well  with a Form
+Don't look any further, the problem has already been solved, with the Canvas object. In Pharo, it's more specifically a FormCanvas object, a Canvas that interacts well  with a Form
 
 Here is the definition of Canvas from Pharo documentation:
 "*A canvas is a two-dimensional medium on which morphs are drawn in a device-independent manner. Canvases keep track of the origin and clipping rectangle, as well as the underlying drawing medium (such as a window, pixmap, or postscript script).*"
 
-## creating canvas
+### Creating a canvas
 
 ```smalltalk
 canvas := FormCanvas extent: 10@10.
@@ -18,7 +18,7 @@ canvas line: 0@9 to: 9@0 width: 1 color: Color red.
 canvas form magnifyBy: 10
 ```
 
-## canvas with specific depth
+## Canvas with specific depth
 
 bitPatternForDepth: depth
  "Return a Bitmap, possibly containing a stipple pattern, that best represents this color at the given depth. BitBlt calls this method to convert colors into Bitmaps. The resulting Bitmap may be multiple words to represent a stipple pattern of several lines.  "
@@ -58,17 +58,9 @@ canvas line: 0@9 to: 9@0 width: 1 color: Color red.
 canvas form magnifyBy: 10.
 ```
 
-## Canvas example
+### Canvas examples
 
-### playing with rectangle and lines
-
-```smalltalk
-canvas := FormCanvas extent: 100@100.
-rect := Rectangle origin: 0@0 extent: 100@100.
-canvas frameAndFillRectangle: rect fillColor: Color yellow borderWidth: 2 borderColor: Color black.
-canvas line: 0@100 to: 100@0 width: 1 color: Color red.
-canvas form magnifyBy: 5
-```
+#### Playing with rectangle and lines
 
 ```smalltalk
 canvas := FormCanvas extent: 100@100.
@@ -78,7 +70,15 @@ canvas line: 0@100 to: 100@0 width: 1 color: Color red.
 canvas form magnifyBy: 5
 ```
 
-### playing with text
+```smalltalk
+canvas := FormCanvas extent: 100@100.
+rect := Rectangle origin: 0@0 extent: 100@100.
+canvas frameAndFillRectangle: rect fillColor: Color yellow borderWidth: 2 borderColor: Color black.
+canvas line: 0@100 to: 100@0 width: 1 color: Color red.
+canvas form magnifyBy: 5
+```
+
+#### Playing with text.
 
 ```smalltalk
 canvas := FormCanvas extent: 200@50.
@@ -88,7 +88,7 @@ canvas drawString: 'hello from Pharo Canvas in World' from: 1 to: 32 in: (Rectan
 canvas form magnifyBy: 5
 ```
 
-### playing with circles and ovals
+#### Playing with circles and ovals.
 
 ```smalltalk
 canvas := FormCanvas extent: 100@100.
@@ -106,7 +106,7 @@ canvas fillOval: rect color: Color yellow borderWidth: 2 borderColor: Color blac
 canvas form magnifyBy: 5
 ```
 
-### playing with polygons
+#### Playing with polygons.
 
 ```smalltalk
 canvas := FormCanvas extent: 100@100.
@@ -127,7 +127,10 @@ canvas drawPolygon: {25@0 . 75@0 . 100@25 . 100@75 . 75@100 . 25@100 . 0@75. 0@2
 canvas form magnifyBy: 5.
 ```
 
-## bitmap and Form reference link
+
+
+
+### Bitmap and Form reference link
 
 [Library built on top of Form](https://github.com/pablo1n7/ImageForm)
 [Reference](http://paulbourke.net/dataformats/bitmaps/)

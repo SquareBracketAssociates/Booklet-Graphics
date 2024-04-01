@@ -61,3 +61,39 @@ bitmap := Bitmap newFrom: #( 2r10000000000000000000000000000000 ).
 pict colors: map.
 pict initFromArray: bitmap.
 ```
+
+
+### Fun script
+
+We should revise it. 
+```
+| newImgName imgFullName rotationFactor scaleFactor fFactor form |
+imgFullName := (FileSystem workingDirectory / '9DB.png') fullName.
+form := (Form fromFileNamed: imgFullName).
+rotationFactor := 10.
+scaleFactor := 10.
+fFactor := 0.1.
+newImgName := (imgFullName copyUpTo: $.) , '_'.
+
+10 to: 30 by: scaleFactor do: [ : i |
+	(form copy scaledToSize: i @ i) writePNGFileNamed: newImgName , 'scaledToSize_' , i asString , '.png'.
+		(form copy magnifyBy: i) writePNGFileNamed: newImgName , 'magnifiedTo_' , i asString , '.png'. ].
+
+{ #flipHorizontally . " #reverse ." #colorReduced . #fixAlpha . #asGrayScale . #asGrayScaleWithAlpha } 
+	do: [ : sym | (form copy perform: sym) writePNGFileNamed: newImgName , sym asString , '.png' ].
+
+1 to: 90 by: rotationFactor 
+	do: [ : i | (form copy rotateBy: i) writePNGFileNamed: newImgName , 'rotateBy_' , i asString , '.png' ].
+
+
+0 to: 1 by: fFactor do: [ : i | 
+	(form copy darker: i) writePNGFileNamed: newImgName , 'darkFactor_' , i asString , '.png'.
+	(form copy  dimmed: i) writePNGFileNamed: newImgName , 'dimmedFactor_' , i asString , '.png'.
+	(form copy  lighter: i) writePNGFileNamed: newImgName , 'lightFactor_' , i asString , '.png'.
+	(form copy  magnifyBy: i) writePNGFileNamed: newImgName , 'magnifiedTo_' , i asString , '.png' ].
+	(form copy  mapColor: Color black to: Color white) writePNGFileNamed: newImgName , 'colorMap_' , i asString , '.png'.
+```
+	
+
+
+

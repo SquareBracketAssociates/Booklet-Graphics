@@ -20,6 +20,10 @@
 <!inputFile|path=Chapters/toplo/stylesheet.md!>
 
 
+#Infrastructure
+<!inputFile|path=Chapters/graphicsfoundation/bitmapFormDisplay.md!>
+
+
 #Old libraries
 
 <!inputFile|path=Chapters/Athens/Athens.md!>

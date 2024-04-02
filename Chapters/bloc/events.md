@@ -1,45 +1,50 @@
-## Event handling & shortcut management
+## Event handling
 
-`addEventHandlerOn:do:` returns the new handler
-`when:do:` is now deprecated and rewritten as `addEventHandlerOn:do:`
 
-### Keymap at system platform level
 
-KeyboardKey class, which is used when a key on the keyboard is pressed.
 
-It's used at Morphic level, when your morph want to catch a specific keyboard
-event.
-
-It can be used by Keymapping (KMSingleKeyCombination & KMShortcutPrinter) as an
-equivalent of `$a asKeyCombination`
-
-It's used ultimately by BlKeyCombinationBuilder to build keyboard shortcut
-in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
-
-### Combination from Bloc framework
-
-Bloc come with its own keymapping framework.
-BlShortcutWithAction would be the equivalent of KMKeymap.
-
-BlShortcutWithAction new
-    combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
-    action: [ flag := true ].
 
 ### Event handling
+
+
+
 
 ```smalltalk
 BlElement new 
   background: Color white; 
   border: (BlBorder paint: Color black width: 2); 
   size: 300 @ 200;
-  when: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
-  when: BlMouseLeaveEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
+  addEventHandlerOn: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
+  addEventHandlerOn: BlMouseLeaveEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
   openInNewSpace 
 ```
 
-Other syntax: `addEventHandlerOn: BlMouseOverEvent   do: [ :e | a background: Color lightGray ];`
+`addEventHandlerOn:do:` returns the new handler so that we can store to remove it in case. 
+`when:do:` is now deprecated and rewritten as `addEventHandlerOn:do:`
+SD: we should update the following
 
-### drag&drop
+Instead of using addEventHandlerOn:do: you can also see users of `addEventHandler:`.
+
+```
+deco addEventHandler: (BlEventHandler				 on: BlMouseLeaveEvent				 do: [ :event | event currentTarget border: BlBorder empty ]).
+```
+
+### About event bubbling
+
+We should check `example_mouseEvent_descending_bubbling`
+
+
+![Windows nested in each others in Toplo.](figures/4windows.png)
+
+
+
+
+
+
+
+
+
+### Drag&drop
 
 ```smalltalk
 "Draggable card that says 'Rainbow!'"
@@ -72,7 +77,7 @@ addShortcut: (BlShortcutWithAction new
 
 ```smalltalk
 eventExample
-<gtExample>
+
  "This is a new method"
 |toto|
 toto := BlDevElement new size:200@200;
@@ -94,7 +99,7 @@ border: (BlBorder paint: Color orange width: 4);
 "constraintsDo: [:c | c horizontal matchParent. c vertical matchParent.];"
 outskirts: BlOutskirts outside.
 
-toto when: BlMouseEnterEvent do: [ :anEvent |
+toto addEventHandlerOn: BlMouseEnterEvent do: [ :anEvent |
   anEvent consumed: true.
   toto background: (Color red alpha:0.2) ].
   
@@ -219,3 +224,32 @@ BlEventHandler
 	on: BlClickEvent
 	do: [ :anEvent | self inform: 'Click!' ]
 ```
+
+
+
+
+### Keymap at system platform level
+
+KeyboardKey class, which is used when a key on the keyboard is pressed.
+
+It's used at Morphic level, when your morph want to catch a specific keyboard
+event.
+
+It can be used by Keymapping (KMSingleKeyCombination & KMShortcutPrinter) as an
+equivalent of `$a asKeyCombination`
+
+It's used ultimately by BlKeyCombinationBuilder to build keyboard shortcut
+in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
+
+### Combination from Bloc framework
+
+Bloc come with its own keymapping framework.
+BlShortcutWithAction would be the equivalent of KMKeymap.
+
+BlShortcutWithAction new
+    combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
+    action: [ flag := true ].
+
+
+
+

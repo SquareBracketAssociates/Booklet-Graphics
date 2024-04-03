@@ -1,39 +1,4 @@
-## Bloc & BlElement
-
-### Introduction
-
-**Bloc** is a powerful and innovative graphical framework designed specifically
-for Pharo. Initially developed by Alain Plantec, it has received large and valuable
-contributions from the Feenk team for **GToolkit** integration. These combined
-efforts are now being merged back into **Pharo**, paving the way for a
-significant step forward in its graphical capabilities.
-
-### Evolution beyond Morphic
-
-**Bloc** is poised to become the primary graphical framework for Pharo,
-gradually replacing the well-established but aging Morphic framework. This
-transition promises to bring numerous advantages, including:
-
-* Enhanced performance and efficiency
-* Greater flexibility and customization options
-* Modernized development experience
-* Improved compatibility with various platforms and technologies
-
-
-### Installation
-To install it in Pharo 11, simply type in the playground
-
-```smalltalk
-EpMonitor disableDuring: [
-  Author useAuthor: 'Load' during: [
-    [ Metacello new baseline: 'Toplo'; repository: 'github://pharo-graphics/Toplo:master/src';
-	onConflictUseIncoming;
-	ignoreImage;
-	load.
-    ] on: MCMergeOrLoadWarning do: [ :warning | warning load ].
-  ].
-]
-```
+## BlElement
 
 **Bloc** distinguishes itself by prioritizing object composition over
 inheritance as its core design principle. This means that instead of relying
@@ -124,11 +89,11 @@ flexibility to construct even more intricate geometries.
 The geometry is like an invisible line on which your border is painted. The
 painting is a subclass of `BlPaint`, and one of the three:
 
-* solid color
-* linear gradient color
-* radial gradient color
+- solid color
+- linear gradient color
+- radial gradient color
 
-![border color type](figures/bordercolortype.png)
+![Border color type.](figures/bordercolortype.png)
 
 Your border opacity can be specified as well: `opacity: 0.5;`
 
@@ -138,25 +103,25 @@ dash offset, the space between elements.
 
 You also have a pre-defined option, available in a single call:
 
-* **dashed**
-* **dashed small**
+- **dashed**
+- **dashed small**
 
-![Border dash.](figures/multipletriangledash.png)
+![Border dash.](figures/multipletriangledash.png label=fig:borderdash)
 
 If the path is not closed, The style extent of your border can be defined with
 
-* **cap square**
-* **cap round**
-* **cap butt**
+- **cap square**
+- **cap round**
+- **cap butt**
 
 Last, when the lines of your border cross each other, you can define the style of
-the join:
+the join as shown in Figure *@fig:jointype@*:
 
-* **round join**
-* **bevel join**
-* **mitter join**
+- **round join**
+- **bevel join**
+- **mitter join**
 
-![Border join type.](figures/borderjointype.png)
+![Border join type.](figures/borderjointype.png label=fig:jointype)
 
 You have two options to define your border:
 

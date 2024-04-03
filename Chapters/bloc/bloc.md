@@ -27,9 +27,9 @@ To install it in Pharo 11, simply type in the playground
 EpMonitor disableDuring: [
   Author useAuthor: 'Load' during: [
     [ Metacello new baseline: 'Toplo'; repository: 'github://pharo-graphics/Toplo:master/src';
-        onConflictUseIncoming;
-        ignoreImage;
-        load.
+	onConflictUseIncoming;
+	ignoreImage;
+	load.
     ] on: MCMergeOrLoadWarning do: [ :warning | warning load ].
   ].
 ]
@@ -170,7 +170,7 @@ customize all the details of your border.
 
 Let's look at the different possible bounds of your element.
 
-**Layout bounds** can be defined explicitly using **size:** method or dynamicaly
+**Layout bounds** can be defined explicitly using `size:` method or dynamically
 Layout bounds are considered by layout algorithms to define mutual locations
 for all considered elements. You'll know more about layout later.
 
@@ -180,28 +180,28 @@ vertices. This does not take in account the border width
 **Visual bounds** is an exact area occupied by an element. it takes strokes
 and rendering into account.
 
-The geometry is like a an invisible line on which your border is represented.
+The geometry is like an invisible line on which your border is represented.
 The border drawing can happen outside (adding its border size to the size of
 your element), centered, or inside the geometry of the element. The final size
 (geometry + border width) will define the **bounds** of your element.
 
-In this figure, the same exact star is drawned 3 time. The only difference is
+In Figure *@fig:outskirts@*, the same exact star is drawn 3 times. The only difference is
 the outskirts definition between those 3.
 
-![outskirts](figures/multipletriangleoutskirts.png)
+![Outskirts.](figures/multipletriangleoutskirts.png label=fig:outskirts)
 
-If we specify BlOutskirts inside, visual bound and geometry bounds will be the
-same. But if BlOutskirts is outside, then visual bounds are larger than
+If we specify outskirts inside, visual bound and geometry bounds will be the
+same. But if the outskirts is outside, then visual bounds are larger than
 geometry bounds to take border width into its calculation.
 
-### element background
+### Element background
 
 quick set-up: `background: (Color red alpha: 0.8);`
 
 using rgb color
 
 ```smalltalk
-background: (Color r: 63 g: 81           b: 181     range: 255);
+background: (Color r: 63 g: 81	   b: 181     range: 255);
 ```
 
 using linear gradient
@@ -220,13 +220,15 @@ radius: largeExtent min;
 yourself);
 ```
 
-Using dedicated *BlPaintBackground* object.
+Using dedicated `BlPaintBackground` object.
 
 ```smalltalk
-background: ((BlPaintBackground paint: fillColor asBlPaint) opacity: 0.75; yourself);
+BlElement new 
+	background: ((BlPaintBackground paint: Color red  asBlPaint) opacity: 0.75; yourself);
+	openInSpace
 ```
 
-![background color](figures/backgroundcolortype.png)
+![Background color.](figures/backgroundcolortype.png)
 
 ### Element effect
 
@@ -234,13 +236,13 @@ background: ((BlPaintBackground paint: fillColor asBlPaint) opacity: 0.75; yours
 
 ```smalltalk
 BlElement new
-        size: 200 @ 100;
-        geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-        background: (Color red alpha: 0.2);
-        border: (BlBorder paint: Color yellow width: 1);
-        outskirts: BlOutskirts centered;
-        effect:
-            (BlSimpleShadowEffect color: Color orange offset: -10 @ -20)
+	size: 200 @ 100;
+	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+	background: (Color red alpha: 0.2);
+	border: (BlBorder paint: Color yellow width: 1);
+	outskirts: BlOutskirts centered;
+	effect:
+	    (BlSimpleShadowEffect color: Color orange offset: -10 @ -20)
 ```
 
 ![simple shadow](figures/simpleshadow.png)
@@ -254,11 +256,11 @@ effect: (BlSimpleShadowEffect
 
 ```smalltalk
 BlElement new
-        size: 300 @ 150;
-        geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
-        background: (Color blue alpha: 0.5);
-        border: (BlBorder paint: Color red width: 10);
-        effect: (BlGaussianShadowEffect color: Color yellow offset: 10@20 width: 5)
+	size: 300 @ 150;
+	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
+	background: (Color blue alpha: 0.5);
+	border: (BlBorder paint: Color red width: 10);
+	effect: (BlGaussianShadowEffect color: Color yellow offset: 10@20 width: 5)
 ```
 
 ![Gaussian shadow.](figures/gaussianshadow.png)
@@ -287,27 +289,27 @@ element transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
 
 ```smalltalk
 aContainer := BlElement new
-                    layout: BlFrameLayout new;
-                    constraintsDo: [ :c |
-                        c horizontal fitContent.
-                        c vertical fitContent ];
-                    padding: (BlInsets all: 20);
-                    background: (Color gray alpha: 0.2).
+		    layout: BlFrameLayout new;
+		    constraintsDo: [ :c |
+			c horizontal fitContent.
+			c vertical fitContent ];
+		    padding: (BlInsets all: 20);
+		    background: (Color gray alpha: 0.2).
 
 node := BlElement new
-            geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
-            border: (BlBorder paint: Color black width: 2);
-            background: Color white;
-            constraintsDo: [ :c |
-                c frame horizontal alignCenter.
-                c frame vertical alignBottom ];
-            size: 20 @ 20.
+	    geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
+	    border: (BlBorder paint: Color black width: 2);
+	    background: Color white;
+	    constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignBottom ];
+	    size: 20 @ 20.
 
 aContainer transformDo: [ :t |
     t
-        scaleBy: 2.0;
-        rotateBy: 69;
-        translateBy: 50 @ 50 ].
+	scaleBy: 2.0;
+	rotateBy: 69;
+	translateBy: 50 @ 50 ].
 aContainer addChild: node.
 
 aContainer forceLayout.

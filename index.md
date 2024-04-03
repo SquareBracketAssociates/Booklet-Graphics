@@ -8,7 +8,7 @@
 <!inputFile|path=Chapters/bloc/introduction.md!>
 
 %first pass done
-<!inputFile|path=Chapters/bloc/introduction.md!>
+%<!inputFile|path=Chapters/bloc/introduction.md!>
 <!inputFile|path=Chapters/bloc/bloc.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
 <!inputFile|path=Chapters/bloc/layout.md!>

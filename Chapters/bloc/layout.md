@@ -61,7 +61,7 @@ with `removeChild:` and `removeChildren:` method.
 Look at **children add/remove** protocol of `BlElement` for all available method
 to manage addition and removal of the elements composing your widget.
 
-### space around elements
+### Space around elements
 
 Before jumping on the definition of the position of each element, you can already
 define how close your element will be from each other, with those 2 properties
@@ -241,7 +241,7 @@ constraintsDo: [ :c |
 	c vertical matchParent ].
 ```
 
-### default layout: basicLayout
+### Default layout: basicLayout
 
 If your parent don't define any specific layout, it will default to *BlBasicLayout*.
 Using this layout, children can position themselves at arbitrary position within
@@ -290,7 +290,7 @@ over its parents, they will be hidden. need to specify their size. If they use
 constraint, the last one will hide previous one. They will fit available space +
 move to next line if necessary
 
-#### parent definition
+#### Parent definition
 
 - horizontal
 - vertical
@@ -335,12 +335,12 @@ previous one. They will fit available space + move to next line if necessary.
 Flow will fill all available space in its parent, and parent can be resized to
 match the space needed to display all its children.
 
-#### parent definition
+#### Parent definition
 
 - horizontal
 - vertical
 
-#### child constraints
+#### Child constraints
 
 - horizontal
 - alignCenter

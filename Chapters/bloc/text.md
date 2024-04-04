@@ -104,7 +104,7 @@ to get the size of your text, and position it into your element.
 **baseline**
 :    line upon which most letters sit and below which descenders extend.
 
-![Typograpy.](figures/2880px-Typography_Line_Terms.svg.png)
+![Typograpy.](figures/2880px-Typography_Line_Terms.png)
 
 References:
 

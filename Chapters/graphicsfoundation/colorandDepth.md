@@ -1,6 +1,6 @@
-# Color and color depth
+## Color and color depth
 
-- The depth of a Form is how many bits are used to specify the color at each pixel.  The supported depths (in bits) are 1, 2, 4, 8, 16, and 32. The color depth is a measure of an individual image pixel to accurately represent a color. Color  depth is calculated in bits-per-pixel or bpp.
+The depth of a Form is how many bits are used to specify the color at each pixel.  The supported depths (in bits) are 1, 2, 4, 8, 16, and 32. The color depth is a measure of an individual image pixel to accurately represent a color. Color  depth is calculated in bits-per-pixel or bpp.
 
 For example, 1-bit color depth or 1bpp means a pixel can have a 1-bit color or 2 values. Monochromatic images have 1-bit color depth because a pixel can be true  black or true white.
 
@@ -17,7 +17,7 @@ The number of actual colors at these depths are: 2, 4, 16, 256, 32768, and 16 mi
 
 The bits representing the bitmap pixels are packed in rows. The size of each row is rounded up to a multiple of 4 bytes (32 bits). The pixel array describes the image pixel by pixel. You can also have an alpha-channel to add transparency in the image using 32-bit color depth.
 
-![bitmap smile](Rgb-raster-image.png)
+![Bitmap smile.](Rgb-raster-image.png)
 
 - The coordinates of a Form start from the top-left corner much like most graphic system out there (why ? Because Western language are mostly written left to right, top to bottom, and initial text display follow this convention, instead of classic Cartesian coordinate). Forms are indexed starting at 0 instead of 1; thus, the top-left pixel of a Form has coordinates 0@0.
 
@@ -25,7 +25,8 @@ The actual bits are held in a Bitmap, whose internal structure is different at e
 
 You also have indexed color. For each pixel, you have a color index that will provide its true color. This is defined as *ColorForm* is Pharo In the Form, the bitmap is an index to a color map index, which size is **2^depth** color
 
-- ColorForm extent: 32@2 depth: 8
+`ColorForm extent: 32@2 depth: 8` 
+
 - For **24** and **32** bits RBG, there is 8 bits allocated to each color component. In 32 bits, there is an additional alpha channel, to manage transparencyy. In RGB space any colour is represented as a point inside a colour cube with orthogonal axes r,g,b. Grey values form a straight line from black to white along the diagonal of the cube, r = g = b.
 
 ```txt
@@ -54,15 +55,15 @@ You also have indexed color. For each pixel, you have a color index that will pr
 `| | | | |    | ...   |0 - 255|0 - 255|0 - 255|`
 `+-+-+-+-+    |2^depth|       |       |       |`
 
-- Through the color map, you can access different color than the default defined in the color depth. Furthermore, Color can be be defined with alpha channel.
+Through the color map, you can access different colors than the default defined in the color depth. Furthermore, Color can be defined with alpha channel.
 
 Class **Color** allows you to deal with colors without knowing how they are actually encoded inside a Bitmap.
 
-## RGB and color definition
+### RGB and color definition
 
-### what is RGB
+#### What is RGB?
 
-In RGB space any colour is represented as a point inside a colour cube with
+In RGB space any color is represented as a point inside a color cube with
 orthogonal axes r,g,b. Grey values form a straight line from black to white
 along the diagonal of the cube, r = g = b.
 
@@ -86,13 +87,13 @@ along the diagonal of the cube, r = g = b.
     Black (0,0,0 )+------------------------+ red(1,0,0 )
 ```
 
-### how are the basic color defined
+### How are the basic colors defined?
 
 You may have noticed that the basic color depth (2, 4, and 8) have a predefined set
 of color.
 
-For example, for a depth of 4, you can have 16 different color. Picking the
-color of a specific pixel will give you its name.
+For example, for a depth of 4, you can have 16 different colors. 
+Picking the color of a specific pixel will give you its name.
 
 ```smallalk
 (Form extent: 8@2 depth: 4 )
@@ -104,15 +105,15 @@ color of a specific pixel will give you its name.
 
 give **Color Magenta**
 
-The basic color are initialized in *Color class >> initializeIndexedColors*.
-Take a look at it to find the definition of all base color.
+The basic colors are initialized in *Color class >> initializeIndexedColors*.
+Take a look at it to find the definition of all base colors.
 
 ### Color form in Pharo
 
-If you are not happy with the different base color, you can specify a color palette
-that will be used as a replacement. They are called indexed color. For each pixel,
+If you are not happy with the different base colors, you can specify a color palette
+that will be used as a replacement. They are called indexed colors. For each pixel,
  you have a color index that will provide its true color. This is defined as *ColorForm* is Pharo
-In the Form, the bitmap is an index to a color map index, which size is
+In the Form, the bitmap is an index to a color map index, whose size is
 
 $2^{depth}$ color
 
@@ -129,18 +130,18 @@ $2^{depth}$ color
     +-+-+-+-+    |2^depth|       |       |       |
 ```
 
-Through the color map, you can access different color than the default defined
-in the color depth. Furthermore, Color can be be defined with alpha channel.
+Through the color map, you can access different colors than the default defined
+in the color depth. Furthermore, Color can be defined with an alpha channel.
 
 Class Color allows you to deal with colors without knowing how they
 are actually encoded inside a Bitmap.
 
-### 1 bit depth with color Form
+### 1-bit depth with color Form
 
-Use ColorForm if you want to use color other than black and white:
+Use ColorForm if you want to use colors other than black and white:
 
 ```smalltalk
-|pict map|
+| pict map |
 pict := ColorForm extent: 32@2 depth: 1.
 
 "create a color map of 2^depth color"
@@ -154,50 +155,52 @@ pict initFromArray: #(
 pict magnifyBy: 25
 ```
 
-### 2bit depth with color Form
+### 2-bit depth with color Form
 
 With ColorForm:
 
 ```smalltalk
-    |pict map|
-    pict := ColorForm extent: 16@1 depth: 2.
+| pict map |
+pict := ColorForm extent: 16@1 depth: 2.
 
-    "create a color map of 2^depth color"
-    map := {  Color white. 
-    Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
-    Color blue.
-    Color red.
-    }.
-    pict colors: map.
-    pict initFromArray: #(2r00011011000110110001101100011011).
-    pict magnifyBy: 25
+"create a color map of 2^depth color"
+map := {  
+	Color white. 
+	Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
+	Color blue.
+	Color red.
+}.
+pict colors: map.
+pict initFromArray: #(2r00011011000110110001101100011011).
+pict magnifyBy: 25
 ```
 
 ### 4bit depth with color Form
 
-With ColorForm:
+With `ColorForm`:
 
 ```smalltalk
-|pict map|
+| pict map |
 pict := ColorForm extent: 8@1 depth: 4.
 
 "create a color map of 2^depth color"
-map := {  Color transparent. 
-   Color white. 
-   Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
-   Color gray.
-   Color red.
-   Color green.
-   Color blue.
-   Color yellow.
-   Color transparent. 
-   Color white. 
-   Color blue.
-   Color gray.
-   Color red.
-   Color green.
-   Color blue.
-   Color yellow. 
+map := {
+	Color transparent. 
+	Color white. 
+	Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
+	Color gray.
+	Color red.
+	Color green.
+	Color blue.
+	Color yellow.
+	Color transparent. 
+	Color white. 
+	Color blue.
+	Color gray.
+	Color red.
+	Color green.
+	Color blue.
+	Color yellow. 
  }.
 pict colors: map.
 pict initFromArray: #(2r01000010001100011011110111101111).
@@ -206,10 +209,10 @@ pict magnifyBy: 25
 
 ### 8bit depth with color Form
 
-Using ColorForm to reverse the color:
+Using `ColorForm` to reverse the color:
 
 ```smalltalk
-|pict map|
+| pict map |
 pict := ColorForm extent: 4@64 depth: 8.
 
 "create a color map of 2^depth color"

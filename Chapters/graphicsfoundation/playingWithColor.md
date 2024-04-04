@@ -1,108 +1,130 @@
-# playing with color depth
+## Playing with color depth
 
-## 1 bit depth
+### 1 bit depth
 
-- You can define the color of 32 pixel with color depth 1 playing with color and form.
-- (Form extent: 32@2 "size of the form"
- depth: 1 "color depth")
- initFromArray: #( "pixel color, expressed on 4 bytes"
-  2r10011000000100010000000000000001
-  2r11000000000000000000000000000000
-)
-; magnifyBy: 10.
-- Using Bitmap:
-- bitMap := Bitmap newFrom: #( "pixel color, expressed on 4 byte"
-  2r10011000000100010000000000000001
-  2r11000000000000000000000000000000
-) .
+You can define the color of 32 pixel with color depth 1 playing with color and form.
 
+```
 (Form extent: 32@2 "size of the form"
- depth: 1 "color depth")
- initFromArray: bitMap
+	depth: 1 "color depth")
+		initFromArray: #( "pixel color, expressed on 4 bytes"
+			2r10011000000100010000000000000001
+			2r11000000000000000000000000000000 )
 ; magnifyBy: 10.
+```
 
-- (Form extent: 32@2 "size of the form"
- depth: 1 "color depth - 16 => 2 bits to define color value")
- initFromArray: #(
- 2r10101010101010101010101010101010
- 2r01010101010101010101010101010101 "2 colors"
-)
-; magnifyBy: 25.
-- Use ColorForm if you want to use color other than black and white:
-- |pict map|
+### Using `Bitmap`:
+
+```
+ bitMap := Bitmap newFrom: #( "pixel color, expressed on 4 byte"
+	2r10011000000100010000000000000001
+	2r11000000000000000000000000000000
+) .
+```
+
+
+```
+(Form extent: 32@2 "size of the form"
+	depth: 1 "color depth")
+	initFromArray: bitMap; 
+	magnifyBy: 10.
+```
+```
+(Form extent: 32@2 "size of the form"
+	depth: 1 "color depth - 16 => 2 bits to define color value")
+	initFromArray: #(
+	2r10101010101010101010101010101010
+	2r01010101010101010101010101010101 "2 colors" ) ;
+	magnifyBy: 25.
+```
+- Use `ColorForm` if you want to use color other than black and white:
+
+```
+| pict map |
 pict := ColorForm extent: 32@2 depth: 1.
 
 "create a color map of 2^depth color"
-map := {  Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
-   Color blue.
+map := {
+	Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
+	Color blue.
  }.
 pict colors: map.
 pict initFromArray: #(
-2r01010101010101010101010101010101
-2r10101010101010101010101010101010).
+	2r01010101010101010101010101010101
+	2r10101010101010101010101010101010).
 pict magnifyBy: 25
+```
 
-- Our initial fish could be described like:
-- (Form extent: 32@20
- depth: 1
- fromArray: #(
-2r00000000011100000000000000000000
-2r00000000001110000000000000000000
-2r00000000001111000000000000000000
-2r00000000001111110000000000000000
-2r00100000011111111110000000000000
-2r11100001111111111111000000000000
-2r01110011111111111111100000000000
-2r01111011111111110111110000000000
-2r00111111111111111111111000000000
-2r00111111111111111111111000000000
-2r00111111111111111111111000000000
-2r00111111111111111111111000000000
-2r01111011111111111111110000000000
-2r01110001111111111111100000000000
-2r11100001111111111111000000000000
-2r00100000011111111100000000000000
-2r00000000001111100000000000000000
-2r00000000000111000000000000000000
-2r00000000000110000000000000000000
-2r00000000000100000000000000000000)
-offset: 10@0) magnifyBy: 20
-- and the same in blue:
-- |pict map|
+Our initial fish could be described like:
+
+```
+(Form extent: 32@20
+	depth: 1
+	fromArray: #(
+	2r00000000011100000000000000000000
+	2r00000000001110000000000000000000
+	2r00000000001111000000000000000000
+	2r00000000001111110000000000000000
+	2r00100000011111111110000000000000
+	2r11100001111111111111000000000000
+	2r01110011111111111111100000000000
+	2r01111011111111110111110000000000
+	2r00111111111111111111111000000000
+	2r00111111111111111111111000000000
+	2r00111111111111111111111000000000
+	2r00111111111111111111111000000000
+	2r01111011111111111111110000000000
+	2r01110001111111111111100000000000
+	2r11100001111111111111000000000000
+	2r00100000011111111100000000000000
+	2r00000000001111100000000000000000
+	2r00000000000111000000000000000000
+	2r00000000000110000000000000000000
+	2r00000000000100000000000000000000)
+		offset: 10@0) magnifyBy: 20
+```
+
+ and the same in blue:
+
+```
+| pict map |
 pict := ColorForm extent: 32@20 depth: 1.
 
 "create a color map of 2^depth color"
-map := {  Color white.
-   Color lightBlue.
- }.
+map := {
+	Color white.
+	Color lightBlue }.
 pict colors: map.
 pict initFromArray: #(
-2r00000000011100000000000000000000
-2r00000000001110000000000000000000
-2r00000000001111000000000000000000
-2r00000000001111110000000000000000
-2r00100000011111111110000000000000
-2r11100001111111111111000000000000
-2r01110011111111111111100000000000
-2r01111011111111110111110000000000
-2r00111111111111111111111000000000
-2r00111111111111111111111000000000
-2r00111111111111111111111000000000
-2r00111111111111111111111000000000
-2r01111011111111111111110000000000
-2r01110001111111111111100000000000
-2r11100001111111111111000000000000
-2r00100000011111111100000000000000
-2r00000000001111100000000000000000
-2r00000000000111000000000000000000
-2r00000000000110000000000000000000
-2r00000000000100000000000000000000).
+	2r00000000011100000000000000000000
+	2r00000000001110000000000000000000
+	2r00000000001111000000000000000000
+	2r00000000001111110000000000000000
+	2r00100000011111111110000000000000
+	2r11100001111111111111000000000000
+	2r01110011111111111111100000000000
+	2r01111011111111110111110000000000
+	2r00111111111111111111111000000000
+	2r00111111111111111111111000000000
+	2r00111111111111111111111000000000
+	2r00111111111111111111111000000000
+	2r01111011111111111111110000000000
+	2r01110001111111111111100000000000
+	2r11100001111111111111000000000000
+	2r00100000011111111100000000000000
+	2r00000000001111100000000000000000
+	2r00000000000111000000000000000000
+	2r00000000000110000000000000000000
+	2r00000000000100000000000000000000).
 pict magnifyBy: 25
+```
 
-- This is how the normal cursor is defined. By default, a cursor size can only
-be 16@16. However, because data is stored on 32 bits, we need to add 16
-additional bit as white to store it, even if they wont be displayed.
-- (Form extent: 16@16
+This is how the normal cursor is defined. By default, a cursor size can only
+be 16@16. However, because data is stored in 32 bits, we need to add 16
+additional bits of white to store it, even if they won't be displayed.
+
+```
+(Form extent: 16@16
  depth: 1
  fromArray: #(
   2r10000001000000000000000000000000
@@ -122,37 +144,44 @@ additional bit as white to store it, even if they wont be displayed.
   2r00000011000000000000000000000000
   2r00000011000000000000000000000000)
  offset: 0@0) magnifyBy: 10.
+```
 
-## 2 bits depth
+#### 2 bits depth
 
-- (Form extent: 16@1 "size of the form"
- depth: 2 "color depth - 16 => 2 bits to define color value")
- initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
+```
+(Form extent: 16@1 "size of the form"
+	depth: 2 "color depth - 16 => 2 bits to define color value")
+	 initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
 "[ 0000 0000 0000 0000 0000 0000 0000 0000]
- first   second    third    fourth pixel
+ first second third fourth pixel
   Each pixel can have 2^2 = 4 different color"
 "[ 0000 0000 0000 0000 0000 0000 0000 0000]"
  2r00011011000110110001101100011011 "4 colors"
-)
-; magnifyBy: 25.
-- With ColorForm:
-- |pict map|
+	); magnifyBy: 25.
+```
+
+With ColorForm:
+```
+| pict map |
 pict := ColorForm extent: 16@1 depth: 2.
 
 "create a color map of 2^depth color"
-map := {  Color white.
-   Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
-   Color blue.
-   Color red.
- }.
+map := {
+	Color white.
+	Color r: 0.0 g: 0.5992179863147605 b: 0.19941348973607037 alpha: 1.0.
+	Color blue.
+	Color red }.
 pict colors: map.
 pict initFromArray: #(2r00011011000110110001101100011011).
 pict magnifyBy: 25
+```
 
-## 4 bits depth
+#### 4-bits depth
 
-- you can define the color of 8 pixel with color depth 16
-- (Form extent: 8@2 "size of the form"
+You can define the color of 8 pixel with color depth 16
+
+```
+(Form extent: 8@2 "size of the form"
  depth: 4 "color depth - 16 => 2 bits to define color value")
  initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
 "[ 0000 0000 0000 0000 0000 0000 0000 0000]
@@ -163,8 +192,11 @@ pict magnifyBy: 25
  2r10001001101010111100110111101111 "8 colors"
 )
 ; magnifyBy: 25.
-- With ColorForm:
-- |pict map|
+```
+
+With ColorForm:
+```
+| pict map |
 pict := ColorForm extent: 8@1 depth: 4.
 
 "create a color map of 2^depth color"
@@ -188,11 +220,14 @@ map := {  Color transparent.
 pict colors: map.
 pict initFromArray: #(2r01000010001100011011110111101111).
 pict magnifyBy: 25
+```
 
-## 8 bits depth
+## 8-bits depth
 
-- you can define the color of 4 pixel with color depth 8
-- (Form extent: 4@64 "size of the form"
+You can define the color of 4 pixel with color depth 8
+
+```
+(Form extent: 4@64 "size of the form"
  depth: 8 "color depth - 16 => 2 bits to define color value")
  initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
 "[ 00000000 00000000 00000000 00000000]
@@ -264,8 +299,12 @@ pict magnifyBy: 25
 2r00111110011111101011111011111110
 2r00111111011111111011111111111111
 ); magnifyBy: 25
-- Using ColorForm to reverse the color:
-- |pict map|
+```
+
+Using ColorForm to reverse the color:
+
+```
+| pict map |
 pict := ColorForm extent: 4@64 depth: 8.
 
 "create a color map of 2^depth color"
@@ -339,11 +378,13 @@ pict initFromArray: #(
 2r00111110011111101011111011111110
 2r00111111011111111011111111111111
 ); magnifyBy: 25
+```
 
 ## 16 bit depth
+You can define the color of 2 pixel with color depth 16
 
-- you can define the color of 2 pixel with color depth 16
-- (Form extent: 2@3 "size of the form"
+```
+(Form extent: 2@3 "size of the form"
  depth: 16 "color depth - 16 => 2 bits to define color value 65K color possible")
  initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
 "[ 0  XXXXX XXXXX XXXXX ]
@@ -357,10 +398,12 @@ pict initFromArray: #(
  2r01111111111111111000000000000000 "white -black"
 )
 ; magnifyBy: 25.
+```
 
 ## 32 bits depths
 
-- (Form extent: 7@1 "size of the form"
+```
+(Form extent: 7@1 "size of the form"
  depth: 32 "color depth")
  initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
 "colore are:
@@ -375,16 +418,20 @@ pict initFromArray: #(
   16r2fff0000 "red with opacity"
 )
 ; magnifyBy: 25.
-- Data is stored in Byte - remember than 8 bit = 1 bytes. Each entry of the color palette takes 4 bytes to define a color
-- (Form extent: 3@3 "size of the form"
+```
+
+Data is stored in Byte - remember that 8 bits = 1 bytes. Each entry of the color palette takes 4 bytes to define a color
+
+```
+(Form extent: 3@3 "size of the form"
  depth: 32 "color depth")
  initFromArray: #( "pixel color, expressed on 4 bytes or 32 bits, which is the maximum of color depth"
-"colore are:
+"colors are:
 2r 00000000 00000000 00000000 00000000
      ALPHA    RED   BLUE     GREEN   "
   16rffff0000 "red"   16rff000000 "black" 16rff0000ff "blue"
   16rff000000 "black" 16rffffffff "white" 16rff000000 "black"
   16rff00ff00 "green" 16rff000000 "black" 16rffffff00 "yello"
-
 )
 ; magnifyBy: 15.
+```

@@ -21,12 +21,12 @@ xargs tlmgr install <<DEPS
     opensans
     pgf
     polyglossia
-    hyphen-english
+    slantsc
     tcolorbox
     tools
     trimspaces
     ulem
     varwidth
     xcolor
-    slantsc
+    xtab
 DEPS

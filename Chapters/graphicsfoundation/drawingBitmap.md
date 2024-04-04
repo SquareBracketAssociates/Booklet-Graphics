@@ -126,12 +126,7 @@ fill := GradientFillStyle ramp: {0.0 -> Color white. 1.0 -> Color black}.
 canvas drawPolygon: {25@0 . 75@0 . 100@25 . 100@75 . 75@100 . 25@100 . 0@75. 0@25} fillStyle: fill borderWidth: 2 borderColor: Color red.
 canvas form magnifyBy: 5.
 ```
+### Bitmap and Form references
 
-
-
-
-### Bitmap and Form reference link
-
-[Library built on top of Form](https://github.com/pablo1n7/ImageForm)
-[Reference](http://paulbourke.net/dataformats/bitmaps/)
-[script to manipulate image](https://80738163270632.blogspot.com/2018/10/pharo-script-of-day-proto-proto-image.html)
+- Little Library built on top of Form https://github.com/pablo1n7/ImageForm
+- Reference: http://paulbourke.net/dataformats/bitmaps/

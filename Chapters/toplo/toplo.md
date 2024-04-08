@@ -1,4 +1,4 @@
-## Toplo widget - highlevel
+## Toplo widget: The high-level view
 
 ```smalltalk
 Metacello new
@@ -7,6 +7,12 @@ Metacello new
     onConflictUseIncoming;
     load
 ```
+
+
+
+
+
+
 
 Toplo defines bloc widgets
 
@@ -19,7 +25,7 @@ Define elementary properties that can be used by widgets:
 - icons
 - etc...
 
-### skins
+### Skins
 
 Toplo widgets interact with skins for the look.
 Skins relies on theme for elementary properties (colors, font, sizes…).
@@ -95,7 +101,7 @@ self flag: 'Leads to ToSpaceFrameSkinInstallationPhase installation in space fra
     anElement space checkSpaceFrameSkinInstallationPhase.
     anElement checkSkinInstallation
 
-## Process for Skin and look
+## Process for Skin
 
 For viewing the whole stack, put a breakpoint in `addChildren:` in ToCheckBox.
 
@@ -169,4 +175,3 @@ Theme -> factory de skin pour tes objets, incluant les propriétés pour décore
 
 Look -> skin event. 
 Skin -> élément central 
-Stylesheet à revoir.

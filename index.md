@@ -1,4 +1,4 @@
-<!inputFile|path=Chapters/bloc/bloc.md!>
+<!inputFile|path=Chapters/bloc/blocStack.md!>
 
 #Low - Level 
 <!inputFile|path=Chapters/Alexandrie/alexandrie.md!>

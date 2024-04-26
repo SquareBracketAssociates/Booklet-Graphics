@@ -1,7 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{sbabook}[2020/02/28]
+\ProvidesClass{sbabook}[2024/03/18]
 
-% \ExecuteOptions{a4paper,11pt,twoside}
 \ProcessOptions*
 \LoadClassWithOptions{memoir}
 
@@ -19,20 +18,17 @@
     \settrims{#1}{#1}%
     \advance\stockheight 2\trimtop
     \advance\stockwidth  2\trimedge}
-
 \newcommand{\paperbackpage}{
   \stockustrade
   \setbleed{.125in}
   % \setbinding{5mm}
   \setlrmarginsandblock{.85in}{.65in}{*}
   \setulmarginsandblock{.75in}{.75in}{*}}
-  
 \newcommand{\spiralboundpage}{
   \stockaivus
   \setbleed{0pt}% trims not required (unless we deliver this via Lulu as well?)
   \setlrmarginsandblock{1.25in}{1.25in}{*}
   \setulmarginsandblock{.75in}{1in}{*}}
-
 \newcommand{\pagelayout}[1]{
   \providecommand{\setuppage}{#1}% set default page layout
   \setuppage\checkandfixthelayout
@@ -42,20 +38,12 @@
 
 \raggedbottom
 
-%%for www.BOD.fr
-\newcommand{\bodpage}{
-	\setstocksize{220mm}{155mm} % final trimmed book dimensions
-	\setbleed{5mm} % additional paper, before trimming
-	\setlrmarginsandblock{.85in}{.65in}{*}
-	\setulmarginsandblock{.75in}{.75in}{*}}
-\pagelayout{\bodpage}
-
 %%%
 %%% Fonts & paragraph typography
 %%%
-\RequirePackage{fontspec,gentium,opensans,FiraMono}
+\RequirePackage{fontspec,gentiumbook,opensans,FiraMono}
 
-\setmainfont{Gentium Book Basic}
+\setmainfont{Gentium Book Plus}
 \setsansfont{Open Sans}[
   \@ifpackagelater{opensans}{2019/06/19}% test for font naming bug
     {}% 2019/06/20 fixed it
@@ -500,7 +488,6 @@
 %% verbatim setup
 \bvtopandtail % \bvsides
 \setlength{\bvboxsep}{.25em}
-\tabson[4]
 \setverbatimfont{\normalfont\codefamily\small}
 
 \DeclareRobustCommand{\LaTeX}{%

@@ -460,6 +460,55 @@ message.
 
 ![Grid layout.](figures/gridlayout.png)
 
+Inside a GridLayout, children do not especially share the same size but they all by default share the same span which means they occupy a single cell of the layout (ie horizontal span = vertical span = 1).
+
+You can change this parameter so your element takes a certain amount of cells (Renaud already wrote about this)
+
+It is possible to add a child with a bigger span and still add smaller elements into the grid layout and fill the space the bigger child left. (Have to rewrite this sentence)
+
+```st
+grid := BlElement new size: 400 asPoint; layout: (BlGridLayout horizontal columnCount: 4).
+
+children := (1 to: 12) collect: [ :i | BlElement new background: Color lightGreen; border: (BlBorder paint: Color black width: 1) ].
+
+square := BlElement new background: Color purple; size: 100 asPoint.
+square constraintsDo: [ :c | c grid horizontal span: 2. c grid vertical span: 2 ].
+1 to: 5 do: [ :i | grid addChild: (children at: i) ].
+
+grid addChild: square.
+6 to: 12 do: [ :i | grid addChild: (children at: i) ].
+
+grid openInSpace.
+```
+
+![Grid Layout span example](figures/gridLayout_SpanExample.png)
+
+This snippet create a 4x4 grid and add a 2x2 purple square in the middle. We can see that after adding the 5 first green squares, we add the purple square but we can wonder on how the grid layout will display other children added afterwards, here we can see that they fill the blank space as if the grid cells taken by the purple square didn't exist.
+
+On the example we can add the notion of Visibility on children.
+
+In Bloc, the visibility is an attribute that lets us display or not an element. However when hiding an element, we have two options : `BlVisibilityHidden` and `BlVisibilityGone`.
+
+Let's start with BlVisibilityGone, it simply removes the element from the drawing phase but it also makes the element gone from the layouting phase (I think, need to verify), because in this example if we apply a BlVisibilityGone to the first little green square, the purple square gets moved to the left and every element gets a new place.
+
+```st
+removed := children first.
+removed visibility: BlVisibilityGone new
+```
+
+![Grid Layout span example - visibility gone](figures/gridLayout_SpanExampleGone.png)
+
+BlVisibilityHidden just hides the element and doesn't display it with the new drawing phase, but the Element is still present and can interact. With this visibility, we see the blank space left by the element and we can inspect it when clicking on this blank space when adding an event handler.
+
+```st
+removed addEventHandlerOn: BlClickEvent do: [ removed inspect ].
+removed visibility: BlVisibilityHidden new.
+```
+
+![Grid Layout span example - visibility hidden](figures/gridLayout_SpanExampleHidden.png)
+
+Note: we can make the element dissapear with BlVisibilityGone and then apply a hidden visibility and the element will get its layouting properties back because the element was not "removed from existence", just gone from layouting phase.
+
 ### Frame Layout
 
 Frame layout preferred usage contains only one child. It gives more dynamic

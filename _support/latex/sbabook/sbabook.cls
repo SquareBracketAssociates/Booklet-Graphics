@@ -18,17 +18,31 @@
     \settrims{#1}{#1}%
     \advance\stockheight 2\trimtop
     \advance\stockwidth  2\trimedge}
+
+% Paper format for US trade paperback (e.g. Lulu)
 \newcommand{\paperbackpage}{
   \stockustrade
   \setbleed{.125in}
   % \setbinding{5mm}
   \setlrmarginsandblock{.85in}{.65in}{*}
   \setulmarginsandblock{.75in}{.75in}{*}}
+
+% Paper format for office binding (both A4 and letter paper)
 \newcommand{\spiralboundpage}{
   \stockaivus
   \setbleed{0pt}% trims not required (unless we deliver this via Lulu as well?)
   \setlrmarginsandblock{1.25in}{1.25in}{*}
   \setulmarginsandblock{.75in}{1in}{*}}
+
+% Paper format for https://librairie.bod.fr
+\newcommand{\bodpage}{
+  \setstocksize{220mm}{155mm} % final trimmed book dimensions
+  \setbleed{5mm} % additional paper, before trimming
+  \setlrmarginsandblock{.85in}{.65in}{*}
+  \setulmarginsandblock{.75in}{.75in}{*}}
+
+% Use this to select the page layout.
+% Pass one of the above \FOOpage, or an equivalent custom macro
 \newcommand{\pagelayout}[1]{
   \providecommand{\setuppage}{#1}% set default page layout
   \setuppage\checkandfixthelayout

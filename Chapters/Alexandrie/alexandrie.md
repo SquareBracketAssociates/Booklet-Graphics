@@ -1,4 +1,4 @@
-## Alexandrie
+## Alexandrie: a fast drawing canvas
 
 In the realm of computer graphics, two fundamental approaches reign: **vector graphics** and **raster graphics**. 
 

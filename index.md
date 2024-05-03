@@ -1,4 +1,4 @@
-<!inputFile|path=Chapters/bloc/bloc.md!>
+<!inputFile|path=Chapters/bloc/blocStack.md!>
 
 #Low - Level 
 <!inputFile|path=Chapters/Alexandrie/alexandrie.md!>
@@ -23,7 +23,7 @@
 # For other books: Pharo by Example 12
 
 %to do a pass
-<!inputFile|path=Chapters/bloc/introduction.md!>
+<!inputFile|path=Chapters/bloc/BlocForPharoByExample13Book.md!>
 
 # For a booklet on Pharo low level graphics
 <!inputFile|path=Chapters/graphicsfoundation/bitmapFormDisplay.md!>

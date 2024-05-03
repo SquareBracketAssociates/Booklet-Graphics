@@ -131,7 +131,7 @@ You have two options to define your border:
 The first one is very helpful for solid line definition. The builder lets use
 customize all the details of your border.
 
-### Elements bounds and outskirts
+### Element bounds and outskirts
 
 Let's look at the different possible bounds of your element.
 
@@ -166,7 +166,7 @@ quick set-up: `background: (Color red alpha: 0.8);`
 using rgb color
 
 ```smalltalk
-background: (Color r: 63 g: 81	   b: 181     range: 255);
+background: (Color r: 63 g: 81 b: 181 range: 255);
 ```
 
 using linear gradient

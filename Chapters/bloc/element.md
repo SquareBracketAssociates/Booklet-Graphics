@@ -289,6 +289,10 @@ aContainer forceLayout.
 
 ![Transform example.](figures/transformexample.png label=fig:transform)
 
+transform is something extra that is applied on top of position. For example if
+you want to have a short of animation, you would use transform as it is not 
+taken into account by layouts
+
 #### Transform catches
 
 The message `transformDo:` can be applied at any moment during the life of an object.

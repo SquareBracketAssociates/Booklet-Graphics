@@ -1,4 +1,4 @@
-# PNG file description
+## PNG file description
 
 Image could be saved a raw bitmap, but this would consume a lot of space.
 Image are usually stored in a compressed format, jpeg or png are one of most
@@ -37,7 +37,7 @@ Black pixel:
     pict initFromArray: bitmap.
 ```
 
-## file description
+### file description
 
 In this chapter, we'll draw a single black pixel, stored as PNG.
 
@@ -48,7 +48,7 @@ PNG file has four sections:
 3. The image’s pixel data: 22 bytes
 4. An “end of image” marker: 12 bytes
 
-## The PNG signature
+### The PNG signature
 
 Every single PNG, starts with the same 8 bytes. Encoded in hex, those bytes are:
 `89 50 4E 47 0D 0A 1A 0A`
@@ -64,12 +64,12 @@ this helps address that.
 Fun fact: if you decode these bytes as ASCII, you’ll see the letters “PNG” in
 there: `.PNG....`
 
-## Image metadata
+### Image metadata
 
 The next part of the PNG is the image metadata, which is one of several chunks.
 What’s a chunk?
 
-### Quick intro to chunks
+#### Quick intro to chunks
 
 Other than the PNG signature at the start, PNGs are made up of chunks.
 
@@ -104,7 +104,7 @@ the “image is done” chunk, the PNG is done.
 
 Our tiny PNG will have just three of these chunks.
 
-### Image header chunk
+#### Image header chunk
 
 The first chunk of every PNG, including ours, is of type IHDR, short for
 *"image header"*.
@@ -180,7 +180,7 @@ CRC crc32FromCollection: (ByteArray readHexFrom:
 '00' "interlace method")
 ```
 
-## pixel data chunk
+### pixel data chunk
 
 Our next chunk is **IDAT**, short for *"image data"*. This is where the actual
 pixels are encoded…or just one pixel, in our case.
@@ -197,7 +197,7 @@ Again, this is just ASCII, and I’m showing the hex-encoded values.
 
 Now for the interesting part: the image data.
 
-### First step: uncompressed pixels
+#### First step: uncompressed pixels
 
 Image data is encoded in a series of *"scanlines"*, and then compressed.
 
@@ -221,7 +221,7 @@ Putting that together (a zero byte to start the scanline, the single zero bit,
 and seven zero padding bits), our single scanline is: `00 00`
 Now it’s time to *"compress"* the data.
 
-### Second step: *"compression"*
+#### Second step: *"compression"*
 
 Next, we compress the scanline data…well, not quite.
 
@@ -283,7 +283,7 @@ IDAT chunk checksum, in our case is `DE 9E 8F BF`
 
 Just one more chunk to go!
 
-## The end
+### The end
 
 Poetically, PNGs end like they begin: with a small number of constant bytes.
 
@@ -306,7 +306,7 @@ And our PNG is done!
 If you want to know more how Pharo decode PNG file, take a look at the class
 **PNGReadWriter**
 
-## full image code
+### full image code
 
 ```smalltalk
 |png| 

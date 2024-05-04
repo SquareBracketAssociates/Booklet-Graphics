@@ -109,9 +109,9 @@ in the color depth. Furthermore, Color can be defined with an alpha channel.
 Class Color allows you to deal with colors without knowing how they
 are actually encoded inside a Bitmap.
 
-## Playing with color depth
+### Playing with color depth
 
-### 1-bit depth
+#### 1-bit depth
 
 You can define the color of 32 pixel with color depth 1 playing with color and form.
 
@@ -124,7 +124,7 @@ You can define the color of 32 pixel with color depth 1 playing with color and f
 ; magnifyBy: 10.
 ```
 
-#### Using `Bitmap`:
+##### Using `Bitmap`:
 
 ```
  bitMap := Bitmap newFrom: #( "pixel color, expressed on 4 byte"
@@ -149,7 +149,7 @@ You can define the color of 32 pixel with color depth 1 playing with color and f
 	magnifyBy: 25.
 ```
 
-#### using colorForm
+##### using colorForm
 - Use `ColorForm` if you want to use color other than black and white:
 
 ```
@@ -259,7 +259,7 @@ additional bits of white to store it, even if they won't be displayed.
  offset: 0@0) magnifyBy: 10.
 ```
 
-### 2-bit depth with color Form
+#### 2-bit depth with color Form
 
 ```
 (Form extent: 16@1 "size of the form"
@@ -291,7 +291,7 @@ pict initFromArray: #(2r00011011000110110001101100011011).
 pict magnifyBy: 25
 ```
 
-### 4bit depth with color Form
+#### 4bit depth with color Form
 
 You can define the color of 8 pixel with color depth 16
 
@@ -339,7 +339,7 @@ pict magnifyBy: 25
 ```
 
 
-### 8bit depth with color Form
+#### 8bit depth with color Form
 
 You can define the color of 4 pixel with color depth 8
 
@@ -497,7 +497,7 @@ pict initFromArray: #(
 ); magnifyBy: 25
 ```
 
-### 16 bit depth
+##### 16 bit depth
 You can define the color of 2 pixel with color depth 16
 
 ```

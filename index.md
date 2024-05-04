@@ -1,10 +1,10 @@
 <!inputFile|path=Chapters/bloc/blocStack.md!>
 
-#Low - Level 
+#Low - Level: Alexandrie and Harfuzz
 <!inputFile|path=Chapters/Alexandrie/alexandrie.md!>
 <!inputFile|path=Chapters/Alexandrie/text_harfbuzz.md!>
 
-# Bloc
+# Bloc: A graphics framework
 
 <!inputFile|path=Chapters/bloc/element.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
@@ -12,7 +12,8 @@
 <!inputFile|path=Chapters/bloc/events.md!>
 <!inputFile|path=Chapters/bloc/animation.md!>
 
-# Toplo
+# Toplo: Bloc widget set
+
 <!inputFile|path=Chapters/toplo/widget_creation.md!>
 <!inputFile|path=Chapters/toplo/stylesheet.md!>
 

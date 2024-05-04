@@ -374,7 +374,7 @@ However, Bloc element composition creates a tree of elements, that can be inspec
 
 Creating and drawing your element
 - subclass `BlElement`
-- custom drawing is done with `aeFullDrawOn:` method. ae stands for the Alexandrie canvas.
+- custom drawing is done with `aeFullDrawOn:` method. Note that 'ae' stands for the Alexandrie canvas.
 
 You can see the `aeFullDrawOn:`
 ```
@@ -398,5 +398,5 @@ Drawing is done through method 'xxx', which receives an Alexandrie
 
 ### Conclusion
 
-BlElement is a defining a large spectrum of element functionalities. 
-The following chapters will cover reaction to events, animations and more. 
+`BlElement` is defining a large spectrum of element functionalities. 
+The following chapters will cover layout, event handling, animations and more. 

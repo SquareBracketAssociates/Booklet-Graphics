@@ -287,7 +287,7 @@ aContainer addChild: node.
 aContainer forceLayout.
 ```
 
-![Transform example.](figures/transformexample.png label=fig:transform)
+![Transform example.](figures/transformexample.png width=60&label=fig:transform)
 
 transform is something extra that is applied on top of position. For example if
 you want to have a short of animation, you would use transform as it is not 
@@ -374,7 +374,7 @@ However, Bloc element composition creates a tree of elements, that can be inspec
 
 Creating and drawing your element
 - subclass `BlElement`
-- dustom drawing is done with `aeFullDrawOn:` method. ae stands for the Alexandrie canvas.
+- custom drawing is done with `aeFullDrawOn:` method. ae stands for the Alexandrie canvas.
 
 You can see the `aeFullDrawOn:`
 ```
@@ -385,15 +385,18 @@ BlElement >> aeFullDrawOn: aCanvas
 	self aeCompositionLayersSortedByElevationDo: [ :each | each paintOn: aCanvas ].
 ```
 
-Element geometry is taken care by:
-the method `BlElement >> aeDrawGeometryOn: aeCanvas`.
-Painting is done on an Alexandrie canvas, then rendered on the host:
-BARenderer (BlHostRenderer) >> render: aHostSpace, display on a AeCairoImageSurface
+Element geometry is taken care by the method `aeDrawGeometryOn: aeCanvas`.
+Painting is done on an Alexandrie canvas, then rendered on the host
+by the method `BARenderer (BlHostRenderer) >> render: aHostSpace` which displays it on a `AeCairoImageSurface`.
 
-Drawing is done through method 'xxx', which receives an alexandrie sparta
+Drawing is done through method 'xxx', which receives an Alexandrie
 (vector) canvas as an argument.
 
-1. aeDrawChildrenOn:
-2. aeDrawOn:
-3. aeDrawGeometryOn:
+1. `aeDrawChildrenOn:`
+2. `aeDrawOn:`
+3. `aeDrawGeometryOn:`
 
+### Conclusion
+
+BlElement is a defining a large spectrum of element functionalities. 
+The following chapters will cover reaction to events, animations and more. 

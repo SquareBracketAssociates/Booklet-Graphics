@@ -67,7 +67,7 @@ part of your text:
     label tightMeasurement.
 ```
 
-![multiple attributes](figures/multipleTextAttributes.png)
+![Multiple attributes.](figures/multipleTextAttributes.png width=60)
 
 
 ### Text size
@@ -78,22 +78,24 @@ Let's familiarize ourselves with those basic measures.
 Bloc will get the measures (in `BATextParagraphSpan >> measure`)
 to get the size of your text, and position it into your element.
 
+Figure *@MulAttri@* describes the information listed below: 
+
 **width**
 :  This is the width of the glyph image's bounding box.
 
 **height**
 : This is the height of the glyph image's bounding box.
 
-**Advance**
+**advance**
 :  Distance to increment the pen position when the glyph is drawn as part of a string of text.
 
-**BearingX**
+**bearingX**
 :  Distance from the current cursor position to the leftmost border of the glyph image's bounding box.
 
-**BearingY**
+**bearingY**
 : Distance from the current cursor position (on the baseline) to the topmost border of the glyph image's bounding box.
 
-![glyph figure](figures/glyph-metrics-3.png)
+![Describing various font elements](figures/glyph-metrics-3.png width=60&label=MulAttri)
 
 **ascent**
 :    portion of letter that extends above the mean line of a font.
@@ -104,7 +106,7 @@ to get the size of your text, and position it into your element.
 **baseline**
 :    line upon which most letters sit and below which descenders extend.
 
-![Typograpy.](figures/2880px-Typography_Line_Terms.png)
+![Typograpy.](figures/2880px-TypographyLineTerms.pdf width=60)
 
 References:
 

@@ -79,6 +79,60 @@ Here is a simple how to to define skins for your widget.
 The common one is `installLookEvent` that will apply the changes you give to your skin when you'll install it.
 For example you can use `pressedLookEvent` that will apply the changes you want when you click on the widget.
 
+#### skin creation - to be place in another chapter
+
+There are several ways to set the skin of an element.
+
+- The first is to redefine #newRawSkin (or newXXXSkin for a ToXXXTheme )
+- The second way is to use #defaultRawSkin: to set a skin different from the one returned by newRawSkin.
+- The third way it #defaultSkin: that is theme independent.
+
+To set its skin, it select in order:
+
+1. An element use the one set by #defaultRawSkin: (if not nil), 
+2. The one set by #defaultSkin: 
+3. The one returned by #newRawSkin.
+
+Thus inside an #installedLookEvent:, an element can set the skin of its sub
+elements by sending it the #defaultRawSkin: message with the desired skin as
+argument :
+
+```smalltalk
+ToRawRoundClockSkin>>installLookEvent: anEvent
+
+	super installLookEvent: anEvent.
+	anEvent elementDo: [ :e |
+		e minutesNeedle defaultRawSkin: ToNeedleInRoundClockSkin new.
+	].
+```
+
+```smalltalk
+ToRawSquareClockSkin>>installLookEvent: anEvent
+
+	super installLookEvent: anEvent.
+	anEvent elementDo: [ :e |
+		e minutesNeedle defaultRawSkin: ToNeedleInSquareClockSkin new.
+	]
+```
+
+It should work ok for an element with its direct sub-elements.
+Now, a sub-element’s skin is installed with one delay pulse.
+A sub-element sub-element skin is then installed with two delay pulse, etc…
+So, some undesirable transition effect can arise with such a skin installation
+in case of a deep composition tree.  this is where a stylesheet can be useful
+because of the selection mechanism that allow the skin selection/building in one
+pass
+
+Two precisions:
+
+- If e minutesNeedle return a BlElement, and not a ToElement, then you need to send it #ensureCanManageSkin
+e ensureCanManageSkin. 
+- One can send #withNullSkin to an element to set a NullSkin.
+
+#ensureCanManageSkin just add two event handlers: one to generate the element
+states (and then dispatch the look events) and a second to setup the skin when
+the element is added in a space.
+
 ## Token properties explanation
  A token property is a key/value pair. Those pairs are all defined in the `defaultTokenProperties` method of `ToTheme` class.
 So if you want to customize the graphical properties, you can call those Token properties to use them for your widget.
@@ -95,6 +149,7 @@ defaultTokenProperties
 		{   (ToTokenProperty name: #'background-color' value: (Color lightGreen)). }
 ```
 This will set the token property "background-color" to value "lightGreen"
+
 
 ### Little example
 

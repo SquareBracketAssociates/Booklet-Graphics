@@ -18,6 +18,8 @@ canvas line: 0@9 to: 9@0 width: 1 color: Color red.
 canvas form magnifyBy: 10
 ```
 
+![color fish](figures/canvas1.png)
+
 ## Canvas with specific depth
 
 bitPatternForDepth: depth
@@ -58,6 +60,8 @@ canvas line: 0@9 to: 9@0 width: 1 color: Color red.
 canvas form magnifyBy: 10.
 ```
 
+![canvas 2](figures/canvas2.png)
+
 ### Canvas examples
 
 #### Playing with rectangle and lines
@@ -70,13 +74,8 @@ canvas line: 0@100 to: 100@0 width: 1 color: Color red.
 canvas form magnifyBy: 5
 ```
 
-```smalltalk
-canvas := FormCanvas extent: 100@100.
-rect := Rectangle origin: 0@0 extent: 100@100.
-canvas frameAndFillRectangle: rect fillColor: Color yellow borderWidth: 2 borderColor: Color black.
-canvas line: 0@100 to: 100@0 width: 1 color: Color red.
-canvas form magnifyBy: 5
-```
+![canvas 3](figures/canvas3.png)
+
 
 #### Playing with text.
 
@@ -87,6 +86,8 @@ canvas frameAndFillRectangle: rect fillColor: Color veryVeryLightGray borderWidt
 canvas drawString: 'hello from Pharo Canvas in World' from: 1 to: 32 in: (Rectangle origin: 10@0 extent: 200@50) font: nil color:Color red underline: true underlineColor: Color orange strikethrough: true strikethroughColor: Color orange.
 canvas form magnifyBy: 5
 ```
+
+![canvas 3](figures/canvasText.png)
 
 #### Playing with circles and ovals.
 
@@ -105,6 +106,8 @@ rect := Rectangle origin: 25@2 extent: 50@96.
 canvas fillOval: rect color: Color yellow borderWidth: 2 borderColor: Color black.
 canvas form magnifyBy: 5
 ```
+
+![canvas 3](figures/canvasOval.png)
 
 #### Playing with polygons.
 
@@ -126,7 +129,11 @@ fill := GradientFillStyle ramp: {0.0 -> Color white. 1.0 -> Color black}.
 canvas drawPolygon: {25@0 . 75@0 . 100@25 . 100@75 . 75@100 . 25@100 . 0@75. 0@25} fillStyle: fill borderWidth: 2 borderColor: Color red.
 canvas form magnifyBy: 5.
 ```
+
+![canvas 3](figures/canvasPolygon.png)
+
 ### Bitmap and Form references
 
-- Little Library built on top of Form https://github.com/pablo1n7/ImageForm
+- [Little Library built on top of Form](https://github.com/pablo1n7/ImageForm)
 - Reference: http://paulbourke.net/dataformats/bitmaps/
+- [color](https://manifold.net/doc/mfd8/colors_as_hue_saturation_and_brightness.htm)

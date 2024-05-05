@@ -460,22 +460,24 @@ Let's design a bloc element to roll a die.
 Clicking on it will display the values of all sides of the die in a quick loop,
 and another click will stop the animation.
 
-%![The die in Morphic](/figures/die.png width=30&label=fig:dialogDie)
+![The die in bloc](figures/die.png)
 
-We will make use of the border.
+%![The die in Morphic](/figures/die.png width=30&label=fig:dialogDie)
 
 %|caption=Defining the die morph|label=scr:classDie
 ```language=smalltalk
-BorderedMorph subclass: #DieMorph
-	instanceVariableNames: 'faces dieValue isStopped'
-	classVariableNames: ''
-	package: 'PBE-Morphic'
+BlElement << #BlDie
+	slots: { #faces . #dieValue . #animation };
+	tag: 'Bloc';
+	package: 'BookletGraphics'
 ```
 
 The instance variable `faces` records the number of faces on the die; we allow dice with up to 9 faces! `dieValue` records the value of the face that is currently displayed, and `isStopped` is true if the die animation has stopped running. 
-To create a die instance, we define the `faces: n` method on the ''class'' side of `DieMorph` to create a new die with `n` faces.
+To create a die instance, we define the `faces: n` method on the ''class'' side of `BlDie` to create a new die with `n` faces.
 
-%|caption=Creating a new die with the number of faces we like|label=scr:facesClass
+%|caption=Creating a new die with the number of faces we 
+like|label=scr:facesClass
+
 ```language=smalltalk
 DieMorph class >> faces: aNumber
 	^ self new faces: aNumber
@@ -487,24 +489,29 @@ remember that `new` automatically sends `initialize` to the newly-created instan
 %|caption=Initializing instances of `DieMorph`|label=scr:initializeDie
 ```language=smalltalk
 DieMorph >> initialize
+
 	super initialize.
-	self extent: 50 @ 50.
-	self
-		useGradientFill;
-		borderWidth: 2;
-		useRoundedCorners.
-	self setBorderStyle: #complexRaised.
-	self fillStyle direction: self extent.
-	self color: Color green.
+
 	dieValue := 1.
 	faces := 6.
-	isStopped := false
+
+	self
+		size: 150 @ 150;
+		position: 100@100;
+		geometry: (BlRoundedRectangleGeometry cornerRadius: 10);
+		border: (BlBorder paint: Color black width: 2);
+		background: ((BlLinearGradientPaint direction: 1 @ 1)
+				 from: Color green
+				 to: Color lightGreen).
+
+    self whenLayoutedDoOnce:  [ self drawPoints].
 ```
 
-We use a few methods of `BorderedMorph` to give a nice appearance to the die:
-a thick border with a raised effect, rounded corners, and a color gradient on
-the visible face. 
-We define the instance method `faces:` to check for a valid parameter as follows:
+We use a few properties of `BlElement` to give a nice 
+appearance to the die: a thick border with a raised 
+effect, rounded corners, and a color gradient on
+the visible face. We define the instance method 
+`faces:` to check for a valid parameter as follows:
 
 %|caption=Setting the number of faces of the die|label=scr:numberOfFaces
 
@@ -520,131 +527,170 @@ It may be good to review the order in which the messages are sent when a die is
 created. 
 For instance, if we start by evaluating `DieMorph faces: 9`:
 
--The class method `DieMorph class >> faces:` sends `new` to `DieMorph class`.
--The method for `new` (inherited by `DieMorph class` from `Behavior`) creates the new instance and sends it the `initialize` message.
--The `initialize` method in `DieMorph` sets `faces` to an initial value of 6.
--`DieMorph class >> new` returns to the class method `DieMorph class >> faces:`, which then sends the message `faces: 9` to the new instance.
--The instance method `DieMorph >> faces:` now executes, setting the `faces` instance variable to 9.
+- The class method `DieMorph class >> faces:` sends `new` to `DieMorph class`.
+- The method for `new` (inherited by `DieMorph class` from `Behavior`) creates the new instance and sends it the `initialize` message.
+- The `initialize` method in `DieMorph` sets `faces` to an initial value of 6.
+- `DieMorph class >> new` returns to the class method `DieMorph class >> faces:`, which then sends the message `faces: 9` to the new instance.
+- The instance method `DieMorph >> faces:` now executes, setting the `faces` instance variable to 9.
 
-Before defining `drawOn:`, we need a few methods to place the dots on the displayed face:
+Before defining how to draw our die, we need a few methods
+to place the dots on the displayed face:
+
 %|caption=Nine methods for placing points on the faces of the die|label=scr:placeDots
+
 ```language=smalltalk
 DieMorph >> face1
 	^ {(0.5 @ 0.5)}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face2
 	^{0.25@0.25 . 0.75@0.75}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face3
 	^{0.25@0.25 . 0.75@0.75 . 0.5@0.5}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face4
 	^{0.25@0.25 . 0.75@0.25 . 0.75@0.75 . 0.25@0.75}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face5
 	^{0.25@0.25 . 0.75@0.25 . 0.75@0.75 . 0.25@0.75 . 0.5@0.5}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face6
 	^{0.25@0.25 . 0.75@0.25 . 0.75@0.75 . 0.25@0.75 . 0.25@0.5 . 0.75@0.5}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face7
 	^{0.25@0.25 . 0.75@0.25 . 0.75@0.75 . 0.25@0.75 . 0.25@0.5 . 0.75@0.5 . 0.5@0.5}
 ```
 
-```
+```language=smalltalk
 DieMorph >> face8
 	^{0.25@0.25 . 0.75@0.25 . 0.75@0.75 . 0.25@0.75 . 0.25@0.5 . 0.75@0.5 . 0.5@0.5 . 0.5@0.25}
 ```
-```
+
+```language=smalltalk
 DieMorph >> face9
 	^{0.25@0.25 . 0.75@0.25 . 0.75@0.75 . 0.25@0.75 . 0.25@0.5 . 0.75@0.5 . 0.5@0.5 . 0.5@0.25 . 0.5@0.75}
 ```
 
-These methods define collections of the coordinates of dots for each face.
-The coordinates are in a square of size 1x1; we will simply need to scale them to place the actual dots.
+These methods define collections of the coordinates of 
+dots for each face.
+The coordinates are in a square of size 1x1; we will
+simply need to scale them to place the actual dots.
 
-The `drawOn:` method does two things: it draws the die background with the `super`-send, and then draws the dots as follows: 
+The `drawPoints` method draws the dots
+as follows:
+
 %|caption=Drawing the die morph|label=scr:drawOnDie
 ```language=smalltalk
-DieMorph >> drawOn: aCanvas
-	super drawOn: aCanvas.
-	(self perform: ('face', dieValue asString) asSymbol)
-		do: [ :aPoint | self drawDotOn: aCanvas at: aPoint ]
+DieMorph >> drawPoints
+
+	(self perform: ('face' , dieValue asString) asSymbol) do: [ :aPoint |
+		self drawPointAt: aPoint ]
 ```
 
-The second part of this method uses the reflective capacities of Pharo.
-Drawing the dots of a face is a simple matter of iterating over the collection given by the `faceX` method for that face, sending the `drawDotOn:at:` message for each coordinate. 
-To call the correct `faceX` method, we use the `perform:` method which sends a message built from a string, `('face',
+This method uses the reflective capacities of Pharo.
+Drawing the dots of a face is a simple matter of iterating
+over the collection given by the `faceX` method for that
+face, sending the ` drawPointAt:` message for each
+coordinate. 
+
+To call the correct `faceX` method, we use the `perform:`
+method which sends a message built from a string, `('face',
 dieValue asString) asSymbol`. 
+
 %|caption=Drawing a single dot on a face|label=scr:drawDotOn
 ```language=smalltalk
-DieMorph >> drawDotOn: aCanvas at: aPoint
-	aCanvas
-		fillOval: (Rectangle
-			center: self position + (self extent * aPoint)
-			extent: self extent / 6)
-		color: Color black
+DieMorph >> drawPointAt: aPoint
+
+	| element  x y|
+	x := self extent / 6.
+	y := self extent  / 6.
+
+	element := BlElement new
+		           geometry: BlCircleGeometry new;
+		           size: x @ y ;
+		           background: Color black;
+		           position: (self extent * aPoint) - ((x/2)@(y/2)).
+	self addChild: element.
 ```
 
-Since the coordinates are normalized to the `[0:1]` interval, we scale them to the dimensions of our die: `self extent * aPoint`.
-We can already create a die instance from a playground (see result on Figure *@fig:die6*):
 
 ```language=smalltalk|caption=Create a Die 6|label=scr:die6
-(DieMorph faces: 6) openInWorld.
+(BlDie faces: 6) openInNewSpace.
 ```
 
-%![A new die 6 with `(DieMorph faces: 6) openInWorld`](/figures/die6.png width=25&label=fig:die6+)
+%![A new die 6 with `(BlDie faces: 6) openInNewSpace`](/figures/die6.png width=25&label=fig:die6+)
 
-To change the displayed face, we create an accessor that we can use as `myDie dieValue: 5`:
+![(BlDie faces: 6) openInNewSpace](figures/die6.png)
+
+To change the displayed face, we create an accessor that 
+we can use as `myDie dieValue: 5`:
+
 %|caption=Setting the current value of the die|label=scr:dieValue
 ```language=smalltalk
 DieMorph >> dieValue: aNumber
+
 	((aNumber isInteger and: [ aNumber > 0 ]) and: [ aNumber <= faces ])
-		ifTrue: [
-			dieValue := aNumber.
-			self changed ]
+		ifFalse: [ ^ self ].
+	dieValue := aNumber.
+	self removeChildren.
+	self drawPoints
 ```
 
-%![Result of `(DieMorph faces: 6) openInWorld; dieValue: 5`.](/figures/die.png width=30&label=fig:dieValue5)
+%![Result of `(BlDie faces: 6) openInNewSpace; dieValue: 5`.](/figures/die.png width=30&label=fig:dieValue5)
 
-Now we will use the animation system to show quickly all the faces:
+![(BlDie faces: 6) openInNewSpace; dieValue: 5](figures/die5.png)
+
+Now we will use the animation system to show quickly all
+the face. Add this in the `initialize` method.
+
 %|caption=Animating the die|label=scr:stepDie
+
 ```language=smalltalk
-DieMorph >> stepTime
-	^ 100
-```
-```
-DieMorph >> step
-	isStopped ifFalse: [self dieValue: (1 to: faces) atRandom]
+BlDie >> initialize
+	animation := BlAnimation new
+		             beInfinite;
+		             duration: 1 seconds.
+
+	animation addEventHandler: (BlEventHandler
+			 on: BlAnimationLoopDoneEvent
+			 do: [ :anEvent | self inform: 'loop done'. self dieValue: (1 to: faces) atRandom ]).
+
+    self addAnimation: animation
 ```
 
 Now the die is rolling!
 
-To start or stop the animation by clicking, we will use what we learned previously about mouse events. 
-First, activate the reception of mouse events:
+To start or stop the animation by clicking, we will use 
+what we learned previously about mouse events. 
+Add this code as well in the `initialize` method.
 
 % |caption=Handling mouse clicks to start and stop the animation|label=scr:handleMouseDie
 ```language=smalltalk
-DieMorph >> handlesMouseDown: anEvent
-	^ true
-```
-Second, we will stop and start alternatively a roll on mouse click. 
-```
-DieMorph >> mouseDown: anEvent
-	anEvent redButtonPressed
-		ifTrue: [isStopped := isStopped not]
+BlDie >> initialize
+
+self addEventHandler: (BlEventHandler
+			 on: BlClickEvent 
+			 do: [ :anEvent |
+				 animation isRunning
+					 ifTrue: [
+						self inform: 'stop'.
+						 animation stop. ]
+					 ifFalse: [
+						self inform: 'start'.
+						animation reset; start; setNew; enqueue ] ]).
+
 ```
 
 Now the die will roll or stop rolling when we click on it.

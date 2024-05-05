@@ -4,7 +4,7 @@
 
 A raster graphic represents a two-dimensional picture as a rectangular matrix or grid of square pixels, viewable via a computer display, paper, or other display medium. A raster is technically characterized by the **width** and **height** of the image in **pixels** and by the **number of bits per pixel**.
 
-![Bitmap fish.](fishInPixels.png width=50)
+![Bitmap fish.](figures/fishInPixels.png width=50)
 
 Many raster manipulations map directly onto the mathematical formalisms of linear algebra, where mathematical objects of matrix structure are of central concern.
 

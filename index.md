@@ -4,9 +4,10 @@
 # Bloc: A graphics framework
 
 <!inputFile|path=Chapters/bloc/element.md!>
-<!inputFile|path=Chapters/bloc/text.md!>
+
 <!inputFile|path=Chapters/bloc/layout.md!>
 <!inputFile|path=Chapters/bloc/events.md!>
+<!inputFile|path=Chapters/bloc/text.md!>
 <!inputFile|path=Chapters/bloc/animation.md!>
 
 # Toplo: Bloc widget set

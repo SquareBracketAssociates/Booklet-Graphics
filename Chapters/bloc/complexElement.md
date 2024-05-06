@@ -1,4 +1,4 @@
-## How to create a raw widget from Toplo
+## How to create an advanced element in Bloc
 
 With Bloc, we have low-level tools to define custom graphical elements. This time,
 we'll combine element together to create a more complex element that'll serve

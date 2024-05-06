@@ -70,7 +70,7 @@ While the Alexandrie canvas provides a foundational set of building drawing
 primitives, Bloc offers a richer library of pre-defined shapes and the
 flexibility to construct even more intricate geometries.
 
-![Base geometries.](figures/allGeometry.png)
+![Base geometries.](figures/allGeometry.png width=80)
 
 * **Annulus**: `BlAnnulusSectorGeometry new startAngle: 225; endAngle: 360;   innerRadius: 0.3; outerRadius: 0.9);`
 * **Bezier**: `BlBezierCurveGeometry controlPoints: { 5@0. 25@80. 75@30. 95@100 }`
@@ -93,7 +93,7 @@ painting is a subclass of `BlPaint`, and one of the three:
 - linear gradient color
 - radial gradient color
 
-![Border color type.](figures/bordercolortype.png)
+![Border color type.](figures/bordercolortype.png width=80)
 
 Your border opacity can be specified as well: `opacity: 0.5;`
 
@@ -106,7 +106,7 @@ You also have a pre-defined option, available in a single call:
 - **dashed**
 - **dashed small**
 
-![Border dash.](figures/multipletriangledash.png label=fig:borderdash)
+![Border dash.](figures/multipletriangledash.png label=fig:borderdash width=80)
 
 If the path is not closed, The style extent of your border can be defined with
 
@@ -121,7 +121,7 @@ the join as shown in Figure *@fig:jointype@*:
 - **bevel join**
 - **mitter join**
 
-![Border join type.](figures/borderjointype.png label=fig:jointype)
+![Border join type.](figures/borderjointype.png label=fig:jointype width=80)
 
 You have two options to define your border:
 
@@ -153,7 +153,7 @@ your element), centered, or inside the geometry of the element. The final size
 In Figure *@fig:outskirts@*, the same exact star is drawn 3 times. The only difference is
 the outskirts definition between those 3.
 
-![Outskirts.](figures/multipletriangleoutskirts.png label=fig:outskirts)
+![Outskirts.](figures/multipletriangleoutskirts.png label=fig:outskirts width=80)
 
 If we specify outskirts inside, visual bound and geometry bounds will be the
 same. But if the outskirts is outside, then visual bounds are larger than
@@ -193,11 +193,11 @@ BlElement new
 	openInSpace
 ```
 
-![Background color.](figures/backgroundcolortype.png)
+![Background color.](figures/backgroundcolortype.png width=80)
 
 ### Element effect
 
-You can get the list of all the effects available executing: `BlElementEffect allSubclasses`
+You can get the list of all the effects available by executing: `BlElementEffect allSubclasses`
 
 #### Simple shadow. 
 
@@ -212,7 +212,7 @@ BlElement new
 	    (BlSimpleShadowEffect color: Color orange offset: -10 @ -20)
 ```
 
-![Simple shadow.](figures/simpleshadow.png)
+![Simple shadow.](figures/simpleshadow.png width=80)
 
 Try the following variation.
 
@@ -234,14 +234,14 @@ BlElement new
 	effect: (BlGaussianShadowEffect color: Color yellow offset: 10@20 width: 5)
 ```
 
-![Gaussian shadow.](figures/gaussianshadow.png label=fig:gaussian)
+![Gaussian shadow.](figures/gaussianshadow.png label=fig:gaussian width=80)
 
 ### Element opacity
 
 The element opacity is a value between 0 and 1, 0 meaning completely transparent.
 You can apply opacity to a background, a border, or to your whole element.
 
-![Element opacity.](figures/elementwitopacity.png)
+![Element opacity.](figures/elementwitopacity.png width=80)
 
 ### Element transformation
 
@@ -287,7 +287,7 @@ aContainer addChild: node.
 aContainer forceLayout.
 ```
 
-![Transform example.](figures/transformexample.png width=60&label=fig:transform)
+![Transform example.](figures/transformexample.png width=40&label=fig:transform)
 
 transform is something extra that is applied on top of position. For example if
 you want to have a short of animation, you would use transform as it is not 

@@ -460,7 +460,7 @@ Let's design a bloc element to roll a die.
 Clicking on it will display the values of all sides of the die in a quick loop,
 and another click will stop the animation.
 
-![The die in bloc](figures/die.png)
+![The die in bloc](figures/die.png width=30)
 
 %![The die in Morphic](/figures/die.png width=30&label=fig:dialogDie)
 
@@ -632,7 +632,7 @@ DieMorph >> drawPointAt: aPoint
 
 %![A new die 6 with `(BlDie faces: 6) openInNewSpace`](/figures/die6.png width=25&label=fig:die6+)
 
-![(BlDie faces: 6) openInNewSpace](figures/die6.png)
+![(BlDie faces: 6) openInNewSpace](figures/die6.png width=30)
 
 To change the displayed face, we create an accessor that 
 we can use as `myDie dieValue: 5`:
@@ -650,7 +650,7 @@ DieMorph >> dieValue: aNumber
 
 %![Result of `(BlDie faces: 6) openInNewSpace; dieValue: 5`.](/figures/die.png width=30&label=fig:dieValue5)
 
-![(BlDie faces: 6) openInNewSpace; dieValue: 5](figures/die5.png)
+![(BlDie faces: 6) openInNewSpace; dieValue: 5](figures/die5.png width=30)
 
 Now we will use the animation system to show quickly all
 the face. Add this in the `initialize` method.

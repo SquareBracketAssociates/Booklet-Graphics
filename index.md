@@ -1,8 +1,5 @@
 <!inputFile|path=Chapters/bloc/blocStack.md!>
 
-#Low - Level: Alexandrie and Harfuzz
-<!inputFile|path=Chapters/Alexandrie/alexandrie.md!>
-<!inputFile|path=Chapters/Alexandrie/text_harfbuzz.md!>
 
 # Bloc: A graphics framework
 
@@ -17,14 +14,19 @@
 <!inputFile|path=Chapters/toplo/widget_creation.md!>
 <!inputFile|path=Chapters/toplo/stylesheet.md!>
 
+#Low - Level: Alexandrie and Harfuzz
+<!inputFile|path=Chapters/Alexandrie/alexandrie.md!>
+<!inputFile|path=Chapters/Alexandrie/text_harfbuzz.md!>
+
+
 #Old libraries
 
 <!inputFile|path=Chapters/Athens/Athens.md!>
 
 # For other books: Pharo by Example 12
-
-%to do a pass
 <!inputFile|path=Chapters/bloc/BlocForPharoByExample13Book.md!>
+
+
 
 # For a booklet on Pharo low level graphics
 <!inputFile|path=Chapters/graphicsfoundation/bitmapFormDisplay.md!>

@@ -95,7 +95,7 @@ Figure *@MulAttri@* describes the information listed below:
 **bearingY**
 : Distance from the current cursor position (on the baseline) to the topmost border of the glyph image's bounding box.
 
-![Describing various font elements](figures/glyph-metrics-3.png width=40&label=MulAttri)
+![Describing various font elements.](figures/glyph-metrics-3.png width=40&label=MulAttri)
 
 **ascent**
 :    portion of letter that extends above the mean line of a font.
@@ -132,7 +132,7 @@ your graphical interface; it'll follow the same layout rules.
 - label measurement: Same width that tight measurement. The height will add to itself the *ascent* and *descent* of the glyph.
 - editor measurement. Same height as label measurement. The width will add to itself the *advance* of the glyph.
 
-![text measure](figures/textMeasure.png)
+![Text measures.](figures/textMeasure.png width=80)
 
 By default, *BlTextElement* will follow the *tightMeasurement* measure.
 

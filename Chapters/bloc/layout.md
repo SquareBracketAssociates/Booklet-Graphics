@@ -16,7 +16,7 @@ visual properties, like background, border, geometry, etc. The final appearance
 depends on the graphical properties of each element and how they're arranged
 together in the layout.
 
-![Multiple elements.](figures/multipleElements.png width=80)
+![Multiple elements.](figures/multipleElements.png width=70)
 
 
 ### Parent children
@@ -115,13 +115,13 @@ In Figure *@padding1@*, we have 3 elements on top of each other. The purple one
 has a margin of 15 pixels with the red one and a padding of 35 pixels with the
 yellow one.
 
-![Margin and padding example.](figures/marginAndPadding.png width=40&label=padding1)
+![Margin and padding example.](figures/marginAndPadding.png width=25&label=padding1)
 
 Margin and padding can be applied to all insets for your figures, but need to
 be adapted to your element geometry. The same example but using triangle
 geometry shows you the difference (See Figure *@padding2@*).
 
-![Margin and padding example 2.](figures/marginAndPaddingwithtriangle.png width=40&label=padding2)
+![Margin and padding example 2.](figures/marginAndPaddingwithtriangle.png width=25&label=padding2)
 
 ### Element size
 
@@ -500,7 +500,7 @@ grid addChild: square.
 grid openInSpace.
 ```
 
-![Grid Layout span example.](figures/gridLayout_SpanExample.png width=50&label=gridspan1)
+![Grid Layout span example.](figures/gridLayout_SpanExample.png width=35&label=gridspan1)
 
 This snippet creates a 4x4 grid and adds a 2x2 purple square in the middle (See Figure *@gridspan1@*). 
 
@@ -517,7 +517,7 @@ removed := children first.
 removed visibility: BlVisibilityGone new
 ```
 
-![Grid Layout span example - visibility gone](figures/gridLayout_SpanExampleGone.png width=50&label=gone)
+![Grid Layout span example - visibility gone](figures/gridLayout_SpanExampleGone.png width=35&label=gone)
 
 `BlVisibilityHidden` just hides the element and doesn't display it with the new drawing phase, but the element is still present and can interact. With this visibility, we see the blank space left by the element and we can inspect it when clicking on this blank space when adding an event handler (see Figure *@hidden@*).
 
@@ -526,7 +526,7 @@ removed addEventHandlerOn: BlClickEvent do: [ removed inspect ].
 removed visibility: BlVisibilityHidden new.
 ```
 
-![Grid Layout span example - visibility hidden](figures/gridLayout_SpanExampleHidden.png width=50&label=hidden)
+![Grid Layout span example - visibility hidden](figures/gridLayout_SpanExampleHidden.png width=35&label=hidden)
 
 Note: we can make the element disappear with BlVisibilityGone and then apply a hidden visibility and the element will get its layouting properties back because the element was not "removed from existence", just gone from layouting phase.
 
@@ -605,11 +605,11 @@ child := BlElement new
 container addChild: child.
 ```
 
-![Frame layout](figures/framelayout.png width=50)
+![Frame layout.](figures/framelayout.png width=50)
 
 #### Example: multiple children
 
-Frame can also accept multiple children
+A frame can also accept multiple children.
 
 Multiple children are positioned with size defined by weight. In this case, children
 that match their parents can also be configured to occupy only a fraction of
@@ -643,7 +643,7 @@ root addChild: elt1.
 "...code continue for the 8 other children"
 ```
 
-![Frame layout](figures/MultipleElementFrameWithWeight.png)
+![Frame layout.](figures/MultipleElementFrameWithWeight.png width=80)
 
 #### Example: multiple children
 Multiple children positioned with fixed size.

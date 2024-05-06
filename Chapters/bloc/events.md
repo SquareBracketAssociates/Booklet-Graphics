@@ -26,7 +26,9 @@ SD: we should update the following
 Instead of using addEventHandlerOn:do: you can also see users of `addEventHandler:`.
 
 ```
-deco addEventHandler: (BlEventHandler				 on: BlMouseLeaveEvent				 do: [ :event | event currentTarget border: BlBorder empty ]).
+deco addEventHandler: (BlEventHandler 
+						on: BlMouseLeaveEvent
+	 					do: [ :event | event currentTarget border: BlBorder empty ]).
 ```
 
 ### About event bubbling
@@ -34,7 +36,7 @@ deco addEventHandler: (BlEventHandler				 on: BlMouseLeaveEvent				 do: [ :eve
 We should check `example_mouseEvent_descending_bubbling`
 
 
-![Windows nested in each others in Toplo.](figures/4windows.png)
+![Windows nested in each others in Toplo.](figures/4windows.png width=80)
 
 
 

@@ -129,7 +129,7 @@ Two precisions:
 e ensureCanManageSkin. 
 - One can send #withNullSkin to an element to set a NullSkin.
 
-#ensureCanManageSkin just add two event handlers: one to generate the element
+`#ensureCanManageSkin` just add two event handlers: one to generate the element
 states (and then dispatch the look events) and a second to setup the skin when
 the element is added in a space.
 

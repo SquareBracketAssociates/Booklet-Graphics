@@ -180,9 +180,27 @@ space toTheme: (name of your theme) new.
 
 
 
+## Notes in bulk
+Your element needs to be a Toplo Element. 
+
+* If e minutesNeedle return a BlElement, and not a ToElement, then you need to send it #ensureCanManageSkin `e ensureCanManageSkin.`
+
+*  One can send #withNullSkin to an element to set a NullSkin.
+
+* stylesheet can be useful because of the selection mechanism that allow the skin selection/building in one pass.
+* 
+I’ve no particular solution for this kind of issue.
+
+An example of this kind of sub-element skin is the ToLabelInListElementSkin that can be used when a node is selected in a ListElement.
+It is typically set from a ToListElement nodeBuilder (not in a #installLookEvent:  in my examples).
 
 
+A theme is to manage common token values for the set of widgets it is supposed to be designed for. So I’ve added the ToThemePreInstallEvent that you can use ton add new token values in the current theme.
+(Have a look at #example_WithLateBoundPropertyWriter).
+But the implementation of token values storage have to be revised to nicely fulfill this need.
 
+First if you only need a ToInstallLookEvent handling, note that adding a skin class is not mandatory. You can simply redefine the #installRawStyle method instead.
 
+In your #installLookEvent:, I see a lot of code that, I think, should stay in the initialize method because changing the theme Would not lead to the change of your element appearance.
 
 

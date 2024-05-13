@@ -2,6 +2,12 @@
 
 Toplo widgets are fully skinnable. All their visual aspects can be controlled via stylesheets. Stylesheets are composed of rules. Such rules are manipulate token properties. In addition, an element gets a skin, a selection of the stylesheet rules that apply to the element. 
 
+A stylesheetTheme is a theme with a default StyleSheet, and a StyleSheet contains the style rules for targeted elements.
+Any BlElement can have its own theme or inherit that of its parent. It's also possible to assign a styleSheet to an element.
+For example, a package can define a widget with the StyleSheet to be used for that widget.
+
+Contrary to *rawSkin*, you don't have anymore specific skin classes (no more ToButtonSkin, ToLabelSkin, ...), an element's skin is calculated dynamically.
+The calculation consists of an interpretation of the StyleSheet selectors and is based on the rules found by lookup, from the element to the space root.
 
 ### Extended Bloc phases
 

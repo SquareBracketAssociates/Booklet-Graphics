@@ -396,6 +396,47 @@ Drawing is done through method 'xxx', which receives an Alexandrie
 2. `aeDrawOn:`
 3. `aeDrawGeometryOn:`
 
+Drawing example -  draw hour tick around a circle 
+```
+aeDrawOn: aeCanvas
+	"draw clock tick on frame"
+
+	super aeDrawOn: aeCanvas.
+
+	aeCanvas setOutskirtsCentered.
+
+	0 to: 11 do: [ :items |
+		| target |
+		target := (items * Float pi / 6) cos @ (items * Float pi / 6) sin.
+
+		items % 3 == 0
+			ifTrue: [
+				aeCanvas pathFactory: [ :cairoContext |
+					cairoContext
+						moveTo: center;
+						relativeMoveTo: target * 115;
+						relativeLineTo: target * 35;
+						closePath ].
+
+				aeCanvas setBorderBlock: [
+					aeCanvas
+						setSourceColor: Color black;
+						setBorderWidth: 8 ] ]
+			ifFalse: [
+				aeCanvas pathFactory: [ :cairoContext |
+					cairoContext
+						moveTo: center;
+						relativeMoveTo: target * 125;
+						relativeLineTo: target * 25;
+						closePath ].
+
+				aeCanvas setBorderBlock: [
+					aeCanvas
+						setSourceColor: Color black;
+						setBorderWidth: 6 ] ].
+		aeCanvas drawFigure ]
+```
+
 ### Conclusion
 
 `BlElement` is defining a large spectrum of element functionalities. 

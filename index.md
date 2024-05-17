@@ -9,6 +9,7 @@
 <!inputFile|path=Chapters/bloc/events.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
 <!inputFile|path=Chapters/bloc/animation.md!>
+<!inputFile|path=Chapters/bloc/complexElement.md!>
 
 # Toplo: Bloc widget set
 

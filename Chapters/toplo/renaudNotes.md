@@ -140,3 +140,133 @@ e ensureCanManageSkin.
 #ensureCanManageSkin just add two event handlers: one to generate the element
 states (and then dispatch the look events) and a second to setup the skin when
 the element is added in a space.
+
+## properties handling - writable properties and property writers.
+
+When you write:
+
+```smalltalk
+self
+write: (self property: #outskirts)
+with: [ :e | BlOutskirts centered ].
+```
+
+This rule constructs a “property writer” (instance of ToPropertyWriter) that is stored in the skin if the rule that uses it is selected.
+This implies that there is a *ToWritableProperty* declared with the name *#outskirts*.
+A WriteableProperty is used to read and write a value as a property of an object.
+The API is therefore identical to that of Slot for reading and writing. We have #read: and #write:to:.
+
+There are 3 types of ToWritableProperty:
+- ToFeatureProperty
+- ToSlotProperty (not very useful, not used, may need to be removed)
+- ToPseudoProperty
+
+For a property whose name is #a:
+- Feature is used if an element has both #a and #a: methods (as in the case of #outskirts). A ToFeatureProperty is then simply constructed using the name. ToFeatureProperty name: #a.
+- use Slot if you have a slot with name #a. ToSlotProperty name: #a.
+- and use Pseudo if you have neither accessors nor a slot. The reader and writer must therefore be explicitly declared.
+ToPseudoProperty name: #a reader: [:e | e monA ] writer: [:e :v | e monA: v ].
+
+The default declarations are in ToStyleSheet class>>defaultWritablePropertyList.
+The exception you have comes from the fact that there was no property name #outskirts declared until now.
+I've added “(ToFeatureProperty name: #outskirts).” 
+In ToStyleSheet class>>defaultWritablePropertyList.
+
+I've added the following test with your example:
+
+```smalltalk
+ToStyleSheetTest>>testOutskirts
+
+	| e styleSheet theme writers |
+	styleSheet := ToStyleSheet new
+		              inherits: false;
+		              yourself.
+
+	theme := ToStyleSheetTheme new.
+
+	styleSheet select: styleSheet any style: [ :sr |
+		sr write: (styleSheet property: #outskirts) with: BlOutskirts centered].
+
+	e := ToElement new.
+	e outskirts: BlOutskirts inside.
+	e localTheme: theme.
+	e styleSheet: styleSheet.
+	space root addChild: e.
+	space applyAllSkinPhases.
+
+	writers := theme applicableWritersFor: e.
+	self assert: writers size equals: 1.
+	self assert: e outskirts equals: BlOutskirts centered
+```
+
+You can dynamically add writable properties to a stylesheet with #addWritableProperty:.
+The addition must be made before the selection rules are declared.
+
+Here's a test with the #myOutskirts “pseudo-property”:
+
+```smalltalk
+ToStyleSheetTest>>testMyOutskirts
+
+	| e styleSheet theme writers |
+	styleSheet := ToStyleSheet new
+		              inherits: false;
+		              yourself.
+
+	theme := ToStyleSheetTheme new.
+
+	styleSheet addWritableProperty: (ToPseudoProperty
+			   name: #myOutskirts
+			   reader: [ :elem | elem outskirts ]
+			   writer: [ :elem :v | elem outskirts: v ]).
+
+	styleSheet select: styleSheet any style: [ :sr |
+		sr write: (styleSheet property: #myOutskirts) with: BlOutskirts centered].
+
+	e := ToElement new.
+	e outskirts: BlOutskirts inside.
+	e localTheme: theme.
+	e styleSheet: styleSheet.
+	space root addChild: e.
+	space applyAllSkinPhases.
+
+	writers := theme applicableWritersFor: e.
+	self assert: writers size equals: 1.
+	self assert: e outskirts equals: BlOutskirts centered
+```
+
+## advance stylesheet - default stamps for element
+
+You can select element with
+
+- Id: asIdSelector
+- Stamp: asStampSelector (comme les classes CSS)
+- type: asTypeSelector
+  
+You might want to have a default stamp to allow selection of a default style.
+
+You might think of placing an #addStamp: in #initialize, but for which theme (BeeTheme won't be the only one)
+And you don't want to have a stamp initialized if you're not going to use it (for another theme). 
+And you can't change #initialize depending on the theme...
+So there you have it, hence the idea of having default stamps by theme
+
+It's the theme that decides how to define the default stamps.
+
+```smalltalk
+ToBeeTheme>>defaultElementStampsFor: anElement 
+	^ anElement defaultBeeStyleStamps
+```
+
+On your element, you can then declare
+
+```smalltalk
+ToClock >> defaultBeeStyleStamps
+    ^ #( #clock )
+```
+
+So, a theme may very well not use default stamps.
+This is the default case.
+
+```smalltalk
+ToStyleSheetTheme>>defaultElementStampsFor: anElement 
+	^ { }
+```

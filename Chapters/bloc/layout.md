@@ -840,49 +840,31 @@ Full example with all elements placed:
 ```smalltalk
 | aContainer childA childB childC |
 childA := BlElement new
-				id: #childA;
 				background: Color red;
-				constraintsDo: [ :c |
-					c proportional horizontal
-						right: 0.25.
-					c proportional vertical
-						bottom: 0.25 ];
+				constraintsDo: [ :c | c proportional horizontal right: 0.25.
+					c proportional vertical bottom: 0.25 ];
 				yourself.
 
 childB := BlElement new
-				id: #childB;
 				background: Color green;
 				constraintsDo: [ :c |
-					c proportional horizontal
-						left: 0.25;
-						right: 0.75.
-					c proportional vertical
-						top: 0.25;
-						bottom: 75 percent ];
+					c proportional horizontal left: 0.25; right: 0.75.
+					c proportional vertical top: 0.25; bottom: 75 percent ];
 				yourself.
 
 childC := BlElement new
-				id: #child;
 				background: Color yellow;
-				constraintsDo: [ :c |
-					c proportional horizontal
-						left: 0.75.
-					c proportional vertical
-						top: 0.75];
+				constraintsDo: [ :c | c proportional horizontal left: 0.75.
+					c proportional vertical top: 0.75];
 				yourself.
 
 aContainer := BlElement new
-					id: #container;
 					background: Color blue;
 					layout: BlProportionalLayout new;
-					addChildren: {
-							childA.
-							childB.
-							childC };
+					addChildren: { childA. childB. childC };
 					constraintsDo: [ :c |
 						c horizontal matchParent.
 						c vertical matchParent ];
-					padding: (BlInsets all: 5);
 					yourself.
 
 aContainer openInNewSpace.

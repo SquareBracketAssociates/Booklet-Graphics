@@ -226,7 +226,22 @@ container for other sub-elements, apply `BlLinearLayout` strategy, but positions
 itself on its parent using the *frame* constraint.
 
 ```smalltalk
-first := BlElement new	layout: BlLinearLayout horizontal alignCenter;	background:  Color red;	constraintsDo: [ :c |		c vertical fitContent.		c horizontal fitContent.		c frame horizontal alignCenter.		c frame vertical alignCenter ].second := BlElement new	background:  Color blue;	layout: BlFrameLayout new;	constraintsDo: [ :c |		c vertical matchParent.		c horizontal matchParent ];	addChild: first.second openInSpace
+first := BlElement new
+	layout: BlLinearLayout horizontal alignCenter;
+	background:  Color red;
+	constraintsDo: [ :c |
+		c vertical fitContent.
+		c horizontal fitContent.
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+second := BlElement new
+	background:  Color blue;
+	layout: BlFrameLayout new;
+	constraintsDo: [ :c |
+		c vertical matchParent.
+		c horizontal matchParent ];
+	addChild: first.
+second openInSpace
 ```
 SD: I do not see it. 
 
@@ -239,7 +254,20 @@ layout strategy, and whose side will match space available in parent element.
 (see Figure *@matchplinear@*).
 
 ```smalltalk
-e := BlElement new.e	layout: BlLinearLayout horizontal alignCenter;	background: Color green;	constraintsDo: [ :c |		c horizontal matchParent.		c vertical matchParent ].e2 := BlElement new.e2 background: Color red.e addChild: e2.e3 := BlElement new.e3 background: Color white.e addChild: e3.e openInSpace
+e := BlElement new.
+e
+	layout: BlLinearLayout horizontal alignCenter;
+	background: Color green;
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent ].
+e2 := BlElement new.
+e2 background: Color red.
+e addChild: e2.
+e3 := BlElement new.
+e3 background: Color white.
+e addChild: e3.
+e openInSpace
 ```
 
 ![A parent matching its parent and its children managed linearly.](figures/matchplinear.png width=40&label=matchplinear)
@@ -749,46 +777,115 @@ taking into account fractions defined in the constraints.
 
 `BlProportionalLayout new`
 
+This layout will *place* and *size* your element base on a proportion of parent
+element. The size of your parent element is ultimately defined by its *width* and
+*height*. Your chilrend element will define a percentage of this witdth and
+height to place themselves, and determine their onw size. By default, your
+element will use the full space of its parent.
+
+Those percentage are define against sides of your parent element, with default
+value :
+
+- left :=0
+- right :=1
+- top :=0
+- bottom :=1
+
+The default value for 
+Let's look at a few example to understand it:
+
+Here, our element is placed in from to top-left corner, and goes down
+to 25% of parent size (right and bottom parameter). We use the default value of 0
+for top and left.
+
+```smalltalk
+	constraintsDo: [ :c | 
+		c proportional horizontal right: 0.25.
+		c proportional vertical bottom: 0.25 ];
+```
+
+In this example, our element is placed at 25% from top-left corner,
+and goes down to 75% of parent size. You may notice that you can use
+both decimal and percent notation to express your element size and position.
+
+```smalltalk
+	constraintsDo: [ :c |
+		c proportional horizontal left: 0.25; right: 0.75.
+		c proportional vertical top: 0.25; bottom: 75 percent ];
+```
+
+In our last example, our element is place at 75% from top-left corner,
+and use remaining space (default for right and bottom is 100%)
+
+```smalltalk
+	constraintsDo: [ :c |
+		c proportional horizontal left: 0.75.
+		c proportional vertical top: 0.75];
+```
+
 #### children constraints
 
 * horizontal
-- left
-- right
+  - left
+  - right
 
 * vertical
-- bottom
-- top
+  - bottom
+  - top
 
 #### example
 
+Full example with all elements placed: 
+
 ```smalltalk
-| aContainer childA childB |
+| aContainer childA childB childC |
 childA := BlElement new
-	id: #childA;
-	background: Color red;
-	constraintsDo: [ :c |
-		c proportional horizontal rightFraction: 0.5 ];
-	yourself.
+				id: #childA;
+				background: Color red;
+				constraintsDo: [ :c |
+					c proportional horizontal
+						right: 0.25.
+					c proportional vertical
+						bottom: 0.25 ];
+				yourself.
 
 childB := BlElement new
-	id: #childB;
-	background: Color green;
-	constraintsDo: [ :c |
-		c proportional horizontal leftFraction: 0.5 ];
-	yourself.
+				id: #childB;
+				background: Color green;
+				constraintsDo: [ :c |
+					c proportional horizontal
+						left: 0.25;
+						right: 0.75.
+					c proportional vertical
+						top: 0.25;
+						bottom: 75 percent ];
+				yourself.
+
+childC := BlElement new
+				id: #child;
+				background: Color yellow;
+				constraintsDo: [ :c |
+					c proportional horizontal
+						left: 0.75.
+					c proportional vertical
+						top: 0.75];
+				yourself.
 
 aContainer := BlElement new
-	id: #container;
-	background: Color blue;
-	layout: BlProportionalLayout new;
-	size: 100 @ 100;
-	addChild: childA;
-	addChild: childB;
-	constraintsDo: [ :c |
-		c horizontal matchParent.
-		c vertical matchParent ];
-	padding: (BlInsets all: 5);
-	yourself.
+					id: #container;
+					background: Color blue;
+					layout: BlProportionalLayout new;
+					addChildren: {
+							childA.
+							childB.
+							childC };
+					constraintsDo: [ :c |
+						c horizontal matchParent.
+						c vertical matchParent ];
+					padding: (BlInsets all: 5);
+					yourself.
 
 aContainer openInNewSpace.
 ```
+
+![Frame layout](figures/proportionalLayout.png)

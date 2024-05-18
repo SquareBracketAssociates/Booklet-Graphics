@@ -199,8 +199,20 @@ BlIntegerInputElement >> initializeMinusButton
 	self addChild: circle.
 ```
 
+```
+BlIntegerInputElement >> initialize
 
-
+	super initialize.
+	self size: self inputExtent.
+	self background: self backgroundPaint.
+	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
+	self layout: BlFrameLayout new.
+	self border: (BlBorder paint: Color pink).
+	self initializePlusButton.
+	self initializeMinusButton.
+	self initializeInputValue: 20.
+	self label: 'Input'
+```
 
 
 ### Writing some tests

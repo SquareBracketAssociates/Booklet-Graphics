@@ -149,7 +149,7 @@ BlIntegerInputElement >> initialize
 
 
 
-### Adding buttons
+### Adding the plus button
 
 ```
 BlIntegerInputElement >> createCircle
@@ -161,6 +161,12 @@ BlIntegerInputElement >> createCircle
 		          layout: BlFrameLayout new;
 		          geometry: BlCircleGeometry new.
 	^ circle
+```
+
+```
+BlIntegerInputElement >>increaseInput
+
+	self changeValueTo: value + 1
 ```
 
 ```
@@ -184,6 +190,33 @@ BlIntegerInputElement >> initializePlusButton
 	circle addChild: plus.
 	self addChild: circle.
 ```
+
+```
+BlIntegerInputElement >> initialize
+
+	super initialize.
+	self size: self inputExtent.
+	self background: self backgroundPaint.
+	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
+	self layout: BlFrameLayout new.
+	self border: (BlBorder paint: Color pink).
+	self initializePlusButton.
+	self initializeInputValue: 20.
+	self label: 'Input'
+```
+
+![With a plus button.](figures/Input3.png label=input&width=50)
+
+
+### Adding the minus button
+
+```
+BlIntegerInputElement >> decreaseInput
+
+	value > 0 ifTrue: [ self changeValueTo: value - 1 ]
+```
+
+Note that we could use a validation block so that we could configure the range of a valid value. 
 
 ```
 BlIntegerInputElement >> initializeMinusButton
@@ -223,7 +256,7 @@ BlIntegerInputElement >> initialize
 	self label: 'Input'
 ```
 
-
+Now we should have the full widget 
 ### Writing some tests
 
 

@@ -66,7 +66,10 @@ BlIntegerInputElement >> initialize
 ```
 
 
-![Empty integer input widget.](figures/input0.png label=input&width=50)
+![Empty integer input widget.](figures/Input0.png label=input&width=50)
+
+
+### Label
 
 We will start to add the label.
 Now since this widget will manipulate a lot of text we define a simple fonction to 
@@ -75,7 +78,7 @@ set the same visual properties to all the text element.
 ```
 BlIntegerInputElement >> configuredString: aString
 
-	^ aString asRopedText attributes: { (BlTextForegroundAttribute paint: Color white) }.
+	^ aString asRopedText attributes: { (BlTextForegroundAttribute paint: Color white) }
 ```	
 
 The `label:` method creates a `BlTextElement`, sets its text using properties and translates it to place it above the center. 
@@ -91,7 +94,7 @@ BlIntegerInputElement >> label: aString
 	self addChild: inputLabel
 ```	
 
-Add missing Figure
+![With a label.](figures/Input1.png label=input&width=50)
 
 
 ```
@@ -141,6 +144,10 @@ BlIntegerInputElement >> initialize
 	self initializeInputValue: 20.
 	self label: 'Input'
 ```
+
+![With a label and a value.](figures/Input2.png label=input&width=50)
+
+
 
 ### Adding buttons
 

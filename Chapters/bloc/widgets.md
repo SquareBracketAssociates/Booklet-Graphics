@@ -8,7 +8,9 @@ In this chapter we will define a little widget to input integer with two buttons
 ### Analysing the widget 
 
 Figure *@input@* was created using the following logic. 
+
 ```
+| anInput space |
 anInput := BlIntegerInputElement new.
 anInput transformDo: [ :c | c translateBy: 200 @ 200 ].
 space := BlSpace new.
@@ -31,7 +33,7 @@ We start by defining a new class called `BlIntegerInputElement` with an attribut
 as well as an extra attribute to hold directly the value
 
 ```
-BlElement << BlIntegerInputElement
+BlElement << #BlIntegerInputElement
 	slots: { #plus . #minus . #inputValue . #value . #inputLabel };
 	tag: 'Input';
 	package: 'myBecherBloc'
@@ -46,7 +48,7 @@ BlIntegerInputElement >> inputExtent
 ```
 
 ```
-backgroundPaint
+BlIntegerInputElement >> backgroundPaint
 
 	^ Color black
 ```
@@ -64,7 +66,7 @@ BlIntegerInputElement >> initialize
 ```
 
 
-Add Missing Figure
+![Empty integer input widget.](figures/input0.png label=input&width=50)
 
 We will start to add the label.
 Now since this widget will manipulate a lot of text we define a simple fonction to 

@@ -76,7 +76,7 @@ BlIntegerInputElement >> configuredString: aString
 	^ aString asRopedText attributes: { (BlTextForegroundAttribute paint: Color white) }.
 ```	
 
-The `label:` method creates a `BlTextElement`, sets its text using properties and translate is
+The `label:` method creates a `BlTextElement`, sets its text using properties and translates it to place it above the center. 
 
 ```
 BlIntegerInputElement >> label: aString
@@ -89,13 +89,115 @@ BlIntegerInputElement >> label: aString
 	self addChild: inputLabel
 ```	
 
+Add missing Figure
 
 
+```
+BlIntegerInputElement >> initialize
+
+	super initialize.
+	self size: self inputExtent.
+	self background: self backgroundPaint.
+	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
+	self layout: BlFrameLayout new.
+	self border: (BlBorder paint: Color pink).
+	self label: 'Input'
+```
 
 
+### Adding the input representation
+
+```
+BlIntegerInputElement >> changeValueTo: aValue
+
+	inputValue text: (self configuredString: aValue asString).
+	inputValue text fontSize: 30.
+	value := aValue
+```
+
+```
+BlIntegerInputElement >> initializeInputValue: aValue
+
+	inputValue := BlTextElement new.
+	inputValue constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	self changeValueTo: aValue.
+	self addChild: inputValue
+```
 
 
+```
+BlIntegerInputElement >> initialize
 
+	super initialize.
+	self size: self inputExtent.
+	self background: self backgroundPaint.
+	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
+	self layout: BlFrameLayout new.
+	self border: (BlBorder paint: Color pink).
+	self initializeInputValue: 20.
+	self label: 'Input'
+```
+
+### Adding buttons
+
+```
+BlIntegerInputElement >> createCircle
+
+	| circle |
+	circle := BlElement new
+		          background: Color black;
+		          border: (BlBorder paint: Color pink width: 2);
+		          layout: BlFrameLayout new;
+		          geometry: BlCircleGeometry new.
+	^ circle
+```
+
+```
+BlIntegerInputElement >> initializePlusButton
+
+	| circle |
+	circle := self createCircle.
+	circle constraintsDo: [ :c |
+		c frame horizontal alignRight.
+		c frame vertical alignCenter ].
+	circle transformDo: [ :t | t translateBy: -15 @ 0 ].
+
+	plus := BlTextElement new text: (self configuredString: '+').
+	plus text fontSize: 55.
+	plus constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	circle
+		addEventHandlerOn: BlMouseDownEvent
+		do: [ :e | self increaseInput ].
+	circle addChild: plus.
+	self addChild: circle.
+```
+
+```
+BlIntegerInputElement >> initializeMinusButton
+
+	| circle |
+	circle := self createCircle.
+	circle constraintsDo: [ :c |
+		c frame horizontal alignLeft.
+		c frame vertical alignCenter ].
+	circle transformDo: [ :t | t translateBy: 15 @ 0 ].
+
+	minus := BlTextElement new text: (self configuredString: '-').
+	minus text fontSize: 80.
+	minus constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	circle
+		addEventHandlerOn: BlMouseDownEvent
+		do: [ :e | self decreaseInput ].
+
+	circle addChild: minus.
+	self addChild: circle.
+```
 
 
 

@@ -1,7 +1,6 @@
 ## Building a simple widget
 
-In this chapter we will define a little widget to input integer with two buttons as shown in Figure *@input@*.
-
+In this chapter we will define a little widget to perform input integer with two buttons as shown in Figure *@input@*. It is inspired from the work of A. Cnokaert in the context of his internship to design  the CoypuIDE (an IDE for live music) and Moofloo (a support for spectator understanding music performance). 
 
 ![An integer input widget.](figures/input.png label=input&width=50)
 
@@ -24,22 +23,22 @@ space show.
 The main widget is composed of four elements: two buttons, a label,  and  a value.
 Let us detail these elements: 
 - the label and the value are text elements,
-- the two buttons are in fact a composite elment composed of a circle element with a text element inside. 
+- the two buttons are, in fact, a composite element composed of a circle element with a text element inside.
 
 
 ### Getting started
 
-We start by defining a new class called `BlIntegerInputElement` with an attribute for each of its subelement
-as well as an extra attribute to hold directly the value
+We start by defining a new class called `BlIntegerInputElement` with an attribute for each of its subelement as well as an extra attribute to hold directly the value:
 
 ```
 BlElement << #BlIntegerInputElement
 	slots: { #plus . #minus . #inputValue . #value . #inputLabel };
 	tag: 'Input';
-	package: 'myBecherBloc'
+	package: 'ABlocPackage'
 ```
 
 We start by defining the shape of the main element. Notice that visual properties such the background, the border could be stored differently to be customized afterwards.This is what we will show in a following chapter using stylesheet and skins as done in Toplo.
+
 
 ```
 BlIntegerInputElement >> inputExtent 
@@ -72,8 +71,8 @@ BlIntegerInputElement >> initialize
 ### Label
 
 We will start to add the label.
-Now since this widget will manipulate a lot of text we define a simple fonction to 
-set the same visual properties to all the text element. 
+Now since this widget manipulates a lot of text we define a simple function to 
+set the same visual properties to all the text elements. 
 
 ```
 BlIntegerInputElement >> configuredString: aString
@@ -94,9 +93,11 @@ BlIntegerInputElement >> label: aString
 	self addChild: inputLabel
 ```	
 
+Note that we use `addChild:` method to add the text element in the composite (the instance of the BlIntegerInputElement`).
+
 ![With a label.](figures/Input1.png label=input&width=50)
 
-
+We modify the initialize method to invoke the `label` method.
 ```
 BlIntegerInputElement >> initialize
 
@@ -112,13 +113,7 @@ BlIntegerInputElement >> initialize
 
 ### Adding the input representation
 
-```
-BlIntegerInputElement >> changeValueTo: aValue
-
-	inputValue text: (self configuredString: aValue asString).
-	inputValue text fontSize: 30.
-	value := aValue
-```
+We add the element that will display the current value of the counter.
 
 ```
 BlIntegerInputElement >> initializeInputValue: aValue
@@ -131,6 +126,19 @@ BlIntegerInputElement >> initializeInputValue: aValue
 	self addChild: inputValue
 ```
 
+We define a little helper method `changeValueTo:` that we will expose as pubic API. 
+Note again that we add the input value element in the composite one. 
+
+```
+BlIntegerInputElement >> changeValueTo: aValue
+
+	inputValue text: (self configuredString: aValue asString).
+	inputValue text fontSize: 30.
+	value := aValue
+```
+
+
+Then we change the `initialize` method to invoke `initializeInputValue:`.
 
 ```
 BlIntegerInputElement >> initialize
@@ -151,6 +159,11 @@ BlIntegerInputElement >> initialize
 
 ### Adding the plus button
 
+We focus on adding the two buttons. Their logic is similar even if we will have to pay attention
+of their placement.
+
+We first define a method `createCircle` that returns an element in a circle shape. 
+
 ```
 BlIntegerInputElement >> createCircle
 
@@ -163,11 +176,16 @@ BlIntegerInputElement >> createCircle
 	^ circle
 ```
 
+We introduce the method `increaseInput` that increments the value of the counter.
+
 ```
 BlIntegerInputElement >>increaseInput
 
 	self changeValueTo: value + 1
 ```
+
+Then we define the method `initializePlusButton` that uses the method `createCircle`.
+We create a new text element and place it inside the circle. 
 
 ```
 BlIntegerInputElement >> initializePlusButton
@@ -190,6 +208,9 @@ BlIntegerInputElement >> initializePlusButton
 	circle addChild: plus.
 	self addChild: circle.
 ```
+
+Note that in addition, we use the message `addEventHandlerOn:do:` to configure
+the circle element to react to mouse down events.
 
 ```
 BlIntegerInputElement >> initialize

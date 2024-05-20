@@ -95,7 +95,7 @@ BlIntegerInputElement >> label: aString
 
 Note that we use `addChild:` method to add the text element in the composite (the instance of the BlIntegerInputElement`).
 
-![With a label.](figures/Input1.png label=input&width=50)
+![With a label.](figures/Input1.png label=input1&width=50)
 
 We modify the initialize method to invoke the `label` method.
 ```
@@ -110,6 +110,7 @@ BlIntegerInputElement >> initialize
 	self label: 'Input'
 ```
 
+We should get now a widget similar to the one shown in Fig *@input1@*.
 
 ### Adding the input representation
 
@@ -126,7 +127,8 @@ BlIntegerInputElement >> initializeInputValue: aValue
 	self addChild: inputValue
 ```
 
-We define a little helper method `changeValueTo:` that we will expose as pubic API. 
+We define a little helper method `changeValueTo:` that we will expose as pubic API for example 
+to start the input with a specific value.
 Note again that we add the input value element in the composite one. 
 
 ```
@@ -153,14 +155,16 @@ BlIntegerInputElement >> initialize
 	self label: 'Input'
 ```
 
-![With a label and a value.](figures/Input2.png label=input&width=50)
+We should obtain now a widget similar to the one show in Fig *@input2@*.
+
+![With a label and a value.](figures/Input2.png label=input2&width=50)
 
 
 
 ### Adding the plus button
 
-We focus on adding the two buttons. Their logic is similar even if we will have to pay attention
-of their placement.
+We focus on adding the two buttons to change the value of the input. 
+Their logic is similar even if we will have to pay attention of their different placement and actions.
 
 We first define a method `createCircle` that returns an element in a circle shape. 
 
@@ -185,7 +189,7 @@ BlIntegerInputElement >>increaseInput
 ```
 
 Then we define the method `initializePlusButton` that uses the method `createCircle`.
-We create a new text element and place it inside the circle. 
+We create a new text element and place it inside the circle and then add the circle as child of the composite.
 
 ```
 BlIntegerInputElement >> initializePlusButton
@@ -210,7 +214,7 @@ BlIntegerInputElement >> initializePlusButton
 ```
 
 Note that in addition, we use the message `addEventHandlerOn:do:` to configure
-the circle element to react to mouse down events.
+the circle element to react to mouse-down events.
 
 ```
 BlIntegerInputElement >> initialize
@@ -226,10 +230,16 @@ BlIntegerInputElement >> initialize
 	self label: 'Input'
 ```
 
-![With a plus button.](figures/Input3.png label=input&width=50)
+We should now get a widget similar to the one shown in Fig *@input3@*.
+![With a plus button.](figures/Input3.png label=input3&width=50)
 
 
 ### Adding the minus button
+
+We follow a similar path for the minus button. 
+
+We define a method to decrease the value of the input. 
+By default we decided against negative values but we could have used a bloc such as `[:x | x > 1]` to be able to customize better the range of the input value. We left this to the reader.
 
 ```
 BlIntegerInputElement >> decreaseInput
@@ -237,8 +247,8 @@ BlIntegerInputElement >> decreaseInput
 	value > 0 ifTrue: [ self changeValueTo: value - 1 ]
 ```
 
-Note that we could use a validation block so that we could configure the range of a valid value. 
-
+We define another method to create and assemble the minus button. 
+Here we adjusted the size of the minus character so that it has a similar shape than the plus character.
 ```
 BlIntegerInputElement >> initializeMinusButton
 
@@ -262,6 +272,7 @@ BlIntegerInputElement >> initializeMinusButton
 	self addChild: circle.
 ```
 
+FInally we update the initialize method to call the minus creation. 
 ```
 BlIntegerInputElement >> initialize
 
@@ -277,9 +288,13 @@ BlIntegerInputElement >> initialize
 	self label: 'Input'
 ```
 
-Now we should have the full widget 
+Now we should have the full widget. 
+
 ### Writing some tests
 
+We take the opportunity show that we can define some simple tests that will help maintaining and improving this little widget.
+
+The first test is rather naive and just check that all the widget as indeed the number of expected elements. In general we are not found of such kind of test because the elements should be grouped into another one for interaction purpose and still be widget would work normally but the test would fail. 
 
 ```
 BlNumberInputElementTest >> testChildrenAreSet
@@ -288,6 +303,9 @@ BlNumberInputElementTest >> testChildrenAreSet
 	inputElem := BlNumberInputElement new.
 	self assert: inputElem children size equals: 4 
 ```
+
+Let us see a more interesting test.
+The following test shows that we can effectively changes the label. 
 
 ```
 BlNumberInputElementTest >> testCanChangeLabel
@@ -299,6 +317,7 @@ BlNumberInputElementTest >> testCanChangeLabel
 	self assert: inputElem label text asString equals: 'Volume'.
 ```
 
+The following tests are checking that the interaction on the buttons is working correctly.
 ```
 BlNumberInputElementTest >> testValueUpdatedOnClick
 
@@ -310,6 +329,7 @@ BlNumberInputElementTest >> testValueUpdatedOnClick
 	self assert: inputElem value equals: 25
 ```
 
+
 ```
 BlNumberInputElementTest >> testValueCantBeNegative
 
@@ -320,3 +340,9 @@ BlNumberInputElementTest >> testValueCantBeNegative
 	value := inputElem value. 
 	self assert: value equals: 0
 ```
+
+### Conclusion
+
+This chapter shows how to build a simple widget. 
+In a subsequent chapter we will show how to build a skinnable widget using stylesheets and skins. 
+

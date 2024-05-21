@@ -32,7 +32,7 @@ We start by defining a new class called `BlIntegerInputElement` with an attribut
 
 ```
 BlElement << #BlIntegerInputElement
-	slots: { #plus . #minus . #inputValue . #value . #inputLabel . #blockCallback };
+	slots: { #plus . #minus . #inputValue . #value . #inputLabel . #callbackBlock };
 	tag: 'Input';
 	package: 'ABlocPackage'
 ```
@@ -300,7 +300,7 @@ First we initialize the callback block.
 ```
 BlIntegerInputElement >> initializeInputValue: aValue
 
-	callbackBlock: [ :newInputValue | ].
+	callbackBlock := [ :newInputValue | ].
 	inputValue := BlTextElement new.
 	inputValue constraintsDo: [ :c |
 		c frame horizontal alignCenter.

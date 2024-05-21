@@ -32,7 +32,7 @@ We start by defining a new class called `BlIntegerInputElement` with an attribut
 
 ```
 BlElement << #BlIntegerInputElement
-	slots: { #plus . #minus . #inputValue . #value . #inputLabel };
+	slots: { #plus . #minus . #inputValue . #value . #inputLabel . #blockCallback };
 	tag: 'Input';
 	package: 'ABlocPackage'
 ```
@@ -290,6 +290,46 @@ BlIntegerInputElement >> initialize
 
 Now we should have the full widget. 
 
+### Adding callback methods
+
+When the state of the widget is changed we need to detect it and have the possibility to use the new state.
+Any time the `inputValue` is changed we will value a block with the new value of the input.
+
+First we initialize the callback block.
+
+```
+BlIntegerInputElement >> initializeInputValue: aValue
+
+	callbackBlock: [ :newInputValue | ].
+	inputValue := BlTextElement new.
+	inputValue constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	self changeValueTo: aValue.
+	self addChild: inputValue
+```
+
+Then anytime we changed the state, we update the value.
+
+```
+BlIntegerInputElement >> changeValueTo: aValue
+
+	inputValue text: (self configuredString: aValue asString).
+	inputValue text fontSize: 30.
+	value := aValue.
+	callbackBlock value: aValue
+```
+
+Finnaly we create a mutator for the `callbackBlock` variable.
+
+```
+BlIntegerInputElement >> callbackBlock: aBlock
+
+	callbackBlock := aBlock
+```
+
+Now we can detect any change in the value of the widget.
+
 ### Writing some tests
 
 We take the opportunity show that we can define some simple tests that will help maintaining and improving this little widget.
@@ -340,6 +380,36 @@ BlNumberInputElementTest >> testValueCantBeNegative
 	value := inputElem value. 
 	self assert: value equals: 0
 ```
+
+The following tests are checking that the callback block is working correctly.
+
+```
+BlNumberInputElementTest >> testCallbackCallOnClick
+
+	| inputElem testNumberOfCall testValue |
+	testNumberOfCall := 0.
+	testValue := -1.
+	inputElem := BlNumberInputElement new.
+	inputElem callbackBlock: [ :val |
+		testNumberOfCall := testNumberOfCall + 1.
+		testValue := val.
+	]
+	self assert: testNumberOfCall equals: 0.
+	self assert: testValue equals: -1.
+	BlSpace simulateClickOn: inputElem minus.
+	self assert: testNumberOfCall equals: 1.
+	self assert: testValue equals: 19.
+	6 timesRepeat: [ BlSpace simulateClickOn: inputElem plus ].
+	self assert: testNumberOfCall equals: 7.
+	self assert: testValue equals: 25.
+	inputElem changeValueTo: 0.
+	self assert: testNumberOfCall equals: 8.
+	self assert: testValue equals: 0.
+	BlSpace simulateClickOn: inputElem minus.
+	self assert: testNumberOfCall equals: 8.
+	self assert: testValue equals: 0.
+```
+
 
 ### Conclusion
 

@@ -1,12 +1,12 @@
 ## Building a simple widget
 
-In this chapter we will define a little widget to perform input integer with two buttons as shown in Figure *@input@*. It is inspired from the work of A. Cnokaert in the context of his internship to design  the CoypuIDE (an IDE for live music) and Moofloo (a support for spectator understanding music performance). 
+In this chapter we will define a little widget to perform input integer with two buttons as shown in Figure *@inputFinal@*. It is inspired from the work of A. Cnokaert in the context of his internship to design the CoypuIDE (an IDE for live music) and Moofloo (a support for spectator understanding music performance). 
 
-![An integer input widget.](figures/input.png label=input&width=50)
+![An integer input widget. % anchor=inputFinal&width=50](figures/input.png )
 
 ### Analysing the widget 
 
-Figure *@input@* was created using the following logic. 
+Figure *@inputFinal@* was created using the following logic. 
 
 ```
 | anInput space |
@@ -65,7 +65,7 @@ BlIntegerInputElement >> initialize
 ```
 
 
-![Empty integer input widget.](figures/Input0.png label=input&width=50)
+![Empty integer input widget. % anchor=input0&width=50](figures/Input0.png)
 
 
 ### Label
@@ -95,7 +95,7 @@ BlIntegerInputElement >> label: aString
 
 Note that we use `addChild:` method to add the text element in the composite (the instance of the BlIntegerInputElement`).
 
-![With a label.](figures/Input1.png label=input1&width=50)
+![With a label. % anchor=input1&width=50](figures/Input1.png)
 
 We modify the initialize method to invoke the `label` method.
 ```
@@ -157,7 +157,7 @@ BlIntegerInputElement >> initialize
 
 We should obtain now a widget similar to the one show in Fig *@input2@*.
 
-![With a label and a value.](figures/Input2.png label=input2&width=50)
+![With a label and a value. %anchor=input2&width=50](figures/Input2.png)
 
 
 

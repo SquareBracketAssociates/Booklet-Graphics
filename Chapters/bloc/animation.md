@@ -211,5 +211,50 @@ sequencially to an element:
 - position
 - scale
 
+### A simple rotation
+
+A custom animation for element rotation.
+
+```
+BlAnimation << #BlRotateAnimation 
+	slots: { #angle }; 
+	tag: 'Animation'; 
+	package: 'BookletGraphics'
+
+BlRotateAnimation >> angle: anAngle 
+	angle := anAngle
+
+BlRotateAnimation >> applyValue: anAngle 
+	self target transformDo: [ :t | t rotateBy: anAngle ]
+
+BlRotateAnimation >> valueForStep: aNumber 
+	^ (angle * aNumber)
+```
+
+You then update your example with:
+
+```
+| elt frame container anim |
+elt := BlElement new 
+	background: (Color red alpha: 0.5); 
+	position: 100 asPoint; 
+	size: 100 asPoint.
+frame := BlElement new 
+	background: Color yellow; 
+	position: 100 asPoint; 
+	size: 100 asPoint.
+container := BlElement new 
+	background: Color lightGreen; 
+	size: 500 asPoint; 
+	addChildren: {frame. elt}.
+
+anim := BlRotateAnimation new angle: 90; duration: 1 second.
+
+elt addEventHandlerOn: BlClickEvent do: [ elt addAnimation: anim copy ].
+
+container openInSpace
+```
+
+
 
 ### Conclusion (missing)

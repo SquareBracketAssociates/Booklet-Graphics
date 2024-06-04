@@ -201,7 +201,7 @@ You can get the list of all the effects available by executing: `BlElementEffect
 
 #### Simple shadow. 
 
-```smalltalk
+```origin=BlocExamples>>shadow
 BlElement new
 	size: 200 @ 100;
 	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);

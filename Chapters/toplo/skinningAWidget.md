@@ -1,11 +1,17 @@
 ## Skinning a simple widget
 
+In this chapter we show how we can take the simple input widget developed in a previous chapter and make it skinnable. 
 
-In this chapter we will show how we can take the simple input widget developed in a previous chapter and make it skinnable. 
+In a first period, we will focus on what is called raw skins. The idea behind raw skins are that we define classes with states and methods to define the behavior of a skin in a given theme. At the end of this chapter we will see that we can also skin widgets
+using stylesheets following the spirit of CSS. 
+ 
+The outline of this chapter is then: first we show that we can extend a theme and define a skin. 
+Then in a second time we show that we can define an autonomous theme. 
+Finally we will show that we can use stylesheet
+
 Remember that we want to create a widget as shown in Figure *@inputFinalSkin@*.
 
 ![An integer input widget. % anchor=inputFinalSkin&width=50](figures/input.png )
-
 
 ### Getting started
 
@@ -50,6 +56,15 @@ ToInputElementSkin >> installLookEvent: anEvent
 In the `ToNumberInputElement` we define the method 
 
 
+Notice that two following forms are equivalent: 
+
+```
+anEvent elementDo: [ :e | 
+		e border: (e valueOfTokenNamed: #'color-border-checkable’).
+
+target := anEvent currentTarget.
+target border: target valueOfTokenNamed: #'color-border-checkable’)
+```
 
 
 ```
@@ -68,7 +83,6 @@ ToNumberInputElement >> initialize
 	super initialize.
 	self size: self inputExtent.
 	self background: self backgroundPaint.
-	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
 	self border: (BlBorder paint: Color pink).
 	self initializePlusButton.

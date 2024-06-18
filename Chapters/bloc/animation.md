@@ -215,7 +215,7 @@ sequencially to an element:
 
 A custom animation for element rotation.
 
-```
+```smalltalk
 BlAnimation << #BlRotateAnimation 
 	slots: { #angle }; 
 	tag: 'Animation'; 
@@ -231,22 +231,13 @@ BlRotateAnimation >> valueForStep: aNumber
 	^ (angle * aNumber)
 ```
 
-You then update your example with:
+you can then use it like:
 
-```
+```smalltalk
 | elt frame container anim |
-elt := BlElement new 
-	background: (Color red alpha: 0.5); 
-	position: 100 asPoint; 
-	size: 100 asPoint.
-frame := BlElement new 
-	background: Color yellow; 
-	position: 100 asPoint; 
-	size: 100 asPoint.
-container := BlElement new 
-	background: Color lightGreen; 
-	size: 500 asPoint; 
-	addChildren: {frame. elt}.
+elt := BlElement new background: (Color red alpha: 0.5); position: 100 asPoint; size: 100 asPoint.
+frame := BlElement new background: Color yellow; position: 100 asPoint; size: 100 asPoint.
+container := BlElement new background: Color lightGreen; size: 500 asPoint; addChildren: {frame. elt}.
 
 anim := BlRotateAnimation new angle: 90; duration: 1 second.
 

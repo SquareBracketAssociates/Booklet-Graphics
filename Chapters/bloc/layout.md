@@ -62,8 +62,28 @@ To ease this kind of script one can use `whenLayoutedDoOnce:` which arms a one
 shot event handler that reacts to the `BlElementLayoutComputedEvent` event.
 
 
+### element order
+Your element will be displayed in the order you added them to your parent. You
+can, however, specify their *zIndex*. They will then follow this index order, 
+from low to high.
 
+In the example below, with zIndex, element shoud appears from black to red. 
+With zIndex, you can reorder the order of display of the elements. Note that
+zIndex can be negative.
 
+```smalltalk
+container:= BlElement new geometry: BlRectangleGeometry new; size: 150@150; background: Color lightGray .
+        
+elt1 := BlElement new geometry: BlCircleGeometry new;  size: 100 asPoint; zIndex: 1;  background:Color  black.
+elt2 := BlElement new geometry: BlCircleGeometry new;  size: 100 asPoint; zIndex: 2; position:10@10; background: Color blue.
+elt3 := BlElement new geometry: BlCircleGeometry new; size: 100 asPoint; zIndex: -1; position:20@20; background: Color red.
+        
+container addChildren: {elt1 . elt2 . elt3}.
+
+container.
+```
+
+![zIndex example](figures/zIndexExample.png)
 
 ### Space around elements
 

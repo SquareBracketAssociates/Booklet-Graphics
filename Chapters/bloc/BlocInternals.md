@@ -4,6 +4,27 @@ BlUniverse contain multiple BlSpace.
 However, we call `BlElement openInNewSpace`
 This will open a new OS Windows, with our scene
 
+BlSpace is your main entry point to your application. It'll connect you to 
+OS window, manage which element needs drawing and the rendering of your scene.
+Rendering is done by a dedicated render class, BARenderer by default.
+
+Host has their own pulse loop which are then transmitted to their BlSpace
+My loop follows the next rules:
+
+•	The #pulsePeriod duration is the minimum amount of time between two subsequent sends of #pulse.
+•	If a pulse took more time than #pulsePeriod, then the next pulse may either send the next #pulse immediately, or do a small wait before if another process with lower priority is suspended (and may be starving).
+
+The opened spaces listen the pulse to be synchronized and to update their state when it is needed.
+
+
+
+Each BlSpace is hosted in  a specific BlHost environment.
+All these BlHost are then accessible through BlUniverse.
+
+ As of this writing, it can be Morphic or an OS Window,
+using OSWindow and SDL2 backend. 
+
+
 
 We begin with `BlElement >> openInNewSpace`
 or `BlElement >> openInSpace`  which are equivalent.
@@ -19,7 +40,9 @@ BlElement >> openInNewSpace
 	^ aSpace
 ```
 
-Contrary to GTookit, BlSpace is not a subclass of BlElement It has, however,
+## window & event management
+
+Contrary to GTookit, BlSpace is not a subclass of BlElement. It has, however,
 a lot of specific responsabilities:
 
 ```smalltalk
@@ -85,12 +108,11 @@ BlSpace new
 
 By default, it'll use `BlOSWindowSDL2Host`
 
-`BlOSWindowSDL2Host` has its own pulse loop
+You can look at `window - properties` protocol for all public API BlSpace offer
+to manage its windows. 
 
-```smalltalk
-BlHostPulseLoop >> defaultPulsePeriod
-	^ 15 milliSeconds
-```
+*BlSpace* are containted in a *BlUniverse*, and its OS Window is managed by a 
+*BlHost*.
 
 BlOSWindowSDL2Host will create it own its own element and renderer.
 
@@ -98,18 +120,28 @@ Host is linked to a renderer and a way to catch keyboard event.
 
 ```smalltalk
 BlOSWindowSDL2Host >> createHostSpace
-
 	^ BlOSWindowSDL2HostSpace new
 ```
 
 ```smalltalk
 BlOSWindowSDL2Host >> keyboardKeyTable
-
 	^ BlOSWindowSDL2KeyboardKeyTable default
 ```
 
 
-## Pulse
+
+
+
+
+## Pulse and animation management.
+`BlOSWindowSDL2Host` has its own pulse loop
+
+```smalltalk
+BlHostPulseLoop >> defaultPulsePeriod
+	^ 15 milliSeconds
+```
+
+
 ```smalltalk
 BlSpaceFrameDrawingValidationPhase >> runOn: aSpace
 
@@ -193,6 +225,33 @@ BABufferSpaceRenderer >> initializeForSurface: aBlHostRendererBufferSurface
 ```
 
 ## BlSpace frame
+Each phase knows about its start time and send a corresponding event once the phase is completed.
+
+
+```smalltalk
+BlSpace >> processPulse
+	self ensureSession.
+	
+	self pulseRequested
+		ifFalse: [ ^ self ].
+	
+	"flip to false beforehand to be able to know if the next pulse was needed during the frame"
+	nextPulseRequested := false.
+	self frame runOn: self
+```
+
+```smalltalk
+BlSpaceFrame >> runOn: aSpace
+	self incrementFrameId.
+	self runCurrentPhaseOn: aSpace.
+
+	[ self hasNextPhase ] whileTrue: [
+		self switchToNextPhase.
+		self runCurrentPhaseOn: aSpace ].
+
+	"move back to the first phase"
+	self switchToNextPhase
+```
 
 `BlSpaceFrame class`, 
 ```smalltalk

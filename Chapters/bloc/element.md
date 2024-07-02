@@ -253,6 +253,33 @@ You can apply transformations to a `BlElement`:
 - reflection
 - etc...
 
+Transformation are affine transformation. For more detail, you can search on the internet, there are countless references to it. To simplify it, I'll say we apply  a transformation matrix (*BlMatrix2D*) to all point of our figure path, each point represented as *BlVector*. 
+
+You have 3 type of tranformation available in Bloc:
+- **BlElementLocalTransformation**: This transformation combine an affine transformation (*BlAffineTransformation* subclasses), with a point of origin (*BlAffineTransformationOrigin* subclasses). By default, origin is the center of your element, BlAffineTransformationCenterOrigin.
+- **BlElementAbsoluteTransformation**: This transformation apply a transformation matrix to your shape, without point of origin. Its  result is similar to *BlElementLocalTransformation*, with origin set to *BlAffineTransformationTopLeftOrigin*
+- **BlElementCompositeTransformation** which are combination of *BlElementLocalTransformation* and/or *BlElementAbsoluteTransformation*
+
+Most of the time, you won't have to deal with matrix definition. You'll use the 
+helper method `transformDo`, and define your transformation using *BlTransformationBuilder*.
+
+When you're defining a transformation using `transformDo:` , you'll, by default, 
+use *BlAffineCompositeTransformation*. All transformation move added subsequently will be composed together.
+The origin will be set to *BlAffineTransformationCenterOrigin*.
+
+Those two transformation below are strictly equivalent, and rotate your element by 45 degree. 
+One use the underlying object, while the other use the helper methods:
+
+```smalltalk
+elt transformation: (BlElementLocalTransformation 
+	newWith: ((BlRotationTransformation new angle: 45) 
+	origin: (BlAffineTransformationCenterOrigin defaultInstance ) )).
+```
+
+```smalltalk
+elt transformDo: [ :t | t rotateBy: 45 ].
+```
+
 A transformation is applied in the scope of the message `transformDo:` as shown below.
 ```
 element transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];

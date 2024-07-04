@@ -1,8 +1,8 @@
-# Interesting snippets of Bloc 
+## Interesting snippets of Bloc 
 
 This document aims to share small interesting snippets that highlight some particularities of Bloc
 
-## Star shape using Bloc Geometry
+### Star shape using Bloc Geometry
 
 Here, we can make a star with N branches using this code
 outerSize is for the length of the branches, innerSize for the width of the branches bases
@@ -32,7 +32,7 @@ space root addChild: starElement.
 space show.
 ```
 
-## Explosion animation 
+### Explosion animation 
 
 We create an explosion animation by creating some BlElements and making them translate along a rotating line starting from a center point
 
@@ -63,7 +63,7 @@ space show.
 
 ```
 
-## Square Layout 
+### Square Layout 
 
 This example shows how the squareLayout works when applied to an element, in fact here we give constraints to match parent horizontally and vertically but the squareLayout forces our element to be of square shape meaning that this will draw the biggest square in the available space?
 
@@ -96,7 +96,7 @@ space
 Something interesting I found using a SquareLayout: If you use a gridLayout and want its elements contained to matchParent and stay as square while resizing the gridLayout, you can encapsulate the gridLayout into a squareLayout so the contained elements will matchParent with a square shape
 
 
-## Space extent following its child extent 
+### Space extent following its child extent 
 
 ```smalltalk
 space := BlSpace new.
@@ -120,7 +120,7 @@ space addChild: rootUniqueChild.
 
 Here, space extent is redefined whenever the extent of its child changes using a basic eventHandler
 
-## Dynamically change fontSize of a TextElement
+### Dynamically change fontSize of a TextElement
 
 For now in Bloc, we can't change the fontSize of a text after its first definition. 
 To change it dynamically we'll have to create a new text which is a copy of the former text and define the new fontSize
@@ -190,7 +190,7 @@ container addChild: textElement as: 'text'.
 container openInNewSpace
 ```
 
-## Center a space
+### Center a space
 
 ```smalltalk
 space := BlSpace new.
@@ -211,7 +211,7 @@ However you might wonder why in this example we send it as a task that we enqueu
 space show; center
 ```
 
-## RequestFocus for KeyboardEvent
+### RequestFocus for KeyboardEvent
 
 To deal with keyboard events, we need to specify our element to request the focus
 
@@ -227,7 +227,7 @@ elt openInSpace
 
 You can see with this example that the background of the element might change twice quickly, it's simply explained by the fact there is an event sent when a key is pressed and another when it is released so there's two events sent when quickly pressing a key.
 
-## Reset a transformation
+### Reset a transformation
 
 When applying a transformation to an object, its position doesn't change even if we translate it so the element might be displayed elsewhere than where it 'actually is', we can reset its transformation with this message `transformation: BlElementIdentityTransformation uniqueInstance` just like in this snippet:
 
@@ -242,7 +242,7 @@ animation := (BlTransformAnimation translate: 250@250) duration: 2 seconds.
 elt addAnimation: (animation onFinishedDo: [ elt transformation: BlElementIdentityTransformation uniqueInstance ])
 ```
 
-### To go further with animations
+#### To go further with animations
 
 The most common animations are translations and rotations but as explained above, whenever we translate or rotate an object, its position doesn't change even if it does visually.
 
@@ -262,7 +262,7 @@ elt openInSpace.
 
 And you will see that the position of the element hasn't changed and still is 0@0, but you can ask for `BlElement>>transformedBounds` to have the bounds of your element after its transformations if you need to exploit this visual position.
 
-## Scale an image according to its parent extent 
+### Scale an image according to its parent extent 
 
 This snippet shows how to deal with extent constraints when having a form as a background, here only in the case of matching parent both horizontally and vertically but this could be interesting to see when applying only one direction
 
@@ -311,7 +311,7 @@ imageWrapper := BlElement new
 imageWrapper openInSpace
 ```
 
-## Enqueue tasks 
+### Enqueue tasks 
 
 ```smalltalk
 a := BlElement new
@@ -347,7 +347,7 @@ a openInSpace
 
 This snippet is an example of how to enqueue tasks and delay the time of the next instruction. This is also an example of a circular animation using an offset on a shadow effect
 
-## Root Element is special
+### Root Element is special
 
 ```smalltalk
 a := BlElement new.
@@ -385,7 +385,7 @@ wheel := Color wheel: 20.
 [Enzo] I keep this note here but I don't see any changes personally
 
 
-## [TOPLO] Placing buttons inside a Notebook page 
+### [TOPLO] Placing buttons inside a Notebook page 
 
 
 
@@ -409,7 +409,7 @@ book openInSpace
 ```
 To make our buttons take the whole space, we have to apply the matchParent constraint to each button and not to the container layout
 
-## [TOPLO] Cool color gradient displayed in notebook
+### [TOPLO] Cool color gradient displayed in notebook
 
 ```smalltalk
 notebook := ToNotebook new.
@@ -452,7 +452,7 @@ space root addChild: notebook.
 space show
 ```
 
-## Rotate a textElement in a parent
+### Rotate a textElement in a parent
 
 ```smalltalk
 label := BlTextElement text: ('HelloHiHolaBonjour' asRopedText fontSize: 40; yourself).
@@ -490,7 +490,7 @@ label size: label transformedBounds extent.
 
 In this snippet we rotate the element containing the text (but not the textElement) using `TBlTransformable>>tranformDo:` but for that we need to force its layout and just like in the earlier example, the transformation didn't change the position nor the bounds hence the last line.
 
-## Using a PullHandler to stay in bounds 
+### Using a PullHandler to stay in bounds 
 
 When dealing with drag and drop events you can use a PullHandler that does the work, you can even select the behavior to keep the child inside its parent's bounds with `BlPullHandler>>disallowOutOfBounds`
 
@@ -504,7 +504,7 @@ hero := BlElement new
 hero openInSpace.
 ```
 
-## transform a Form into ByteString and vice versa
+### transform a Form into ByteString and vice versa
 
 Starting from a ByteString (self), we can have a Form using this code:
 
@@ -539,7 +539,7 @@ OpalCompiler new
 Object readFrom: byteString
 ```
 
-## need to define outskirts to have round cap/join border 
+### need to define outskirts to have round cap/join border 
 
 ```st
 elt := BlElement new background: Color lightGray; size: 100 asPoint; position: 50 asPoint.
@@ -557,7 +557,7 @@ In this example the border does not have cap/join round if the `outskirts:` mess
 
 [Enzo] I don't know the meaning of the outskirts but it is weird sending `capRound`, `joinRound` to the border is not enough
 
-## Example of curved arrow 
+### Example of curved arrow 
 
 This arrow is created using an annulus sector and a polyline geometry. This polyline geometry is used (instead of a polygon geometry) to give the impression of a single element when applying a border.
 
@@ -606,7 +606,7 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	^ container
 ```
 
-## Show trajectories of corner with rotation animation 
+### Show trajectories of corner with rotation animation 
 
 This snippet was written to prove the rotation animation didn't have the right feeling, by showing the trajectories of each corner of a totating square. By default, people expect each corner to draw a circle when the square is fully rotated but here we can see it is not the case.
 

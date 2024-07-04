@@ -29,8 +29,6 @@ to manage the addition and removal of the elements composing your element.
 
 ![Element tree.](figures/blelementtreestructure.png width=80)
 
-
-
 Layouts constitute a fundamental aspect of *Bloc*. Rather than constructing your
 entire widget within a single *drawing* method, it advocates for the creation of
 small elements with distinct geometries and visual attributes, which are then
@@ -62,7 +60,7 @@ To ease this kind of script one can use `whenLayoutedDoOnce:` which arms a one
 shot event handler that reacts to the `BlElementLayoutComputedEvent` event.
 
 
-### element order
+### element order and overlap
 Your element will be displayed in the order you added them to your parent. You
 can, however, specify their *zIndex*. They will then follow this index order, 
 from low to high.
@@ -82,6 +80,33 @@ container addChildren: {elt1 . elt2 . elt3}.
 
 container.
 ```
+
+we have different ways to manage the overlap of your elements in a Bloc scene.
+This also depends of the layout strategy used for your element.
+
+1. When element are added (though addChild: or addChildren:), they are process and displayed one after the other, with the same order they were added, from left to right. You can tell if element must be added before or after another element. This apply as well if some element overlap another, the first one will appear below the next one.
+2. If some element overlap each other, you can specify in which order they should be displayed with  zIndex:.
+
+**NOTE**
+(as of 4th of july 2024), the element order or the elevation (zIndex) are not managed properly when using composition layer, 
+and this element always appears on top (current situation or bug) when it overlap with others 
+
+### element rendering
+
+By default, all your bloc scene will be rendered using the same Alexandrie Canvas and surface.
+In scenarios of "complex enough" elements that don't change on every frame, you can improve performance 
+by using composition layer to saves time by caching the pixels instead of rasterizing on next space redraw.
+
+You can tell your element to be in a composition layer with *compositing:* message. 
+You can change this using *beInSeparateCompositionLayer*, *beInSingleCompositionLayer* or *beWithoutCompositionLayer* message. 
+*beInSingleCompositionLayer* and *beInSeparateCompositionLayer* are 2 different strategies, 
+and tell how children of your element in composition layer will be rendered. 
+By default, BlElement is in *BlCompositingWithoutLayerMode*.
+BlElement  effect can also be applied in their own composition layer, with message *wantCompositionLayer*.
+
+With composition layer activated, your element will be rendered on it's own Canvas and Ae surface, 
+and the result will be added as a separated layer in your parent element canvas. 
+
 
 ![zIndex example](figures/zIndexExample.png)
 

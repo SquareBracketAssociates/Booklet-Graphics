@@ -27,9 +27,13 @@ ToElement << #ToNumberInputElement
 	package: 'myBecherBloc'
 ```
 
+[E] Our widget will then inherit the behavior to install a skin when instantiated, we can now define a skin
+
 ### Define a skin
 
-We define a skin 
+We define a skin
+[E] by inheriting from `ToRawSkin`, this class defines methods reacting to some events.
+In fact, skins in Toplo are EventHandlers we simply add to our elements, changing their visual properties according to incoming events
 
 ```
 ToRawSkin << #ToInputElementSkin
@@ -38,12 +42,13 @@ ToRawSkin << #ToInputElementSkin
 ```
 
 We will now define action that should be done when the skin is installed. 
+[E] These methods **need** to call themselves on `super` before declaring other behaviors (I might need to check this info with Alain)
 
 ```
-ToInputElementSkin >> installLookEvent: anEvent
+ToInputElementSkin >> installSkinEvent: anEvent
 	"when installing the skin, changes the properties of widget mentionned down here"
 
-	super installLookEvent: anEvent.
+	super installSkinEvent: anEvent.
 	anEvent elementDo: [ :e |
 		e border: (BlBorder
 				 paint: (e valueOfTokenNamed: #'color-border')
@@ -52,9 +57,8 @@ ToInputElementSkin >> installLookEvent: anEvent
 		e plus background: Color blue.
 		e minus background: Color red ]
 ```
-
-In the `ToNumberInputElement` we define the method 
-
+[E] Here we redefine the background of the element and its 'plus' and 'minus' sub-elements, but we also define a border to our element using tokens from our theme.
+We accessed our element through the event received, this can be done in both following ways
 
 Notice that two following forms are equivalent: 
 
@@ -66,6 +70,8 @@ target := anEvent currentTarget.
 target border: target valueOfTokenNamed: #'color-border-checkable’)
 ```
 
+[E] Now that we defined our skin, we only need to tell our element to install this skins during initialization
+In the `ToNumberInputElement` we define the method 
 
 ```
 ToNumberInputElement >> newRawSkin
@@ -74,7 +80,9 @@ ToNumberInputElement >> newRawSkin
 	^ ToInputElementSkin new
 ```
 
+[E] This `newRawSkin` method is the one called by default by a ToElement to get the skin to install, here we simply gave it our brand new skin
 
+[E] (I'm not sure to understand what has been updated in the initialize method below, I don't see the relevant information here)
 Update the following instance method.
 
 ```
@@ -93,10 +101,15 @@ ToNumberInputElement >> initialize
 
 ### Decorating a BlElement to get a ToElement
 
-```
-BlNumberInputElement << #ToNumberInputElement	traits: {TToElement}
+[E] We can also decorate a BlElement by applying the `TToElement` trait
 
 ```
+BlNumberInputElement << #ToNumberInputElement
+	traits: {TToElement}
+
+```
+
+[E] This way, some methods in the API of `ToElement` are not called and we need to define the following behaviors to install skins on this element
 
 ```
 ToNumberInputElement >> initialize
@@ -144,30 +157,57 @@ ToInputElementTheme class >> defaultTokenProperties
 
 
 ```
-ToNumberInputElement class >> openInputWithSkin	<script>	| space anInput |	space := BlSpace new.	space toTheme: ToInputElementTheme new.	anInput := self new position: 200 @ 200.	space root addChild: anInput.	space show.	^ anInput
+ToNumberInputElement class >> openInputWithSkin
+
+	<script>
+	| space anInput |
+	space := BlSpace new.
+	space toTheme: ToInputElementTheme new.
+	anInput := self new position: 200 @ 200.
+	space root addChild: anInput.
+	space show.
+	^ anInput
 ```
 
 
 ### Autonome theme
 
 ```
-ToTheme << #ToMooflooTheme	slots: {};	tag: 'Input';	package: 'myBecherBloc'
+ToTheme << #ToMooflooTheme
+	slots: {};
+	tag: 'Input';
+	package: 'myBecherBloc'
 ```
 
 ```
-ToMooflooThemenewSkinInstanceFor: anElement	^ anElement newMooflooSkin
+ToMooflooThemenewSkinInstanceFor: anElement
+
+	^ anElement newMooflooSkin
 ```
 
 ```
-ToNumberInputElement class >> openInputWithSkin	<script>	| space anInput |	space := BlSpace new.	space toTheme: ToMooflooTheme new.	anInput := self new position: 200 @ 200.	space root addChild: anInput.	space show.	^ anInput
+ToNumberInputElement class >> openInputWithSkin
+
+	<script>
+	| space anInput |
+	space := BlSpace new.
+	space toTheme: ToMooflooTheme new.
+	anInput := self new position: 200 @ 200.
+	space root addChild: anInput.
+	space show.
+	^ anInput
 ```
 
 ```
-BlElement >> newMooflooSkin	^ ToBasicMooflooSkin new
+BlElement >> newMooflooSkin
+
+	^ ToBasicMooflooSkin new
 ```
 
 ```
-ToNumberInputElement >> newMooflooSkin	^ ToInputElementSkin new
+ToNumberInputElement >> newMooflooSkin
+
+	^ ToInputElementSkin new
 ```
 
 

@@ -24,7 +24,7 @@ The first thing that we should do is to make `ToNumberInputElement` inherit from
 ToElement << #ToNumberInputElement
 	slots: { #plus . #minus . #inputValue . #value . #inputLabel };
 	tag: 'Input';
-	package: 'myBecherBloc'
+	package: 'Bloc-Book'
 ```
 
 ### Define a skin
@@ -33,11 +33,13 @@ We define a skin
 
 ```
 ToRawSkin << #ToInputElementSkin
-	package: 'myBecherBloc'```
-
+	package: 'Bloc-Book'
 ```
 
-We will now define action that should be done when the skin is installed. 
+We will now define the actions that should be done when the skin is installed. 
+Here for example we can change the border, background color and more.
+Note that we can access the theme token properties using the message `valueOfTokenNamed:` or decide that 
+can simply use values specific to this skin.
 
 ```
 ToInputElementSkin >> installLookEvent: anEvent
@@ -48,15 +50,16 @@ ToInputElementSkin >> installLookEvent: anEvent
 		e border: (BlBorder
 				 paint: (e valueOfTokenNamed: #'color-border')
 				 width: (e valueOfTokenNamed: #'line-width')).
-		e background: e backgroundPaint.
+		e background: Color red.
+		e geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 		e plus background: Color blue.
 		e minus background: Color red ]
 ```
 
-In the `ToNumberInputElement` we define the method 
 
-
-Notice that two following forms are equivalent: 
+##### Remark
+Notice that the two following forms are equivalent. 
+This is important if you want to maximize 
 
 ```
 anEvent elementDo: [ :e | 
@@ -66,14 +69,16 @@ target := anEvent currentTarget.
 target border: target valueOfTokenNamed: #'color-border-checkable’)
 ```
 
+### Declaring the skin
+
+The last step is to declare the skin to be used by the element. 
+To do so we define the method `newRawSkin` in the class `ToNumberInputElement`.
 
 ```
 ToNumberInputElement >> newRawSkin
-	"Allow to create an instance of the widget skin"
 
 	^ ToInputElementSkin new
 ```
-
 
 Update the following instance method.
 
@@ -81,23 +86,87 @@ Update the following instance method.
 ToNumberInputElement >> initialize
 
 	super initialize.
-	self size: self inputExtent.
-	self background: self backgroundPaint.
-	self layout: BlFrameLayout new.
+	self constraintsDo: [ :c |
+		c vertical fitContent.
+		c horizontal fitContent ].
+	self padding: (BlInsets all: 30).
+	self layout: BlLinearLayout horizontal.
 	self border: (BlBorder paint: Color pink).
-	self initializePlusButton.
+	self validateValueBlock: [ :v | v between: 1 and: 25 ].
+	self label: 'Input'.
 	self initializeMinusButton.
 	self initializeInputValue: 20.
-	self label: 'Input'.
+	self initializePlusButton
 ```
+
+We can now open 
+
+ToNumberInputElement class >> openInputWithSkin
+
+	<script>
+	| space anInput |
+	space := BlSpace new.
+	space toTheme: ToRawSkin new.
+	anInput := self new position: 200 @ 200.
+	space root addChild: anInput.
+	space show.
+	^ anInput
+```
+
+
+### Define a theme that extends an existing one
+
+Here we show that we can refine an existing theme. 
+
+```
+ToRawTheme << #ToNewTheme
+	package: 'Bloc-Book'
+```
+
+
+```
+ToNewTheme class >> defaultTokenProperties
+	"define here token properties of the widget theme"
+
+	^ super defaultTokenProperties ,
+	  { (ToTokenProperty
+		   name: #'background-color'
+		   value: Color lightGreen) }
+```
+
+Now we are ready to open the 
+```
+ToNumberInputElement class >> openInputWithSkin
+
+	<script>
+	| space anInput |
+	space := BlSpace new.
+	space toTheme: ToNewTheme new.
+	anInput := self new position: 200 @ 200.
+	space root addChild: anInput.
+	space show.
+	^ anInput
+```
+
+
 
 ### Decorating a BlElement to get a ToElement
 
-```
-BlNumberInputElement << #ToNumberInputElement	traits: {TToElement}
+In the previous section,ent we said that the class has to inherit from `ToElement`, 
+this is not entirely true you can also use the trait `TToElement` in the class
+either directly or in a subclass as in the following definition. 
 
 ```
+BlNumberInputElement << #ToNumberInputElement
+	traits: {TToElement};
+	package: 'Bloc-Book'
+```
 
+Since it does not make much sense to have both a non-skinnable widget and its skinnable
+version (except in a tutorial) we believe that inheriting from `ToElement` will be the way to 
+define skinnable widget. 
+
+When you use a trait you should also refine the initialize method to invoke the trait initialization. 
 ```
 ToNumberInputElement >> initialize
 	super initialize. 
@@ -105,7 +174,7 @@ ToNumberInputElement >> initialize
 ```
 
 
-??? we should check if the following is necessary
+SD: we should check if the following is necessary
 ```
 ToNumberInputElement >> onAddedToSceneGraph
 
@@ -118,57 +187,57 @@ ToNumberInputElement >> onAddedToSceneGraph
 
 
 
-
-
-
-
-### Define a theme that extends an existing one
-
-we also define a theme
-
-```
-ToRawTheme << #ToInputElementTheme
-	package: 'Mooflod'
-```
-
-
-```
-ToInputElementTheme class >> defaultTokenProperties
-	"define here token properties of the widget theme"
-
-	^ super defaultTokenProperties ,
-	  { (ToTokenProperty
-		   name: #'background-color'
-		   value: Color lightGreen) }
-```
-
-
-```
-ToNumberInputElement class >> openInputWithSkin	<script>	| space anInput |	space := BlSpace new.	space toTheme: ToInputElementTheme new.	anInput := self new position: 200 @ 200.	space root addChild: anInput.	space show.	^ anInput
-```
-
-
 ### Autonome theme
 
+We should now how we can define a full new theme.
+We will 
+- define a theme class
+- define a skin class acting a root for the skins
+- a specific skin for the widget
+
+#### Defining a new theme
+
 ```
-ToTheme << #ToMooflooTheme	slots: {};	tag: 'Input';	package: 'myBecherBloc'
+ToTheme << #ToNewTheme
+	tag: 'Input';
+	package: 'Bloc-Book'
+```
+
+
+
+```
+ToNewTheme >> newSkinInstanceFor: anElement
+
+	^ anElement newNewThemeSkin
 ```
 
 ```
-ToMooflooThemenewSkinInstanceFor: anElement	^ anElement newMooflooSkin
+ToNumberInputElement class >> openInputWithSkin
+
+	<script>
+	| space anInput |
+	space := BlSpace new.
+	space toTheme: ToNewTheme new.
+	anInput := self new position: 200 @ 200.
+	space root addChild: anInput.
+	space show.
+	^ anInput
 ```
 
 ```
-ToNumberInputElement class >> openInputWithSkin	<script>	| space anInput |	space := BlSpace new.	space toTheme: ToMooflooTheme new.	anInput := self new position: 200 @ 200.	space root addChild: anInput.	space show.	^ anInput
+BlElement >> newNewThemeSkin
+
+	^ ToBasicMooflooSkin new
 ```
 
 ```
-BlElement >> newMooflooSkin	^ ToBasicMooflooSkin new
+ToNumberInputElement >> newNewThemeSkin
+
+	^ ToInputElementSkin new
 ```
 
-```
-ToNumberInputElement >> newMooflooSkin	^ ToInputElementSkin new
-```
+
+
 
 
 ### Using a stylesheet

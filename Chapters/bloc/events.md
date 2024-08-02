@@ -266,4 +266,24 @@ BlShortcutWithAction new
 
 
 
+### Drag and Drop
+
+The drop event should be applied to the element that will receive the dragged content.
+`Elt1` uses the dragEnd to know when the drag has ended.
+`Elt2` uses the dropEvent to know when something try to be dropped on it.
+If you drop `elt1` on `elt2`, `elt2` opens an inspector on `elt1`.
+
+```
+| elt1 elt2 space |
+elt1 := BlElement new 
+	background: Color lightBlue;	position: 100 asPoint;	addEventHandler: BlPullHandler new disallowOutOfBounds;	id: #elt1;	yourself.
+	elt2 := BlElement new 
+	background: Color red;	size: 100 asPoint;	position: 200 asPoint;	id: #elt2;	yourself.
+	space := BlSpace new.space root addChildren: { elt1 . elt2 }. elt2 
+	addEventHandlerOn: BlDropEvent 
+	do: [ :evt | evt gestureSource inspect ].elt1 
+	addEventHandlerOn: BlDragEndEvent 
+	do: [ :evt | ]. space show.
+```
+
 

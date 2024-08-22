@@ -16,6 +16,7 @@
 
 <!inputFile|path=Chapters/toplo/widget_creation.md!>
 <!inputFile|path=Chapters/toplo/stylesheet.md!>
+<!inputFile|path=Chapters/toplo/skinningAWidget.md!>
 
 #Low - Level: Alexandrie and Harfuzz
 <!inputFile|path=Chapters/Alexandrie/alexandrie.md!>

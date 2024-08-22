@@ -171,3 +171,87 @@ BlElement new
 whose result is shown in Figure *@rect@*.
 
 ![Rectangle with numbers.](figures/rectangleWithNumbers.png width=60&label=rect)
+
+
+
+### BlText vs. BlTextElement
+
+You have 2 different levels to manage text in Bloc.
+- `BlText` and its subclass `BlRopedText` create a text model where you can specify its attributes and style.
+- `BlTextElement` and its subclasses will properly display the text inside a Bloc element.
+
+A small example. You can notice that `BlText` background is different from `BlTextElement` background. 
+
+```smalltalk
+| labelText label |
+labelText := 'hello from bloc' asRopedText
+             background: Color orange ;
+             fontSize: 75;
+             fontName: 'Source Code Pro';
+             italic;
+             underline;
+             underlineColor: Color red;
+             vertical.
+
+(labelText from: 1 to: 5) foreground: Color blue.
+(labelText from: 7 to: 11) foreground: Color white.
+(labelText from: 12 to: 15) foreground: Color red.
+
+label := (BlTextElement text: labelText) position: 50 @ 10; background: Color yellow.
+```
+
+you can define the style of your text through BlTextAttributesStyler
+
+````smalltalk
+text := 'Hi John' asRopedText.
+
+styler := BlTextAttributesStyler on: (text from: 3 to: 7).
+styler
+bold;
+italic;
+fontSize: 30;
+fontName: 'Roboto';
+monospace;
+foreground: Color green.
+styler style.
+```
+
+or using a fluent API
+
+````smalltalk
+text := 'Hi John' asRopedText.
+(text from: 3 to: 7) stylerDo: [ :aStyler | aStyler bold italic foreground: Color red ].
+````
+
+As you may have noticed, this gives you a very fine-grained control over the style of your text.
+You also need to re-specify attributes when your text changes.
+If you want all your text to use the same attribute, you can then use `BlAttributedTextElement`. 
+You can then change your text, `BlAttributedTextElement` will reuse its attributes.
+
+
+```smalltalk
+text := 'Hi John' asRopedText.
+
+element := BlAttributedTextElement new.
+attributes := element attributesBuilder
+              foreground: Color green;
+              monospace;
+              bold;
+              italic;
+              fontSize: 30;
+              fontName: 'Roboto';
+              monospace.
+
+label := (element text: text)
+         position: 50 @ 10;
+         background: Color yellow;
+         margin: (BlInsets all: 2);
+         padding: (BlInsets all: 2);
+         outskirts: BlOutskirts centered;
+         border: (BlBorder paint: Color red width: 2).
+
+element text: 'hello world' asRopedText.
+label.
+```
+
+

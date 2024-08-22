@@ -916,3 +916,52 @@ aContainer openInNewSpace.
 ```
 
 ![Frame layout](figures/proportionalLayout.png)
+
+
+
+
+### Proportional layout
+
+This section should reevaluated - it is a copy and paste from an issue
+[https://github.com/pharo-graphics/Bloc/issues/562](https://github.com/pharo-graphics/Bloc/issues/562)
+
+```
+gap:= 20.
+
+BlElement new
+	constraintsDo: [ :constraints |
+		constraints horizontal exact: 400.
+		constraints vertical exact: 300.
+		constraints padding: (BlInsets all: gap) ];
+	background: Color red;
+	id: #A;
+	layout: BlProportionalLayout new;
+	addChildren: {
+		(BlElement new
+			constraintsDo: [ :constraints |
+				constraints proportional vertical bottom: 0.5.
+				constraints margin: (BlInsets all: gap) ];
+			id: #B;
+			background: Color green;
+			yourself).
+		(BlElement new
+			constraintsDo: [ :constraints |
+				constraints proportional horizontal right: 0.5.
+				constraints proportional vertical top: 0.5.
+				constraints margin: (BlInsets all: gap) ];
+			id: #C;
+			background: Color blue;
+			yourself).
+		(BlElement new
+			constraintsDo: [ :constraints |
+				constraints proportional horizontal left: 0.5.
+				constraints proportional vertical top: 0.5.
+				constraints margin: (BlInsets all: gap) ];
+			id: #D;
+			background: Color yellow;
+			yourself) };
+	yourself
+```
+
+![Proportional layout from issue 562](figures/proportionalFromIssue562.png)
+

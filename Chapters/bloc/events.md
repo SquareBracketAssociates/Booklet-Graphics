@@ -276,14 +276,58 @@ If you drop `elt1` on `elt2`, `elt2` opens an inspector on `elt1`.
 ```
 | elt1 elt2 space |
 elt1 := BlElement new 
-	background: Color lightBlue;	position: 100 asPoint;	addEventHandler: BlPullHandler new disallowOutOfBounds;	id: #elt1;	yourself.
-	elt2 := BlElement new 
-	background: Color red;	size: 100 asPoint;	position: 200 asPoint;	id: #elt2;	yourself.
-	space := BlSpace new.space root addChildren: { elt1 . elt2 }. elt2 
+	background: Color lightBlue;
+	position: 100 asPoint;
+	addEventHandler: BlPullHandler new disallowOutOfBounds;
+	id: #elt1;
+	yourself.
+	
+elt2 := BlElement new 
+	background: Color red;
+	size: 100 asPoint;
+	position: 200 asPoint;
+	id: #elt2;
+	yourself.
+	
+space := BlSpace new.
+space root addChildren: { elt1 . elt2 }.
+ 
+elt2 
 	addEventHandlerOn: BlDropEvent 
-	do: [ :evt | evt gestureSource inspect ].elt1 
+	do: [ :evt | evt gestureSource inspect ].
+elt1 
 	addEventHandlerOn: BlDragEndEvent 
-	do: [ :evt | ]. space show.
+	do: [ :evt | ].
+ 
+space show.
 ```
 
+
+### Manually drag and drop
+
+```
+elt := BlElement new background: Color red; size: 200 asPoint.
+offset := 0.
+
+elt addEventHandlerOn: BlDragStartEvent do: [ :e | e consume.
+    offset := e position - elt position].
+elt addEventHandlerOn: BlDragEvent do: [ :e | elt position: e position - offset ].
+
+elt openInSpace.
+```
+
+
+
+### BlPullHandler
+
+
+```
+parent := BlElement new background: Color lightGreen; size: 600 asPoint.
+elt := BlElement new background: Color red; size: 100 asPoint.
+parent addChild: elt.
+
+elt addEventHandler: BlPullHandler new disallowOutOfBounds.
+
+parent openInSpace.
+```
 

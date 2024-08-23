@@ -1,4 +1,4 @@
-name: Book generation
+name: Book with Pillar
 
 on:
   push:
@@ -13,6 +13,6 @@ on:
 
 jobs:
   build:
-    uses: SquareBracketAssociates/BookBuilderDashboard/.github/workflows/main.yml@sbabook-upgrade
+    uses: SquareBracketAssociates/BookBuilderDashboard/.github/workflows/main.yml@newVersionOfPillar
     with:
-      bookname: Pharo-Graphics
+      bookname: bkTemplate

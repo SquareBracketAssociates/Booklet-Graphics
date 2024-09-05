@@ -286,6 +286,13 @@ Matrix interpolation is one possibility to manage this.
 If you want to have an exact rotation animation, it's better to define your own animation to manage only rotation, 
 like I did previously in this chapter.
 
+Last: One point about the relative/absolute naming
+
+- *BlTransformAnimation new relative* is a **cumulative** transformation, meaning you can apply it several times and the effects will add up. So it's relative to the current transformation (it transforms by this *delta*)
+- *BlTransformAnimation new absolute* converges to the final transformation you asked for. If you apply it again, it will no nothing because the element is already there (it transforms to *that* destination)
+
+It's confusing because relative suggests it could be in coordinates relative to the element's origin, or to some coordinate space other than the world/screen.
+
 ### Color transition
 
 Transition from one color to another

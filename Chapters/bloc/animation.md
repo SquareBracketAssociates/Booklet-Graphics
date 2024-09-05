@@ -220,6 +220,72 @@ BlTransformAnimation new
 	easing: BlEasing bounceOut.
 ```
 
+#### Transform animation rotation pitfall
+
+A transform rotation has some peculiarities its worth highlighting.
+
+Let's take the initial step-up to show how it works:
+
+```smalltalk
+| elt frame container anim |
+elt := BlElement new    background: (Color red alpha: 0.5);    position: 100 asPoint;    size: 100 asPoint.
+frame := BlElement new background: Color yellow; position: 100 asPoint; size: 100 asPoint.
+container := BlElement new background: Color lightGreen; size: 500 asPoint; addChildren: { frame. elt }.
+```
+
+Transformation are affine transformation. For more detail, you can search on the internet,
+there are countless references to it. To simplify it, I'll say we apply a
+transformation matrix (*BlMatrix2D*) to all point of our figure path, each point
+represented as BlVector. 
+
+You have 3 type of tranformation available in Bloc:
+- *BlElementLocalTransformation*: This transfomation combine an affine transformation (*BlAffineTransformation* subclasses), with a point of origin (*BlAffineTransformationOrigin* subclasses). By default, origin is the center of your element, *BlAffineTransformationCenterOrigin*.
+- *BlElementAbsoluteTransformation*: This transformation apply a transformation matrix to your shape, without point of origin. Its  result is similar to *BlElementLocalTransformation*, with origin set to *BlAffineTransformationTopLeftOrigin*
+- *BlElementCompositeTransformation* which are combination of *BlElementLocalTransformation* and/or *BlElementAbsoluteTransformation*
+
+When you're doing a transformation using transformDo:, you'll, by default, use
+*BlElementLocalTransformation*. The origin will be set to *BlAffineTransformationCenterOrigin*.
+
+For an element rotated to 45 degree, it'll look like:
+
+```smalltalk
+elt transformation: (BlElementLocalTransformation newWith: ((BlRotationTransformation new angle: 45) origin: (BlAffineTransformationCenterOrigin defaultInstance ) )).
+```
+
+![transform rotation real. % anchor=inputFinal&width=50](figures/transformRotationExpected.png )
+
+However, *BlTransformAnimation* will use *BlElementAbsoluteTransformation* to
+manage the transformation matrix. This transformation works by updating its
+trasformation matrix, from IdentityMatrix, to target matrix, through
+interpolation computed at each animation step (fromMatrix interpolate: aNumber to: toMatrix)
+
+This transformation doesn't use an origin point. Instead, It'll apply a translation,
+so that your shape still look like it's in the element bound. This translation
+is added to your transformation definition (boundingRectangle:)
+
+So, for the sample 90 degree rotation used as an example, the tranformation will
+look like below in mid-way (45 degrees rotation, and translation of 50px on 100px)
+
+```smalltalk
+elt transformation: (BlElementAbsoluteTransformation matrix: (BlMatrix2D new x: 50 ;y: 0; shx: 45 degreesToRadians sin * -1 ; shy: 45 degreesToRadians sin ; sx: 45 degreesToRadians cos; sy: 45 degreesToRadians cos )   ).
+```
+
+![transform rotation real. % anchor=inputFinal&width=50](figures/transformRotationReal.png )
+
+You can notice that for a similar rotation, the position of orange square is not the same.
+
+Now, why do we need to use a *BlElementAbsoluteTransformation* for *BlTransformAnimation* ?
+My assumption is that this animation must managed all 3 basic transformation: rotation, translation and scale.
+Each tranformation will happen gradually during animation, with new position computed at each step.
+
+You can specify a default generic value of 0 for rotation and translation, so 
+if you don't specifiy it, it won't affect your element (At each step, 0*StepValue = 0).
+However, for scaling, if you don't specify it, you need to keep it's value at 1.
+Matrix interpolation is one possibility to manage this.
+
+If you want to have an exact rotation animation, it's better to define your own animation to manage only rotation, 
+like I did previously in this chapter.
+
 ### Color transition
 
 Transition from one color to another

@@ -12,9 +12,7 @@ BlElement new
   openInNewSpace 
 ```
 
-`addEventHandlerOn:do:` returns the new handler so that we can store to remove it in case. 
-
-#addEventHandlerOn: do: returns the new event handler.  add a #yourself send after to return a BlElement.
+`addEventHandlerOn:do:` returns the new handler so that we can store to remove it in case. Add a #yourself send after to return a BlElement.
 
 `when:do:` is now deprecated and rewritten as `addEventHandlerOn:do:`
 SD: we should update the following

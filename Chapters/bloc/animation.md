@@ -19,8 +19,6 @@ number within [0..1] where:
 0....................progress...............................1 
 ```
 
-The value is normalized from 0 to 1, reaching 1 at the end of animation duration.
-
 When a step or the full loop is complete, animation
 will raise `BlAnimationStepEvent` or `BlAnimationLoopDoneEvent`.
 
@@ -84,9 +82,38 @@ Once stopped, an animation is considered as **complete**.
 
 You can call **stop** to stop a running animation. 
 
-You cannot add multiple time an animation to an element. If you need to reapply 
+You cannot add multiple time an animation to an element. If you need to reapply
 one, you can restart it. To do so, you'll have to do this in a specific order,
-as: `animation reset; start; setNew; enqueue`
+as: `animation reset; start; setNew; enqueue`. Another solution is to add a *copy*
+of your animation to your element. You can then add the same animation multiple
+time. This is demonstrated below. In this example, we copy multiple time the 
+same animation, and apply it to different targets
+
+```smalltalk
+animation := (BlTransformAnimation translate: 300 @ 0) duration: 3 seconds.
+
+elt1 := BlElement new background: Color random.
+elt2 := BlElement new background: Color random; position: 0 @ 100.
+elt3 := BlElement new background: Color random; position: 0 @ 200.
+
+container := BlElement new size: 600 asPoint.
+
+container addChildren: { elt1. elt2. elt3 }.
+
+space := BlSpace new.
+space root addChild: container.
+space show.
+
+parallelTranslate := BlParallelAnimation withAll: ( container children collect: [ :e | 
+|anim|
+anim := animation copy.
+anim target: e.
+anim ] ).
+
+blank := BlElement new.
+space root addChild: blank.
+blank addAnimation: parallelTranslate .
+```
 
 ### Creating your own animation
 

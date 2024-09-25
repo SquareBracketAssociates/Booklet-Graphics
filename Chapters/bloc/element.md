@@ -17,7 +17,7 @@ behavior of your UI elements.
 
 #### Navigating Bloc's spatial landscape
 
-**Bloc** introduces two key concepts for managing the visual environment:
+**Bloc** introduces two key concepts for managing the visual environment: 
 `BlUniverse` and `BlSpace`. Imagine `BlUniverse` as a container housing a
 collection of individual `BlSpace` instances. Each `BlSpace` represents a
 distinct operating system window where your Pharo application unfolds. If you
@@ -36,39 +36,30 @@ BlElement new
 
 ![Creating a basic element.](figures/basicElement.png)
 
-1. **Start with a blank canvas:** Begin by creating a new `BlElement`. This serves
-as the foundation for your user interface element, initially appearing
+1. **Start with a blank canvas:** Begin by creating a new `BlElement`. 
+This serves as the foundation for your user interface element, initially appearing
 invisible.
-1. **Define its shape:** In Bloc, the element's visual representation is
-determined by its geometry. In this example, we'll use a simple rectangle, but
-more complex shapes are also possible (explored in further detail later).
-1. **Set its dimensions and appearance:** Specify the element's size and color
-to customize its visual characteristics.
-1. **Bring it to life:** Finally, open the element in a new space, making it
-visible on the screen.
+2. **Define its shape:** In Bloc, the element's visual representation is
+determined by its geometry. 
+In this example, we'll use a simple rectangle, but more complex shapes are also possible (explored in further detail later).
+3. **Set its dimensions and appearance:** 
+Specify the element's size and color to customize its visual characteristics.
+4. **Bring it to life:** Finally, open the element in a new space, making it visible on the screen.
 
 
 ### Geometry of BlElement
 
-In Bloc, the visual form and boundaries of your UI elements are determined by
-their geometries. Each element can only possess a single geometry, essentially
-acting as a blueprint for its shape and size. You can visualize an element as a
-specific geometry encapsulated within an invisible rectangular container,
-representing its overall *bounds*.
+In Bloc, the visual form and boundaries of your UI elements are determined by their geometry. 
+Each element can only possess a single geometry, essentially acting as a blueprint for its shape and size.
+You can visualize an element as a specific geometry encapsulated within an invisible rectangular container, representing its overall *bounds*.
 
-Bloc provides a diverse range of pre-defined geometry shapes accessible through
-`BlElementGeometry allSubclasses`. This comprehensive library empowers you to
-construct elements of varying complexities, from basic rectangles and circles to
-more intricate forms.
+Bloc provides a diverse range of pre-defined geometry shapes accessible through `BlElementGeometry allSubclasses`. 
+This comprehensive library empowers you to construct elements of varying complexities, from basic rectangles and circles to more intricate forms.
 
-Bloc excels in facilitating the creation of custom components with advanced
-layout possibilities. Imagine building complex layouts by strategically
-arranging various elements, each defined by its unique geometry, to form a
-cohesive whole.
+Bloc excels in facilitating the creation of custom components with advanced layout possibilities. 
+Imagine building complex layouts by strategically arranging various elements, each defined by its unique geometry, to form a cohesive whole.
 
-While the Alexandrie canvas provides a foundational set of building drawing
-primitives, Bloc offers a richer library of pre-defined shapes and the
-flexibility to construct even more intricate geometries.
+While the Alexandrie canvas provides a foundational set of building drawing primitives, Bloc offers a richer library of pre-defined shapes and the flexibility to construct even more intricate geometries.
 
 ![Base geometries.](figures/allGeometry.png width=80)
 

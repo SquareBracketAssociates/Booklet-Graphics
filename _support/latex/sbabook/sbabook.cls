@@ -51,6 +51,7 @@
 \settypeoutlayoutunit{mm}
 
 \raggedbottom
+\justifying
 
 %%%
 %%% Fonts & paragraph typography

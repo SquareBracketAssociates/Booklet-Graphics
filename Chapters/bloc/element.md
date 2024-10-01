@@ -85,7 +85,7 @@ redRectangle position: 75@25.
 
 Notice that if you did not close the original space opened for the `blueRectangle` element, the display automatically updates when the `redRectangle` position changes.
 
-## Spaces: where elements are displayed
+### Spaces: where elements are displayed
 
 Spaces represent windows in which elements are displayed.
 They are explicitely controlled by instantiating `BlSpace` objects.
@@ -102,11 +102,11 @@ An element can only be the child of a single other element.
 If an element is already added as a child in a space, trying to add that element to a new space will raise an exception. 
 One solution is to create new instances of that element to add it to another space.
 
-## Exercise
+### Exercise 1: color wall
 
-Create a $10\times10$ grid of squares, each with a random color, and display it in a space.
-
-![Creating a grid of elements.](figures/elementsGrid.png width=80)
+Create a $10\times10$ grid of squares, each with a random color, and display it in a space (Figure *@fig:jointype@*).
+ 
+![Creating a wall of colors.](figures/colorWall.png label=fig:colorWall width=80)
 
 
 ### Geometry of BlElement
@@ -516,6 +516,15 @@ aeDrawOn: aeCanvas
 						setBorderWidth: 6 ] ].
 		aeCanvas drawFigure ]
 ```
+
+### Exercise: lights wall
+Transform your color grid from Figure*@fig:colorWall@* to a wall of lights such as in Figure *@fig:lightsWall@*:
+- compose elements to add circles to the squares
+- build and add glowing effects to the circles
+
+Do not hesitate to explore the various effects and their configuration!
+
+![Creating a wall of lights.](figures/lightsWall.png label=fig:lightsWall width=80)
 
 ### Conclusion
 

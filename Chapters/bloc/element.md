@@ -186,6 +186,9 @@ customize all the details of your border.
 
 ### Element bounds and outskirts
 
+Bloc allow the user to select where they would like to draw the *border* of a region
+around a shape; either along the inside, outside or centre of the shape.
+
 Let's look at the different possible bounds of your element.
 
 **Layout bounds** can be defined explicitly using `size:` method or dynamically
@@ -516,6 +519,18 @@ aeDrawOn: aeCanvas
 						setBorderWidth: 6 ] ].
 		aeCanvas drawFigure ]
 ```
+
+
+Bloc allow the user to select where they would like to draw the *border* of a region
+around a shape; either along the inside, outside or centre of the shape. This
+is controled throught the outskirts parameter.
+`PathFactory:` is used by default to paint the border (stroke) and the inside (fill)
+of your element. If you want to manage different outskirts, you can refine the
+definiton of the border path with `borderPathFactory:` canvas method by overwriting
+`aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth` 
+and `aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth`
+to specify the border path of your element.
+
 
 ### Exercise: lights wall
 Transform your color grid from Figure*@fig:colorWall@* to a wall of lights such as in Figure *@fig:lightsWall@*:

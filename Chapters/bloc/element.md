@@ -35,7 +35,7 @@ blueRectangle := BlElement new
 blueRectangle openInNewSpace
 ```
 
-![Creating a basic element.](figures/basicElement.png)
+![Creating a basic element.](figures/basicElement.png width=40)
 
 1. **Start with a blank canvas:** Begin by creating a new `BlElement`. 
 This serves as the foundation for your user interface element, initially appearing
@@ -50,7 +50,7 @@ Specify the element's size and color to customize its visual characteristics.
 
 In our example, we can observe the state of your element by inspecting the `blueRectangle` variable. We can observe a graphical overview of the element, as well as its state:
 
-![Creating a basic element.](figures/basicElementInspection.png)
+![Creating a basic element.](figures/basicElementInspection.png width=80)
 
 Elements are organized in trees. 
 To compose tree of elements, we select a root element and we add children.
@@ -71,7 +71,7 @@ In this example, we will use a red rectangle, but smaller than the blue one.
 The `addChild:` api adds leaf elements to a root.
 4. **Bring it to life:** If the `blueRectangle` is still open, it automatically updates with the `redRectangle`. Else, re-execute all the code to open the root in a new space, making it visible on the screen.
 
-![Composing elements.](figures/composedElements.png)
+![Composing elements.](figures/composedElements.png width=40)
 
 The red element is placed on the top left corner of its parent, the blue element.
 By default, the position of `BlElement` instances is `0@0`.
@@ -81,7 +81,7 @@ The position of elements is configured by using the `position:` api, such as in 
 redRectangle position: 75@25. 
 ```
 
-![Changing elements positions.](figures/basicElementPosition.png)
+![Changing elements positions.](figures/basicElementPosition.png width=40)
 
 Notice that if you did not close the original space opened for the `blueRectangle` element, the display automatically updates when the `redRectangle` position changes.
 
@@ -106,7 +106,7 @@ One solution is to create new instances of that element to add it to another spa
 
 Create a $10\times10$ grid of squares, each with a random color, and display it in a space.
 
-![Creating a grid of elements.](figures/elementsGrid.png)
+![Creating a grid of elements.](figures/elementsGrid.png width=80)
 
 
 ### Geometry of BlElement

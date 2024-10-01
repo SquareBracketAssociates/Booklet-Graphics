@@ -27,11 +27,12 @@ the `BlUniverse`, providing a clear overview of your active spaces.
 #### Ready to Build: Creating Your First Bloc Component
 
 ```smalltalk
-BlElement new
+blueRectangle := BlElement new
 	geometry: BlRectangleGeometry  new;
 	size: 200 @ 100;
 	background: Color blue;
-	openInNewSpace
+	yourself.
+blueRectangle openInNewSpace
 ```
 
 ![Creating a basic element.](figures/basicElement.png)
@@ -45,6 +46,67 @@ In this example, we'll use a simple rectangle, but more complex shapes are also 
 3. **Set its dimensions and appearance:** 
 Specify the element's size and color to customize its visual characteristics.
 4. **Bring it to life:** Finally, open the element in a new space, making it visible on the screen.
+
+
+In our example, we can observe the state of your element by inspecting the `blueRectangle` variable. We can observe a graphical overview of the element, as well as its state:
+
+![Creating a basic element.](figures/basicElementInspection.png)
+
+Elements are organized in trees. 
+To compose tree of elements, we select a root element and we add children.
+
+```smalltalk
+redRectangle := BlElement new
+	geometry: BlRectangleGeometry  new;
+	size: 50 @ 50;
+	background: Color red; 
+	yourself.
+blueRectangle addChild: redRectangle
+```
+
+1. **Start with a root element of your choice:** in our example, we reuse the `blueRectangle` element.
+2. **Define the new element:** This is done like any other element, such as the `blueRectangle` element.
+In this example, we will use a red rectangle, but smaller than the blue one.
+3. **Add the new element as a child of the root element:** 
+The `addChild:` api adds leaf elements to a root.
+4. **Bring it to life:** If the `blueRectangle` is still open, it automatically updates with the `redRectangle`. Else, re-execute all the code to open the root in a new space, making it visible on the screen.
+
+![Composing elements.](figures/composedElements.png)
+
+The red element is placed on the top left corner of its parent, the blue element.
+By default, the position of `BlElement` instances is `0@0`.
+The position of elements is configured by using the `position:` api, such as in the following:
+
+```Smalltalk
+redRectangle position: 75@25. 
+```
+
+![Changing elements positions.](figures/basicElementPosition.png)
+
+Notice that if you did not close the original space opened for the `blueRectangle` element, the display automatically updates when the `redRectangle` position changes.
+
+## Spaces: where elements are displayed
+
+Spaces represent windows in which elements are displayed.
+They are explicitely controlled by instantiating `BlSpace` objects.
+A space has a root element, to which other elements are attached using the `addChild:` api.
+In the following example, we create a new space in which we add our two rectangles:
+
+```Smalltalk
+space := BlSpace new.
+space root addChild: blueRectangle.
+space root addChild: redRectangle.
+space show
+```
+An element can only be the child of a single other element.
+If an element is already added as a child in a space, trying to add that element to a new space will raise an exception. 
+One solution is to create new instances of that element to add it to another space.
+
+## Exercise
+
+Create a $10\times10$ grid of squares, each with a random color, and display it in a space.
+
+![Creating a grid of elements.](figures/elementsGrid.png)
 
 
 ### Geometry of BlElement
@@ -123,6 +185,9 @@ The first one is very helpful for solid line definition. The builder lets use
 customize all the details of your border.
 
 ### Element bounds and outskirts
+
+Bloc allow the user to select where they would like to draw the *border* of a region
+around a shape; either along the inside, outside or centre of the shape.
 
 Let's look at the different possible bounds of your element.
 
@@ -454,6 +519,17 @@ aeDrawOn: aeCanvas
 						setBorderWidth: 6 ] ].
 		aeCanvas drawFigure ]
 ```
+
+Bloc allow the user to select where they would like to draw the *border* of a region
+around a shape; either along the inside, outside or centre of the shape. This
+is controled throught the outskirts parameter.
+`PathFactory:` is used by default to paint the border (stroke) and the inside (fill)
+of your element. If you want to manage different outskirts, you can refine the
+definiton of the border path with `borderPathFactory:` canvas method by overwriting
+`aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth` 
+and `aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth`
+to specify the border path of your element.
+
 
 ### Conclusion
 

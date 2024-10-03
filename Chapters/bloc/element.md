@@ -411,11 +411,22 @@ Painting is done on an Alexandrie canvas, then rendered on the host
 by the method `BARenderer (BlHostRenderer) >> render: aHostSpace` which displays it on a `AeCairoImageSurface`.
 
 Drawing is done through method 'xxx', which receives an Alexandrie
-(vector) canvas as an argument.
+(vector) canvas (`AeCanvas`) as an argument.
 
 1. `aeDrawChildrenOn:`
 2. `aeDrawOn:`
 3. `aeDrawGeometryOn:`
+
+To draw a figure, prepare the canvas using set* methods in the API protocol,
+using this order:
+
+1. set up path
+2. set up background
+3. set up border and outskirts
+4. send a variant of drawFigure*
+drawFigureAndPrepareToClip: true
+ou
+drawFigure. which set clip to false.
 
 Drawing example -  draw hour tick around a circle 
 ```

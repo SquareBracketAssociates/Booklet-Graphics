@@ -23,6 +23,8 @@ together in the layout.
 
 Elements can be added in the element tree of an element with the `addChild:` method. You can add multiple elements at once 
 with `addChildren:`. You can of course remove sub-element with `removeChild:` and `removeChildren:` methods.
+Children cannot be rendered outside of the geometry of their parent, unless you set `clipChildren: false` for a parent element.
+
 
 Browse `BlElement` to find all the available methods
 to manage the addition and removal of the elements composing your element.
@@ -58,7 +60,6 @@ subclasses.
 
 To ease this kind of script one can use `whenLayoutedDoOnce:` which arms a one
 shot event handler that reacts to the `BlElementLayoutComputedEvent` event.
-
 
 ### element order and overlap
 Your element will be displayed in the order you added them to your parent. You
@@ -106,7 +107,6 @@ BlElement  effect can also be applied in their own composition layer, with messa
 
 With composition layer activated, your element will be rendered on it's own Canvas and Ae surface, 
 and the result will be added as a separated layer in your parent element canvas. 
-
 
 ![zIndex example](figures/zIndexExample.png)
 

@@ -237,8 +237,17 @@ BlEventHandler
 	do: [ :anEvent | self inform: 'Click!' ]
 ```
 
+how do I remove all eventHandlers from a Blelement?
 
+```smalltalk
+el removeEventHandlersSuchThat: [:e|true] 
+```
 
+or
+
+```smalltalk
+el eventDispatcher removeEventHandlers
+```
 
 ### Keymap at system platform level
 

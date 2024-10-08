@@ -104,7 +104,8 @@
 % footnotes at bottom of page instead of below text (which is ragged bottom)
 % also moves footnotes below bottom-of-page floats
 \RequirePackage[bottom]{footmisc}
-%\justifying
+
+\justifying
 
 %%%
 %%% Title page

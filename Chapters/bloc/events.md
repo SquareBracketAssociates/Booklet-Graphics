@@ -29,6 +29,7 @@ deco addEventHandler: (BlEventHandler
 
 We should check `example_mouseEvent_descending_bubbling`
 
+![event propagation](figures/EventPropagation.png)
 
 ![Windows nested in each others in Toplo.](figures/4windows.png width=80)
 

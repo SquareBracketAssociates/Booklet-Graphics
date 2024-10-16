@@ -455,13 +455,16 @@ Bloc favors `BlElement` composition to create your graphical interface.
 Most of the time, you will not have to create a custom painting of your element widget. 
 You can already do a lot with existing geometry.
 
-Ultimately, you can define drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
-for its elements. 
+Ultimately, you can define drawing methods on a canvas, but once drawn, a canvas cannot 
+be easily inspected for its elements. 
 However, Bloc element composition creates a tree of elements, that can be inspected, and shaped dynamically.
 
 Creating and drawing your element
 - subclass `BlElement`
-- custom drawing is done with `aeFullDrawOn:` method. Note that 'ae' stands for the Alexandrie canvas.
+- custom drawing is done with `aeFullDrawOn:` method. Note that 'ae' stands for the Alexandrie canvas. 
+
+This Canvas is been specifically designed for drawing Bloc element. It's not as complete
+as Alexandrie Cairo Canvas, which is the closest to the underlying Cairo libray
 
 You can see the `aeFullDrawOn:`
 ```
@@ -535,6 +538,50 @@ aeDrawOn: aeCanvas
 		aeCanvas drawFigure ]
 ```
 
+Let's do it one by one.
+
+1. set up path
+
+```smalltalk
+	canvas pathFactory: [ :cairoContext |
+		cairoContext
+			moveTo: 50 @ 50;
+			lineTo: 150 @ 50;
+			closePath ].
+```
+
+You'll find the usual path verb to draw line, bezier curve, arc, and absolute
+or relative move. Take a look at **AeCaireContext** class in the *API - Path* 
+protocol for all possibilities.
+
+ 
+2. set up background
+
+![canvas background example.](figures/aecanvas_background.png width=25&label=padding1)
+
+- Solid background: `canvas setBackgroundWith: [ canvas setSourceSolidColor: Color  red]`
+- Form background: `canvas setBackgroundWithForm: form`
+- linear color: `canvas setBackgroundWith: [ canvas setSourceLinearPatternStops: {	(0 -> Color red). (1 -> Color black) } 	start: 0 @ 0end: 500 @ 500 ] `
+- radial color: `canvas setBackgroundWith: [ canvas setSourceRadialPatternStops:  {
+(0 -> Color red). (1 -> Color black) }
+innerCenter: 50 @ 50 innerRadius: 500
+outerCenter: 480 @ 480 outerRadius:  30 ]`
+
+
+3. set up border and outskirts
+
+You need to specify the position of the border, or of there are no border:
+
+- `canvas setOutskirtsCentered .`
+- `canvas setOutskirtsInside .`
+- `canvas setOutskirtsOutside .`
+- `canvas setBorderOff`
+
+You can of course set the line cap
+![canvas background example.](figures/aecanvas_linecap.png width=25&label=padding1)
+
+and the line join
+![canvas background example.](figures/aecanvas_linejoin.png  width=25&label=padding1)
 
 Bloc allow the user to select where they would like to draw the *border* of a region
 around a shape; either along the inside, outside or centre of the shape. This
@@ -546,7 +593,212 @@ definiton of the border path with `borderPathFactory:` canvas method by overwrit
 and `aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth`
 to specify the border path of your element.
 
+1. send a variant of drawFigure*
 
+You can manage to draw your figure using a mask to reach interesting effect like
+![canvas background example.](figures/aecanvas_mask1.png  width=25&label=padding1)
+
+```smalltalk
+| canvas form |
+form := PolymorphSystemSettings pharoLogoForm.
+
+canvas := AeCanvas extent: form extent.
+
+canvas setBorderBlock: [
+	canvas
+		setSourceColor: Color yellow;
+		setBorderWidth: 5.0 ].
+canvas setOutskirtsCentered.
+
+canvas maskGroupWith: [
+	canvas pathFactory: [ :cairoContext |
+		cairoContext rectangleTo: form extent ].
+	canvas setBackgroundWithForm: form alpha: 0.5.
+	canvas drawFigure ].
+
+canvas pathFactory: [ :cairoContext | cairoContext rectangleTo: form extent ].
+canvas setBackgroundWith: [ canvas setSourceColor: (Color purple alpha: 0.5) ].
+canvas drawFigure.
+
+^ canvas asForm
+```
+or
+![canvas background example.](figures/aecanvas_mask2.png  width=25&label=padding1)
+
+```smalltalk
+| canvas |
+canvas := AeCanvas extent: 150 @ 150.
+
+canvas maskGroupWith: [
+	canvas pathTranslate: 10 @ 20.
+	canvas pathFactory: [ :cairoContext |
+		cairoContext
+			moveTo: 10 @ 10;
+			lineTo: 100 @ 10;
+			lineTo: 100 @ 100;
+			lineTo: 10 @ 100;
+			closePath ].
+	canvas setBorderBlock: [
+		canvas
+			setSourceColor: (Color orange);
+			setBorderWidth: 5.0 ].
+	canvas setOutskirtsCentered.
+	canvas setBackgroundWith: [
+		canvas setSourceColor: (Color orange alpha: 0.5) ].
+	canvas drawFigure ].
+
+canvas pathFactory: [ :cairoContext |
+	cairoContext
+		moveTo: 10 @ 10;
+		lineTo: 100 @ 10;
+		lineTo: 100 @ 100;
+		lineTo: 10 @ 100;
+		closePath ].
+canvas setBorderBlock: [
+	canvas
+		setSourceColor: Color yellow;
+		setBorderWidth: 5.0 ].
+canvas setOutskirtsCentered.
+canvas setBackgroundWith: [
+	canvas setSourceColor: (Color red alpha: 0.5) ].
+canvas drawFigure.
+
+^ canvas asForm
+```
+
+You can also manage text directly in the AeCanvas, like this (You'll find more
+detailled explanation on harfbuzz in the text chapter in the Alexandrie part)
+
+![canvas background example.](figures/aecanvas_font.png  width=25&label=padding1)
+
+```smalltalk
+| aManager aFace aeCanvas cairoScaledFont fontHeight string  |
+"font definition"
+AeFontManager resetGlobalInstance.
+aManager := AeFontManager globalInstance.
+aManager
+	scanDirectory: AeFilesystemResources fontsDirectory;
+	scanEmbeddedFonts.
+
+aFace := aManager
+				detectFamilyName: 'Cascadia Code'
+				slant: AeFontSlant normal
+				weight: AeFontWeight normal
+				stretch: AeFontStretch normal
+				ifNone: [
+				self inform: 'missing font' ].
+
+string := 'a := A->B->>C <= c|=>d~~>e.'.
+fontHeight := 22.
+
+aeCanvas := AeCanvas extent: 1000 @ (fontHeight * 4).
+aeCanvas clear: Color white.
+
+cairoScaledFont := aeCanvas scaledFontForFace: aFace size: fontHeight.
+
+"Margin"
+aeCanvas pathTranslate: fontHeight / 2 @ 0.
+
+"Draw text withOUT Harfbuzz:"
+aeCanvas pathTranslate: 0 @ (fontHeight * 1.1).
+aeCanvas setSourceColor: Color red muchDarker.
+aeCanvas
+	drawGlyphs: (cairoScaledFont glyphArrayForString: string)
+	font: cairoScaledFont.
+
+"Draw text with Harfbuzz:"
+aeCanvas pathTranslate: 0 @ (fontHeight * 1.1).
+aeCanvas setSourceColor: Color green muchDarker.
+aeCanvas
+	drawGlyphs: (AeHbBuffer new
+				direction: AeHbDirection leftToRight;
+				script: AeHbScript latin;
+				language: AeHbLanguage en;
+				clusterLevel: AeHbBufferClusterLevel recommended;
+				flags: AeHbBufferFlags beginningOrEndingOfText;
+				addString: string;
+				cairoGlyphArrayForFace: aFace size: fontHeight)
+	font: cairoScaledFont.
+
+^ aeCanvas asForm
+```
+
+A full example with all possibilities:
+
+![canvas background example.](figures/aecanvas_full.png  width=25&label=padding1)
+
+```smalltalk
+| aManager aFace aeCanvas cairoScaledFont fontHeight paint anAlexandrieCanvasExperiment |
+anAlexandrieCanvasExperiment := self new.
+aeCanvas := AeCanvas extent: 400 @ 400.
+aeCanvas clear: Color white.
+
+paint := PolymorphSystemSettings pharoLogoForm.
+
+"--------------------------------"
+aeCanvas pathFactory: [ :cairoContext |
+	cairoContext rectangle: (0 @ 0 rectangle: 400 @ 400) ].
+
+aeCanvas setBackgroundWith: [
+	aeCanvas
+		setSourceLinearPatternStops: {
+				(0 -> (Color red alpha: 0.8)).
+				(0.166 -> (Color orange alpha: 0.8)).
+				(0.332 -> (Color yellow alpha: 0.8)).
+				(0.5 -> (Color green alpha: 0.8)).
+				(0.664 -> (Color blue alpha: 0.8)).
+				(0.83 -> (Color magenta alpha: 0.8)).
+				(1 -> (Color purple alpha: 0.8)) }
+		start: 0 @ 0
+		end: 400 @ 400 ].
+aeCanvas setBorderOff.
+aeCanvas drawFigure.
+
+"--------------------------------"
+
+aeCanvas pathFactory: [ :cairoContext |
+	cairoContext rectangleTo: paint extent ].
+aeCanvas setBackgroundWithForm: paint alpha: 0.2.
+aeCanvas drawFigure.
+
+aManager := AeFontManager globalInstance.
+aManager
+	scanDirectory: AeFilesystemResources fontsDirectory;
+	scanEmbeddedFonts.
+
+fontHeight := 25.
+aFace := aManager
+				detectFamilyName: 'Inria Serif'
+				slant: AeFontSlant normal
+				weight: AeFontWeight normal
+				stretch: AeFontStretch normal
+				ifNone: [
+				anAlexandrieCanvasExperiment inform: 'missing font' ].
+
+cairoScaledFont := aeCanvas scaledFontForFace: aFace size: fontHeight.
+
+aeCanvas pathTransform: (AeCairoMatrix
+			newX: 20
+			y: 180
+			sx: 1.2
+			sy: 1.2
+			shx: -25 degreesToRadians
+			shy: 25 degreesToRadians).
+
+aeCanvas pathTranslate: 0 @ (fontHeight * 1.1).
+aeCanvas
+	setSourceLinearPatternStops: {
+			(0 -> (Color white alpha: 0.9)).
+			(1 -> (Color black alpha: 0.9)) }
+	start: 0 @ 0
+	end: 100 @ 150.
+aeCanvas
+	drawGlyphs:
+	(cairoScaledFont glyphArrayForString: 'Hello Alexandrie in Pharo')
+	font: cairoScaledFont.
+
+^ aeCanvas asForm
+```
 ### Exercise: lights wall
 Transform your color grid from Figure*@fig:colorWall@* to a wall of lights such as in Figure *@fig:lightsWall@*:
 - compose elements to add circles to the squares

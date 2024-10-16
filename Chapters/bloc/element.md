@@ -557,7 +557,7 @@ protocol for all possibilities.
  
 2. set up background
 
-![canvas background example.](figures/aecanvas_background.png width=25&label=padding1)
+![canvas background example.](figures/aecanvas_background.png)
 
 - Solid background: `canvas setBackgroundWith: [ canvas setSourceSolidColor: Color  red]`
 - Form background: `canvas setBackgroundWithForm: form`
@@ -568,7 +568,7 @@ innerCenter: 50 @ 50 innerRadius: 500
 outerCenter: 480 @ 480 outerRadius:  30 ]`
 
 
-3. set up border and outskirts
+1. set up border and outskirts
 
 You need to specify the position of the border, or of there are no border:
 
@@ -578,10 +578,10 @@ You need to specify the position of the border, or of there are no border:
 - `canvas setBorderOff`
 
 You can of course set the line cap
-![canvas background example.](figures/aecanvas_linecap.png width=25&label=padding1)
+![canvas line cap example.](figures/aecanvas_linecap.png)
 
 and the line join
-![canvas background example.](figures/aecanvas_linejoin.png  width=25&label=padding1)
+![canvas line join example.](figures/aecanvas_linejoin.png )
 
 Bloc allow the user to select where they would like to draw the *border* of a region
 around a shape; either along the inside, outside or centre of the shape. This
@@ -596,7 +596,7 @@ to specify the border path of your element.
 1. send a variant of drawFigure*
 
 You can manage to draw your figure using a mask to reach interesting effect like
-![canvas background example.](figures/aecanvas_mask1.png  width=25&label=padding1)
+![canvas mask1 example.](figures/aecanvas_mask1.png)
 
 ```smalltalk
 | canvas form |
@@ -623,7 +623,7 @@ canvas drawFigure.
 ^ canvas asForm
 ```
 or
-![canvas background example.](figures/aecanvas_mask2.png  width=25&label=padding1)
+![canvas mask2 example.](figures/aecanvas_mask2.png)
 
 ```smalltalk
 | canvas |
@@ -669,7 +669,7 @@ canvas drawFigure.
 You can also manage text directly in the AeCanvas, like this (You'll find more
 detailled explanation on harfbuzz in the text chapter in the Alexandrie part)
 
-![canvas background example.](figures/aecanvas_font.png  width=25&label=padding1)
+![canvas font example.](figures/aecanvas_font.png)
 
 ```smalltalk
 | aManager aFace aeCanvas cairoScaledFont fontHeight string  |
@@ -725,7 +725,7 @@ aeCanvas
 
 A full example with all possibilities:
 
-![canvas background example.](figures/aecanvas_full.png  width=25&label=padding1)
+![canvas full example.](figures/aecanvas_full.png)
 
 ```smalltalk
 | aManager aFace aeCanvas cairoScaledFont fontHeight paint anAlexandrieCanvasExperiment |

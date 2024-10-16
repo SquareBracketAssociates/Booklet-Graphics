@@ -342,6 +342,10 @@ element transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
 ```
 The following script produces *@fig:transform@*.
 
+it sets the scale to 0.2 and translate by -25@15, it doesn't scale it by 0.2.
+each time you execute it. If you want to append try: `builder inherit scaleBy: 0.2`.
+`transformDo:` creates a new transformation from the commands in the block closure
+
 ```smalltalk
 aContainer := BlElement new
 		layout: BlFrameLayout new;

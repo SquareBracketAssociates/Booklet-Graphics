@@ -479,6 +479,9 @@ Element geometry is taken care by the method `aeDrawGeometryOn: aeCanvas`.
 Painting is done on an Alexandrie canvas, then rendered on the host
 by the method `BARenderer (BlHostRenderer) >> render: aHostSpace` which displays it on a `AeCairoImageSurface`.
 
+AeCanvas, not to confused with AlexandrieCanvas, is a specific canvas for Bloc,
+designed to render geometrical figures on a Cairo surface.
+
 Drawing is done through method 'xxx', which receives an Alexandrie
 (vector) canvas (`AeCanvas`) as an argument.
 
@@ -496,6 +499,11 @@ using this order:
 drawFigureAndPrepareToClip: true
 ou
 drawFigure. which set clip to false.
+
+Clipping is restricting of drawing to a certain area. This is done for efficiency 
+reasons and to create interesting effects.
+
+Note: Background MUST be set BEFORE border.
 
 Drawing example -  draw hour tick around a circle 
 ```

@@ -27,6 +27,23 @@ deco addEventHandler: (BlEventHandler
 	 					do: [ :event | event currentTarget border: BlBorder empty ]).
 ```
 
+You can also add event filter:
+
+`addEventFilterOn:do:` returns the new handler so that we can store to remove it in case. 
+
+Event filters receive events before general event handlers. Their main goal is
+to prevent some specific events from being handled by basic handlers. For that
+custom filters should mark event as ==consumed: true== which instantly stops propagation
+
+In the example below, the element will catch `BlMouseEnterEvent`. If you uncomment
+`anEvent consumed: true`, you'll only have the filtered version. If the event keep
+propagating, both will be called, filter and then handler.
+
+```smalltalk
+addEventFilterOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true". self inform: 'event filter'];
+addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true". self inform: 'event handler' ];
+```
+
 ### About event bubbling
 
 We should check `example_mouseEvent_descending_bubbling`
@@ -201,18 +218,12 @@ This will use BlEventHandler, and will associate a single block action to an Eve
 
 ### Complex case - reusing event handling logic with BlEventListener
 
-1. Subclass `BlEventListener` (which is a subclass of {{gtClass:name=BlBasicEventHandler}} and override all method that match specific event you want to catch, for example `BlEventListener>>clickEvent:`
+1. Subclass `BlEventListener` and override all method that match specific event you want to catch, for example `BlEventListener>>clickEvent:`
 2. Add your listener to your BlElement with method: `BlElement>>addEventHandler:`
 
-This allows complete flexibility. You can define custom behavior and interact with
-domain model object in a much cleaner way than when using **when:do:** messages.
+This allows complete flexibility. 
 
 ### Using event Handler
-
-UI element model can use Announcer (observer) pattern to tell when their state
-change:
-- `card announcer when: CardFlipped send: #onFlipped to: self.`
-- `card announcer when: CardDisappeared send: #onDisappear to: self.`
 
 To add event to an element, you first need to subclass 'BlEventListener' and
 override the event you want to manage. You then add your event handler to your
@@ -264,7 +275,11 @@ BlShortcutWithAction new
     combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
     action: [ flag := true ].
 
-
+	space addEventHandlerOn: BlKeyDownEvent
+			 do: [ :evt |
+				 (evt key = KeyboardKey altLeft or: [
+					  evt key = KeyboardKey altRight ]) ifTrue: [
+					 self inform: 'source 1 alt key pressed' ] ].
 
 ### Drag and Drop
 

@@ -377,3 +377,27 @@ BlElement >> aeCompositionLayersSortedByElevationDo: aBlock
 ```
 
 Drawing is separated into layers.
+
+Drawing is done on one instance of AeCanvas.
+Alexandrie Canvas for bloc, which is not Alexandrie Canvas for Cairo.
+You can still view the temporary result with `aeCanvas asForm`.
+
+Start with BASpaceRenderer >> renderSpace: aBlSpace
+	aBlSpace aeFullDrawOn: aeCanvas.
+	
+BlElement >> aeFullDrawOn: aCanvas
+	BlElement >> aeDrawInSameLayerOn: aCanvas.
+		BlElement >> aeDrawOn: aeCanvas
+		BlElement >> aeDrawIgnoringOpacityAndTransformationOn: aeCanvas
+			BlElement >> aeDrawEffectBelowGeometryOn: aeCanvas.
+			BlElement >> aeDrawGeometryOn: aeCanvas.
+			BlElement >> aeDrawEffectAboveGeometryOn: aeCanvas.
+			BlElement >> aeDrawChildrenOn: aeCanvas. "Z-index: children sorted by elevation"
+				BlElement >> aeDrawInSameLayerOn: aCanvas "and recursive repeat"
+	BlElement >> aeCompositionLayersSortedByElevationDo: [ :each | each paintOn: aCanvas ].
+	
+BlElement >> aeCompositionLayersSortedByElevationDo:  call
+	BAAxisAlignedCompositionLayer >> paintOn: aCanvas
+	BAAxisAlignedCompositionLayer>> ensureReadyToPaintOn: aCanvas
+		BlElement >> aeDrawAsSeparatedLayerOn: layerCanvas
+			BlElement >> aeDrawIgnoringOpacityAndTransformationOn: layerCanvas

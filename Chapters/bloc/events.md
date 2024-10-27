@@ -312,6 +312,15 @@ in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
 Bloc come with its own keymapping framework.
 BlShortcutWithAction would be the equivalent of KMKeymap.
 
+Shortcut represents a keyboard shortcut that can be registered to any arbitrary BlElement.
+Shortcut consist of an Action that is evaluated when a Shortcut is triggered and BlKeyCombination that describes when shortcut should be triggered. A combination is a logical formula expression that is composed of various key combinations such as alternative, compulsory or single key. See subclasses of BlKeyCombination.
+Additionally, shortcut may provide its optional textual description and name.
+
+A shortcut can be added or removed from the element by using BlElement>>#addShortcut: or BlElement>>#removeShortcut: methods.
+BlElement>>#shortcuts message can be sent to an element in order to access a list of all registered shortcuts.
+
+BlShortcutWithAction extend BlBasicShortcut with ability to specify a runtime action that should be evaluated when shortcut is performed. In addition to that, shortcuts with action allow users to customise the name and description of the shortcut.
+
 BlShortcutWithAction new
     combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
     action: [ flag := true ].
@@ -321,6 +330,7 @@ BlShortcutWithAction new
 				 (evt key = KeyboardKey altLeft or: [
 					  evt key = KeyboardKey altRight ]) ifTrue: [
 					 self inform: 'source 1 alt key pressed' ] ].
+
 
 ### Drag and Drop
 

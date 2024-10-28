@@ -70,7 +70,7 @@ While the Alexandrie canvas provides a foundational set of building drawing
 primitives, Bloc offers a richer library of pre-defined shapes and the
 flexibility to construct even more intricate geometries.
 
-![Base geometries.](figures/allGeometry.png width=80)
+![Base geometries.](figures/7v9iturfiyjt width=80)
 
 * **Annulus**: `BlAnnulusSectorGeometry new startAngle: 225; endAngle: 360;   innerRadius: 0.3; outerRadius: 0.9);`
 * **Bezier**: `BlBezierCurveGeometry controlPoints: { 5@0. 25@80. 75@30. 95@100 }`

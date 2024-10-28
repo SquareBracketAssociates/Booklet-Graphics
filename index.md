@@ -11,6 +11,8 @@
 <!inputFile|path=Chapters/bloc/animation.md!>
 <!inputFile|path=Chapters/bloc/complexElement.md!>
 <!inputFile|path=Chapters/bloc/snippets.md!>
+<!inputFile|path=Chapters/bloc/dragAndDropExample.md!>
+
 
 # Toplo: Bloc widget set
 

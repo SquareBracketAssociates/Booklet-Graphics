@@ -17,7 +17,7 @@ behavior of your UI elements.
 
 #### Navigating Bloc's spatial landscape
 
-**Bloc** introduces two key concepts for managing the visual environment:
+**Bloc** introduces two key concepts for managing the visual environment: 
 `BlUniverse` and `BlSpace`. Imagine `BlUniverse` as a container housing a
 collection of individual `BlSpace` instances. Each `BlSpace` represents a
 distinct operating system window where your Pharo application unfolds. If you
@@ -27,48 +27,101 @@ the `BlUniverse`, providing a clear overview of your active spaces.
 #### Ready to Build: Creating Your First Bloc Component
 
 ```smalltalk
-BlElement new
+blueRectangle := BlElement new
 	geometry: BlRectangleGeometry  new;
 	size: 200 @ 100;
 	background: Color blue;
-	openInNewSpace
+	yourself.
+blueRectangle openInNewSpace
 ```
 
-![Creating a basic element.](figures/basicElement.png)
+![Creating a basic element.](figures/basicElement.png width=40)
 
-1. **Start with a blank canvas:** Begin by creating a new `BlElement`. This serves
-as the foundation for your user interface element, initially appearing
+1. **Start with a blank canvas:** Begin by creating a new `BlElement`. 
+This serves as the foundation for your user interface element, initially appearing
 invisible.
-1. **Define its shape:** In Bloc, the element's visual representation is
-determined by its geometry. In this example, we'll use a simple rectangle, but
-more complex shapes are also possible (explored in further detail later).
-1. **Set its dimensions and appearance:** Specify the element's size and color
-to customize its visual characteristics.
-1. **Bring it to life:** Finally, open the element in a new space, making it
-visible on the screen.
+2. **Define its shape:** In Bloc, the element's visual representation is
+determined by its geometry. 
+In this example, we'll use a simple rectangle, but more complex shapes are also possible (explored in further detail later).
+3. **Set its dimensions and appearance:** 
+Specify the element's size and color to customize its visual characteristics.
+4. **Bring it to life:** Finally, open the element in a new space, making it visible on the screen.
+
+
+In our example, we can observe the state of your element by inspecting the `blueRectangle` variable. We can observe a graphical overview of the element, as well as its state:
+
+![Creating a basic element.](figures/basicElementInspection.png width=80)
+
+Elements are organized in trees. 
+To compose tree of elements, we select a root element and we add children.
+
+```smalltalk
+redRectangle := BlElement new
+	geometry: BlRectangleGeometry  new;
+	size: 50 @ 50;
+	background: Color red; 
+	yourself.
+blueRectangle addChild: redRectangle
+```
+
+1. **Start with a root element of your choice:** in our example, we reuse the `blueRectangle` element.
+2. **Define the new element:** This is done like any other element, such as the `blueRectangle` element.
+In this example, we will use a red rectangle, but smaller than the blue one.
+3. **Add the new element as a child of the root element:** 
+The `addChild:` api adds leaf elements to a root.
+4. **Bring it to life:** If the `blueRectangle` is still open, it automatically updates with the `redRectangle`. Else, re-execute all the code to open the root in a new space, making it visible on the screen.
+
+![Composing elements.](figures/composedElements.png width=40)
+
+The red element is placed on the top left corner of its parent, the blue element.
+By default, the position of `BlElement` instances is `0@0`.
+The position of elements is configured by using the `position:` api, such as in the following:
+
+```Smalltalk
+redRectangle position: 75@25. 
+```
+
+![Changing elements positions.](figures/basicElementPosition.png width=40)
+
+Notice that if you did not close the original space opened for the `blueRectangle` element, the display automatically updates when the `redRectangle` position changes.
+
+### Spaces: where elements are displayed
+
+Spaces represent windows in which elements are displayed.
+They are explicitely controlled by instantiating `BlSpace` objects.
+A space has a root element, to which other elements are attached using the `addChild:` api.
+In the following example, we create a new space in which we add our two rectangles:
+
+```Smalltalk
+space := BlSpace new.
+space root addChild: blueRectangle.
+space root addChild: redRectangle.
+space show
+```
+An element can only be the child of a single other element.
+If an element is already added as a child in a space, trying to add that element to a new space will raise an exception. 
+One solution is to create new instances of that element to add it to another space.
+
+### Exercise 1: color wall
+
+Create a $10\times10$ grid of squares, each with a random color, and display it in a space (Figure *@fig:jointype@*).
+ 
+![Creating a wall of colors.](figures/colorWall.png label=fig:colorWall width=80)
 
 
 ### Geometry of BlElement
 
-In Bloc, the visual form and boundaries of your UI elements are determined by
-their geometries. Each element can only possess a single geometry, essentially
-acting as a blueprint for its shape and size. You can visualize an element as a
-specific geometry encapsulated within an invisible rectangular container,
-representing its overall *bounds*.
+In Bloc, the visual form and boundaries of your UI elements are determined by their geometry. 
+Each element can only possess a single geometry, essentially acting as a blueprint for its shape and size.
+You can visualize an element as a specific geometry encapsulated within an invisible rectangular container, representing its overall *bounds*.
 
-Bloc provides a diverse range of pre-defined geometry shapes accessible through
-`BlElementGeometry allSubclasses`. This comprehensive library empowers you to
-construct elements of varying complexities, from basic rectangles and circles to
-more intricate forms.
+Bloc provides a diverse range of pre-defined geometry shapes accessible through `BlElementGeometry allSubclasses`. 
+This comprehensive library empowers you to construct elements of varying complexities, from basic rectangles and circles to more intricate forms.
 
-Bloc excels in facilitating the creation of custom components with advanced
-layout possibilities. Imagine building complex layouts by strategically
-arranging various elements, each defined by its unique geometry, to form a
-cohesive whole.
+Bloc excels in facilitating the creation of custom components with advanced layout possibilities. 
+Imagine building complex layouts by strategically arranging various elements, each defined by its unique geometry, to form a cohesive whole.
 
-While the Alexandrie canvas provides a foundational set of building drawing
-primitives, Bloc offers a richer library of pre-defined shapes and the
-flexibility to construct even more intricate geometries.
+While the Alexandrie canvas provides a foundational set of building drawing primitives, Bloc offers a richer library of pre-defined shapes and the flexibility to construct even more intricate geometries.
 
 ![Base geometries.](figures/7v9iturfiyjt width=80)
 
@@ -132,6 +185,9 @@ The first one is very helpful for solid line definition. The builder lets use
 customize all the details of your border.
 
 ### Element bounds and outskirts
+
+Bloc allow the user to select where they would like to draw the *border* of a region
+around a shape; either along the inside, outside or centre of the shape.
 
 Let's look at the different possible bounds of your element.
 
@@ -286,6 +342,10 @@ element transformDo: [ :b | b scaleBy: 0.2; translateBy: -25 @ -15 ];
 ```
 The following script produces *@fig:transform@*.
 
+it sets the scale to 0.2 and translate by -25@15, it doesn't scale it by 0.2.
+each time you execute it. If you want to append try: `builder inherit scaleBy: 0.2`.
+`transformDo:` creates a new transformation from the commands in the block closure
+
 ```smalltalk
 aContainer := BlElement new
 		layout: BlFrameLayout new;
@@ -395,13 +455,16 @@ Bloc favors `BlElement` composition to create your graphical interface.
 Most of the time, you will not have to create a custom painting of your element widget. 
 You can already do a lot with existing geometry.
 
-Ultimately, you can define drawing methods on a canvas, but once drawn, a canvas cannot be easily inspected
-for its elements. 
+Ultimately, you can define drawing methods on a canvas, but once drawn, a canvas cannot 
+be easily inspected for its elements. 
 However, Bloc element composition creates a tree of elements, that can be inspected, and shaped dynamically.
 
 Creating and drawing your element
 - subclass `BlElement`
-- custom drawing is done with `aeFullDrawOn:` method. Note that 'ae' stands for the Alexandrie canvas.
+- custom drawing is done with `aeFullDrawOn:` method. Note that 'ae' stands for the Alexandrie canvas. 
+
+This Canvas is been specifically designed for drawing Bloc element. It's not as complete
+as Alexandrie Cairo Canvas, which is the closest to the underlying Cairo libray
 
 You can see the `aeFullDrawOn:`
 ```
@@ -416,12 +479,31 @@ Element geometry is taken care by the method `aeDrawGeometryOn: aeCanvas`.
 Painting is done on an Alexandrie canvas, then rendered on the host
 by the method `BARenderer (BlHostRenderer) >> render: aHostSpace` which displays it on a `AeCairoImageSurface`.
 
+AeCanvas, not to confused with AlexandrieCanvas, is a specific canvas for Bloc,
+designed to render geometrical figures on a Cairo surface.
+
 Drawing is done through method 'xxx', which receives an Alexandrie
-(vector) canvas as an argument.
+(vector) canvas (`AeCanvas`) as an argument.
 
 1. `aeDrawChildrenOn:`
 2. `aeDrawOn:`
 3. `aeDrawGeometryOn:`
+
+To draw a figure, prepare the canvas using set* methods in the API protocol,
+using this order:
+
+1. set up path
+2. set up background
+3. set up border and outskirts
+4. send a variant of drawFigure*
+drawFigureAndPrepareToClip: true
+ou
+drawFigure. which set clip to false.
+
+Clipping is restricting of drawing to a certain area. This is done for efficiency 
+reasons and to create interesting effects.
+
+Note: Background MUST be set BEFORE border.
 
 Drawing example -  draw hour tick around a circle 
 ```
@@ -463,6 +545,276 @@ aeDrawOn: aeCanvas
 						setBorderWidth: 6 ] ].
 		aeCanvas drawFigure ]
 ```
+
+Let's do it one by one.
+
+1. set up path
+
+```smalltalk
+	canvas pathFactory: [ :cairoContext |
+		cairoContext
+			moveTo: 50 @ 50;
+			lineTo: 150 @ 50;
+			closePath ].
+```
+
+You'll find the usual path verb to draw line, bezier curve, arc, and absolute
+or relative move. Take a look at **AeCaireContext** class in the *API - Path* 
+protocol for all possibilities.
+
+ 
+2. set up background
+
+![canvas background example.](figures/aecanvas_background.png)
+
+- Solid background: `canvas setBackgroundWith: [ canvas setSourceSolidColor: Color  red]`
+- Form background: `canvas setBackgroundWithForm: form`
+- linear color: `canvas setBackgroundWith: [ canvas setSourceLinearPatternStops: {	(0 -> Color red). (1 -> Color black) } 	start: 0 @ 0end: 500 @ 500 ] `
+- radial color: `canvas setBackgroundWith: [ canvas setSourceRadialPatternStops:  {
+(0 -> Color red). (1 -> Color black) }
+innerCenter: 50 @ 50 innerRadius: 500
+outerCenter: 480 @ 480 outerRadius:  30 ]`
+
+
+1. set up border and outskirts
+
+You need to specify the position of the border, or of there are no border:
+
+- `canvas setOutskirtsCentered .`
+- `canvas setOutskirtsInside .`
+- `canvas setOutskirtsOutside .`
+- `canvas setBorderOff`
+
+You can of course set the line cap
+![canvas line cap example.](figures/aecanvas_linecap.png)
+
+and the line join
+![canvas line join example.](figures/aecanvas_linejoin.png )
+
+Bloc allow the user to select where they would like to draw the *border* of a region
+around a shape; either along the inside, outside or centre of the shape. This
+is controled throught the outskirts parameter.
+`PathFactory:` is used by default to paint the border (stroke) and the inside (fill)
+of your element. If you want to manage different outskirts, you can refine the
+definiton of the border path with `borderPathFactory:` canvas method by overwriting
+`aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth` 
+and `aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth`
+to specify the border path of your element.
+
+1. send a variant of drawFigure*
+
+You can manage to draw your figure using a mask to reach interesting effect like
+![canvas mask1 example.](figures/aecanvas_mask1.png)
+
+```smalltalk
+| canvas form |
+form := PolymorphSystemSettings pharoLogoForm.
+
+canvas := AeCanvas extent: form extent.
+
+canvas setBorderBlock: [
+	canvas
+		setSourceColor: Color yellow;
+		setBorderWidth: 5.0 ].
+canvas setOutskirtsCentered.
+
+canvas maskGroupWith: [
+	canvas pathFactory: [ :cairoContext |
+		cairoContext rectangleTo: form extent ].
+	canvas setBackgroundWithForm: form alpha: 0.5.
+	canvas drawFigure ].
+
+canvas pathFactory: [ :cairoContext | cairoContext rectangleTo: form extent ].
+canvas setBackgroundWith: [ canvas setSourceColor: (Color purple alpha: 0.5) ].
+canvas drawFigure.
+
+^ canvas asForm
+```
+or
+![canvas mask2 example.](figures/aecanvas_mask2.png)
+
+```smalltalk
+| canvas |
+canvas := AeCanvas extent: 150 @ 150.
+
+canvas maskGroupWith: [
+	canvas pathTranslate: 10 @ 20.
+	canvas pathFactory: [ :cairoContext |
+		cairoContext
+			moveTo: 10 @ 10;
+			lineTo: 100 @ 10;
+			lineTo: 100 @ 100;
+			lineTo: 10 @ 100;
+			closePath ].
+	canvas setBorderBlock: [
+		canvas
+			setSourceColor: (Color orange);
+			setBorderWidth: 5.0 ].
+	canvas setOutskirtsCentered.
+	canvas setBackgroundWith: [
+		canvas setSourceColor: (Color orange alpha: 0.5) ].
+	canvas drawFigure ].
+
+canvas pathFactory: [ :cairoContext |
+	cairoContext
+		moveTo: 10 @ 10;
+		lineTo: 100 @ 10;
+		lineTo: 100 @ 100;
+		lineTo: 10 @ 100;
+		closePath ].
+canvas setBorderBlock: [
+	canvas
+		setSourceColor: Color yellow;
+		setBorderWidth: 5.0 ].
+canvas setOutskirtsCentered.
+canvas setBackgroundWith: [
+	canvas setSourceColor: (Color red alpha: 0.5) ].
+canvas drawFigure.
+
+^ canvas asForm
+```
+
+You can also manage text directly in the AeCanvas, like this (You'll find more
+detailled explanation on harfbuzz in the text chapter in the Alexandrie part)
+
+![canvas font example.](figures/aecanvas_font.png)
+
+```smalltalk
+| aManager aFace aeCanvas cairoScaledFont fontHeight string  |
+"font definition"
+AeFontManager resetGlobalInstance.
+aManager := AeFontManager globalInstance.
+aManager
+	scanDirectory: AeFilesystemResources fontsDirectory;
+	scanEmbeddedFonts.
+
+aFace := aManager
+				detectFamilyName: 'Cascadia Code'
+				slant: AeFontSlant normal
+				weight: AeFontWeight normal
+				stretch: AeFontStretch normal
+				ifNone: [
+				self inform: 'missing font' ].
+
+string := 'a := A->B->>C <= c|=>d~~>e.'.
+fontHeight := 22.
+
+aeCanvas := AeCanvas extent: 1000 @ (fontHeight * 4).
+aeCanvas clear: Color white.
+
+cairoScaledFont := aeCanvas scaledFontForFace: aFace size: fontHeight.
+
+"Margin"
+aeCanvas pathTranslate: fontHeight / 2 @ 0.
+
+"Draw text withOUT Harfbuzz:"
+aeCanvas pathTranslate: 0 @ (fontHeight * 1.1).
+aeCanvas setSourceColor: Color red muchDarker.
+aeCanvas
+	drawGlyphs: (cairoScaledFont glyphArrayForString: string)
+	font: cairoScaledFont.
+
+"Draw text with Harfbuzz:"
+aeCanvas pathTranslate: 0 @ (fontHeight * 1.1).
+aeCanvas setSourceColor: Color green muchDarker.
+aeCanvas
+	drawGlyphs: (AeHbBuffer new
+				direction: AeHbDirection leftToRight;
+				script: AeHbScript latin;
+				language: AeHbLanguage en;
+				clusterLevel: AeHbBufferClusterLevel recommended;
+				flags: AeHbBufferFlags beginningOrEndingOfText;
+				addString: string;
+				cairoGlyphArrayForFace: aFace size: fontHeight)
+	font: cairoScaledFont.
+
+^ aeCanvas asForm
+```
+
+A full example with all possibilities:
+
+![canvas full example.](figures/aecanvas_full.png)
+
+```smalltalk
+| aManager aFace aeCanvas cairoScaledFont fontHeight paint anAlexandrieCanvasExperiment |
+anAlexandrieCanvasExperiment := self new.
+aeCanvas := AeCanvas extent: 400 @ 400.
+aeCanvas clear: Color white.
+
+paint := PolymorphSystemSettings pharoLogoForm.
+
+"--------------------------------"
+aeCanvas pathFactory: [ :cairoContext |
+	cairoContext rectangle: (0 @ 0 rectangle: 400 @ 400) ].
+
+aeCanvas setBackgroundWith: [
+	aeCanvas
+		setSourceLinearPatternStops: {
+				(0 -> (Color red alpha: 0.8)).
+				(0.166 -> (Color orange alpha: 0.8)).
+				(0.332 -> (Color yellow alpha: 0.8)).
+				(0.5 -> (Color green alpha: 0.8)).
+				(0.664 -> (Color blue alpha: 0.8)).
+				(0.83 -> (Color magenta alpha: 0.8)).
+				(1 -> (Color purple alpha: 0.8)) }
+		start: 0 @ 0
+		end: 400 @ 400 ].
+aeCanvas setBorderOff.
+aeCanvas drawFigure.
+
+"--------------------------------"
+
+aeCanvas pathFactory: [ :cairoContext |
+	cairoContext rectangleTo: paint extent ].
+aeCanvas setBackgroundWithForm: paint alpha: 0.2.
+aeCanvas drawFigure.
+
+aManager := AeFontManager globalInstance.
+aManager
+	scanDirectory: AeFilesystemResources fontsDirectory;
+	scanEmbeddedFonts.
+
+fontHeight := 25.
+aFace := aManager
+				detectFamilyName: 'Inria Serif'
+				slant: AeFontSlant normal
+				weight: AeFontWeight normal
+				stretch: AeFontStretch normal
+				ifNone: [
+				anAlexandrieCanvasExperiment inform: 'missing font' ].
+
+cairoScaledFont := aeCanvas scaledFontForFace: aFace size: fontHeight.
+
+aeCanvas pathTransform: (AeCairoMatrix
+			newX: 20
+			y: 180
+			sx: 1.2
+			sy: 1.2
+			shx: -25 degreesToRadians
+			shy: 25 degreesToRadians).
+
+aeCanvas pathTranslate: 0 @ (fontHeight * 1.1).
+aeCanvas
+	setSourceLinearPatternStops: {
+			(0 -> (Color white alpha: 0.9)).
+			(1 -> (Color black alpha: 0.9)) }
+	start: 0 @ 0
+	end: 100 @ 150.
+aeCanvas
+	drawGlyphs:
+	(cairoScaledFont glyphArrayForString: 'Hello Alexandrie in Pharo')
+	font: cairoScaledFont.
+
+^ aeCanvas asForm
+```
+### Exercise: lights wall
+Transform your color grid from Figure*@fig:colorWall@* to a wall of lights such as in Figure *@fig:lightsWall@*:
+- compose elements to add circles to the squares
+- build and add glowing effects to the circles
+
+Do not hesitate to explore the various effects and their configuration!
+
+![Creating a wall of lights.](figures/lightsWall.png label=fig:lightsWall width=80)
 
 ### Conclusion
 

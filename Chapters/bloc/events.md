@@ -1,5 +1,26 @@
 ## Event handling
 
+In graphical applications, whenever a user interacts with the application (BlElements),
+an event is said to have been occurred. For example, clicking on a button, moving
+the mouse, entering a character through keyboard, selecting an item from list, etc.
+are the activities that causes an event to happen.
+
+Bloc provides support to handle a wide varieties of events. The class named *BlEvent* is the base class for an event. An instance of any of its subclass is an event. Some of them are are listed below.
+
+- **Mouse Event**  − This is an input event that occurs when a mouse is clicked. It includes actions like mouse clicked, mouse pressed, mouse released, mouse moved, etc.
+
+- **Key Event** − This is an input event that indicates the key stroke occurred on an element. Those events includes actions like key pressed, key released and key typed.
+
+- **Drag Event** − This occurs when an Element is dragged by mouse. It includes actions like drag entered, drag dropped, drag entered target, drag exited target, drag over, etc.
+
+Event Handling is the mechanism that controls the event and decides what should happen, if an event occurs. This mechanism has the code which is known as an event handler that is executed when an event occurs.
+
+Bloc provides handlers and filters to handle events. Every event has:
+
+- Target − The element on which an event occurred.
+- Source - Used in drag&drop to identify the source element.
+- Type − Type of the occurred event
+
 ### Event handling
 
 ```smalltalk
@@ -25,10 +46,40 @@ deco addEventHandler: (BlEventHandler
 	 					do: [ :event | event currentTarget border: BlBorder empty ]).
 ```
 
+You can also add event filter:
+
+`addEventFilterOn:do:` returns the new handler so that we can store to remove it in case. 
+
+Event filters receive events before general event handlers. Their main goal is
+to prevent some specific events from being handled by basic handlers. For that
+custom filters should mark event as ==consumed: true== which instantly stops propagation
+
+In the example below, the element will catch `BlMouseEnterEvent`. If you uncomment
+`anEvent consumed: true`, you'll only have the filtered version. If the event keep
+propagating, both will be called, filter and then handler.
+
+```smalltalk
+addEventFilterOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true". self inform: 'event filter'];
+addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true". self inform: 'event handler' ];
+```
+
 ### About event bubbling
+
+#### Event Capturing Phase
+This event travels to all elements in the dispatch chain (from top to bottom), starting from *BlSpace*. If any of these element has a handler for this event, it will be executed, until it reach the target element which can process it.
+
+#### Event Bubbling Phase
+In the event bubbling phase, the event is travelled from the target element to BlSpace (bottom to top). If any of the element in the event dispatch chain has a handler registered for the event, it will be executed. When the event reaches the BlSpace element the process will be completed.
+
+#### Event Handlers
+Event handlers are those which contains application logic to process an event. An element can register more than one handler.
+
+You can stop the event propagation in an event handler by adding
+`anEvent consumed: true.`
 
 We should check `example_mouseEvent_descending_bubbling`
 
+![event propagation](figures/EventPropagation.png)
 
 ![Windows nested in each others in Toplo.](figures/4windows.png width=80)
 
@@ -199,18 +250,12 @@ This will use BlEventHandler, and will associate a single block action to an Eve
 
 ### Complex case - reusing event handling logic with BlEventListener
 
-1. Subclass `BlEventListener` (which is a subclass of {{gtClass:name=BlBasicEventHandler}} and override all method that match specific event you want to catch, for example `BlEventListener>>clickEvent:`
+1. Subclass `BlEventListener` and override all method that match specific event you want to catch, for example `BlEventListener>>clickEvent:`
 2. Add your listener to your BlElement with method: `BlElement>>addEventHandler:`
 
-This allows complete flexibility. You can define custom behavior and interact with
-domain model object in a much cleaner way than when using **when:do:** messages.
+This allows complete flexibility. 
 
 ### Using event Handler
-
-UI element model can use Announcer (observer) pattern to tell when their state
-change:
-- `card announcer when: CardFlipped send: #onFlipped to: self.`
-- `card announcer when: CardDisappeared send: #onDisappear to: self.`
 
 To add event to an element, you first need to subclass 'BlEventListener' and
 override the event you want to manage. You then add your event handler to your
@@ -237,8 +282,17 @@ BlEventHandler
 	do: [ :anEvent | self inform: 'Click!' ]
 ```
 
+how do I remove all eventHandlers from a Blelement?
 
+```smalltalk
+el removeEventHandlersSuchThat: [:e|true] 
+```
 
+or
+
+```smalltalk
+el eventDispatcher removeEventHandlers
+```
 
 ### Keymap at system platform level
 
@@ -258,63 +312,66 @@ in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
 Bloc come with its own keymapping framework.
 BlShortcutWithAction would be the equivalent of KMKeymap.
 
+Shortcut represents a keyboard shortcut that can be registered to any arbitrary BlElement.
+Shortcut consist of an Action that is evaluated when a Shortcut is triggered and BlKeyCombination that describes when shortcut should be triggered. A combination is a logical formula expression that is composed of various key combinations such as alternative, compulsory or single key. See subclasses of BlKeyCombination.
+Additionally, shortcut may provide its optional textual description and name.
+
+A shortcut can be added or removed from the element by using BlElement>>#addShortcut: or BlElement>>#removeShortcut: methods.
+BlElement>>#shortcuts message can be sent to an element in order to access a list of all registered shortcuts.
+
+BlShortcutWithAction extend BlBasicShortcut with ability to specify a runtime action that should be evaluated when shortcut is performed. In addition to that, shortcuts with action allow users to customise the name and description of the shortcut.
+
 BlShortcutWithAction new
     combination: (BlKeyCombination builder alt; control; key: KeyboardKey C; build);
     action: [ flag := true ].
 
+	space addEventHandlerOn: BlKeyDownEvent
+			 do: [ :evt |
+				 (evt key = KeyboardKey altLeft or: [
+					  evt key = KeyboardKey altRight ]) ifTrue: [
+					 self inform: 'source 1 alt key pressed' ] ].
 
 
 ### Drag and Drop
 
-The drop event should be applied to the element that will receive the dragged content.
-`Elt1` uses the dragEnd to know when the drag has ended.
-`Elt2` uses the dropEvent to know when something try to be dropped on it.
-If you drop `elt1` on `elt2`, `elt2` opens an inspector on `elt1`.
+Full drag&drop example
 
 ```
-| elt1 elt2 space |
-elt1 := BlElement new 
-	background: Color lightBlue;
-	position: 100 asPoint;
-	addEventHandler: BlPullHandler new disallowOutOfBounds;
-	id: #elt1;
-	yourself.
-	
-elt2 := BlElement new 
-	background: Color red;
-	size: 100 asPoint;
-	position: 200 asPoint;
-	id: #elt2;
-	yourself.
-	
+| source1 source2 target space offset |
 space := BlSpace new.
-space root addChildren: { elt1 . elt2 }.
- 
-elt2 
-	addEventHandlerOn: BlDropEvent 
-	do: [ :evt | evt gestureSource inspect ].
-elt1 
-	addEventHandlerOn: BlDragEndEvent 
-	do: [ :evt | ].
- 
-space show.
+source1 := BlElement new size: 100 @ 100; background: Color red; border: (BlBorder paint: Color gray width: 2); position: 0@0.
+source2 := BlElement new size: 100 @ 100; background: Color purple; border: (BlBorder paint: Color gray width: 2); position: 150@0.
+target := BlElement new size: 100 @ 100; background: Color blue; border: (BlBorder paint: Color gray width: 2); position: 500 @ 500.
+
+space root addChildren: { source1. source2. target. }.
+
+source1 addEventHandlerOn: BlDragStartEvent do: [ :event | event consumed: true. self inform: 'source1 BlStartDragEvent'. 
+	offset := event position - source1 position. 
+	source1 removeFromParent.].
+source1 addEventHandlerOn: BlDragEndEvent do: [ :event | event consumed: true. self inform: 'source1 BlDragEndEvent'. 	 ].
+source1 addEventHandlerOn: BlDragEvent do: [ :event | event consumed: true. "self inform:  'source1 BlDragEvent'."
+	source1 position: event position - offset.
+	source1 hasParent ifFalse: [space root addChild: source1].
+	source1 preventMeAndChildrenMouseEvents ].
+
+source2 addEventHandlerOn: BlDragStartEvent do: [ :event | event consumed: true. self inform: 'source2 BlStartDragEvent'. 
+	offset := event position - source2 position.
+	source2  removeFromParent.].
+source2 addEventHandlerOn: BlDragEndEvent do: [ :event | event consumed: true. self inform: 'source2 BlDragEndEvent'. ].
+source2 addEventHandlerOn: BlDragEvent do: [ :event | event consumed: true. "self inform:  'source BlDragEvent'."
+	source2 position: event position - offset.
+	source2 hasParent ifFalse: [space root addChild: source2].
+	source2 preventMeAndChildrenMouseEvents ].
+
+target addEventHandlerOn: BlDropEvent do: [ :event | event consumed: true. self inform: 'target BlDropEvent'.
+	event gestureSource background paint color = (Color red)
+			ifTrue: [ self inform: 'drop accepted' ]
+			ifFalse: [ self inform: 'drop rejected'. event gestureSource position: 100 @ 400; allowMeAndChildrenMouseEvents] ].
+target addEventHandlerOn: BlDragEnterEvent do: [ :event | event consumed: true. self inform: 'target BlDragEnterEvent' ].
+target addEventHandlerOn: BlDragLeaveEvent do: [ :event | event consumed: true. self inform: 'target BlDragLeaveEvent' ].
+
+space show
 ```
-
-
-### Manually drag and drop
-
-```
-elt := BlElement new background: Color red; size: 200 asPoint.
-offset := 0.
-
-elt addEventHandlerOn: BlDragStartEvent do: [ :e | e consume.
-    offset := e position - elt position].
-elt addEventHandlerOn: BlDragEvent do: [ :e | elt position: e position - offset ].
-
-elt openInSpace.
-```
-
-
 
 ### BlPullHandler
 

@@ -105,6 +105,7 @@
 % also moves footnotes below bottom-of-page floats
 \RequirePackage[bottom]{footmisc}
 
+\justifying
 
 %%%
 %%% Title page

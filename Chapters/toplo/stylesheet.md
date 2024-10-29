@@ -63,13 +63,11 @@ Each graphic element stores its tokens and stamps in a *store* (`ToStyleStore`).
 
 ### How theme works?
 
-A theme can be applied to a space to quickly modify the appearance of the graphic elements it contains. A theme contains a variant, a list of editable properties and style rules.
+A theme can be applied to a space to quickly modify the appearance of the graphic elements it contains.
 Editable properties are a list of properties that the theme allows you to modify; an editable property is not necessarily a property of a graphic element. There are two types of editable property:
 
 * **Feature:** when the property has the same name in the theme as in the API of the graphic element (e.g. width, height, layout, label, geometry, etc.). In this case, the writer uses the graphic element's API to update the graphic appearance.
 * **Pseudo:** When the property in the theme does not correspond to a property in the graphic element (e.g. background-color, border-with-builder, label-text-background, etc.). Pseudos can be used to modify a widget's child elements directly at widget level, or to access properties not present in the graphical element API in the form of a facade (e.g. change text color).
-
-Theme variants allow you to change the values of certain tokens in the space's root element. When a theme is applied to a space, the root element of the space receives from the theme a list of all tokens used in the theme. Theme variants can be used to change the value of some theme tokens, for example the tokens used for the colors, making it easy to create a *light* theme and a *dark* theme.
 
 A style rule is an association between a selector and one or more writers. A rule can only be applied to a graphic element if the rule's selector corresponds to the graphic element. There are 5 types of selector, and they can be combined with different operators. The five selector types are:
 

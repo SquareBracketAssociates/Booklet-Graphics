@@ -58,8 +58,19 @@ handler registered for the event, it will be executed. When the event reaches
 the BlSpace element the process will be completed.
 
 ##### stop event propatation
+
 You can stop the event propagation in an event handler by adding
 `anEvent consumed: true.`
+
+##### prevent event capture
+
+Sometime, you don't want your element to capture event. There is an option to
+forbid mouse events for an element. You just send *#preventMouseEvent* to it.
+`child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.`
+
+You can also prevent element and its children to capture event, with *#preventMeAndChildrenMouseEvents*
+message, or apply it only to its children with *#preventChildrenMouseEvents*
+
 
 #### Event Handlers
 
@@ -71,33 +82,34 @@ An element can register more than one handler.
 1. use method: `BlElement>>addEventHandlerOn:do:`
 2. anEventClass can be a subclass of `BlUIEvent`
 
-
-This will use BlEventHandler, and will associate a single block action to an Event.
-
-##### Complex case - reusing event handling logic with BlEventListener and event Handler
-
-Instead of using addEventHandlerOn:do: you can also see users of `addEventHandler:`.
-
-To add event to an element, you first need to subclass 'BlEventListener' and
-override the event you want to manage. You then add your event handler to your
-bloc element with method `addEventHandler`. Event are bloc announcement method
-and classes.
-
-1. Subclass `BlEventListener` and override all method that match specific event you want to catch, for example `BlEventListener>>clickEvent:`
-2. Add your listener to your BlElement with method: `BlElement>>addEventHandler:`
-
-This allows complete flexibility.
-
 **Note**
 `addEventHandlerOn:do:` returns the new handler so that we can store to remove 
 it in case. **Add a #yourself send after to return a BlElement.**
+
+##### Complex case - reusing event handling logic with an event Handler
+
+Instead of using addEventHandlerOn:do: you can also see users of `addEventHandler:`.
+An event handler can manage multiple element at once, by overriding the method `eventsToHandle`
+
+This example is taken from `BlPullHandler` which demonstrate how you can dra around an
+element (more on this at the end of this chapter)
+
+```smalltalk
+eventsToHandle
+^ {	BlDragStartEvent. BlDragEvent. BlDragEndEvent }
+```
+
+You then add your event handler to your bloc element with method `addEventHandler`.
+This allows complete flexibility.
+
+You can also declare dynamically event handler on specific event.
 
 ```smalltalk
 BlEventHandler on: BlClickEvent do: [ :anEvent | self inform: 'Click!' ]
 ```
 
 As a more general explanation, all UI related events can be controlled. Have a
-look at BlElementFlags and BlElementEventDispatcherActivatedEvents and how
+look at *BlElementFlags* and *BlElementEventDispatcherActivatedEvents* and how
 these classes are used.
 
 ```smalltalk

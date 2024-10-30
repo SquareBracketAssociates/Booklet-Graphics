@@ -1,5 +1,42 @@
 ## Renaud notes for widget creation
 
+
+## For Raw theme:
+
+- element subclass of ToElement
+- overwrite method `newRawSkin`
+
+- ToCheckboxSkin which is a subclass of ToRawSkin and ToSkin
+=> react to specific event to apply skin to element. Without skin, an element is kind of naked. 
+state + evt associé -> skin
+Un skin est un event handleur qui va réagir à des look events.
+
+## For BeeTheme => use of stylesheet.
+
+- element subclass of ToElement
+- overwrite method: `defaultBeeStyleStamps` and `installBeeStyle`
+- associated theme: `ToBeeTheme and method for each element. 
+
+## Theme management. 
+
+Theme -> factory de skin pour tes objets, incluant les propriétés pour décorer.
+A theme contains a variant, a list of editable properties and style rules.
+element properties (like color, radius, etc.) are defined as part of a theme
+
+theme are added at space level: 
+- `aSpace toTheme: Toplo newDefaultThemeInstance.`
+- `space toTheme: ToBeeTheme new.`
+- `aSpace toTheme inspect`
+
+Theme can be raw or defined through stylesheet
+- `ToBeeTheme and method for each element. 
+- `ToTheme class >> defaultTokenProperties` and subclasses 
+
+- theme could be generated from theme file and subclass of `ToStyleSheetTheme`
+WIP: *ToThemeEditorPresenter*
+- stylesheet could be exported in a CSS style like (and could probably be
+imported in the same format - TBC).
+
 ########################################################
 For checkbox (as of 1 jan 2024)
 Implement rawSkin/rawStyle (*ToRawTheme* and *ToRawSkin*) which is the default theme

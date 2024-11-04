@@ -137,6 +137,32 @@ addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true".
 
 #### event tips
 
+##### Event inheritance.
+
+ `BlPrimaryClickEvent`, `BlMiddleClickEvent` and `BlSecondaryClickEvent` are all subclasses of `BlClickEvent`. In Bloc logic, event handler will look for event that are from the defined event class, or inherit from its  parent (exact code is ` anEvent class == self eventClass or: [ anEvent class inheritsFrom: self eventClass ] `. For example, If you define handler for both `BlClickEvent` and `BlPrimaryClickEvent` on your element, and you left click on it, it will raise `BlPrimaryClickEvent`. Because `BlPrimaryClickEvent`inherit from `BlClickEvent`, both will be handled.
+
+In the example below, 'click' will be raised, whatever the mouse button you use to click on your element. 
+```smalltalk
+elt := BlElement new extent: 200@200; border: (BlBorder paint: (Color black) width: 3 ); background: (BlBackground paint: Color blue).
+
+elt addEventHandlerOn: BlClickEvent do: [  self inform: 'click' ].
+elt addEventHandlerOn: BlPrimaryClickEvent do: [  self inform: 'Primary' ].
+elt addEventHandlerOn: BlSecondaryClickEvent do: [ self inform: 'secondary' ].
+elt addEventHandlerOn: BlMiddleClickEvent do: [ self inform: 'middle' ].
+
+elt openInNewSpace 
+```
+
+A similar effect can be achieve with:
+```smalltalk
+elt := BlElement new extent: 200 @ 200; border: (BlBorder paint: Color black width: 3); background: (BlBackground paint: Color blue).
+elt addEventHandlerOn: BlClickEvent do: [ :evt | evt primaryButtonPressed ifTrue: [ self inform: 'primary' ] ].
+elt addEventHandlerOn: BlClickEvent do: [ :evt | evt secondaryButtonPressed ifTrue: [ self inform: 'secondary' ] ].
+elt addEventHandlerOn: BlClickEvent do: [ :evt | evt middleButtonPressed ifTrue: [ self inform: 'middle' ] ].
+elt openInNewSpace
+```
+In the first way, you tell explicitely which mouse button event you want to catch. In the second, you have to filter it in the handler action.
+
 ##### Remove all eventHandlers from a Blelement?
 
 ```smalltalk

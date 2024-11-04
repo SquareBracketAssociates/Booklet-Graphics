@@ -5,7 +5,7 @@ an event is said to have been occurred. For example, clicking on a button, movin
 the mouse, entering a character through keyboard, selecting an item from list, etc.
 are the activities that causes an event to happen.
 
-Bloc provides support to handle a wide varieties of events. The class named
+Bloc provides support to handle a wide variety of events. The class named
 *BlEvent* is the base class for an event. An instance of any of its subclass
 is an event. Some of them are are listed below.
 
@@ -31,24 +31,27 @@ BlElement new
   background: Color white; 
   border: (BlBorder paint: Color black width: 2); 
   size: 300 @ 200;
-  addEventHandlerOn: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
-  addEventHandlerOn: BlMouseLeaveEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
+  addEventHandlerOn: BlMouseEnterEvent do: [ :anEvent | anEvent consume. anEvent currentTarget background: Color veryVeryLightGray];
+  addEventHandlerOn: BlMouseLeaveEvent do: [ :anEvent | anEvent consume. anEvent currentTarget background: Color white ]; 
   openInNewSpace 
 ```
 
 ### About event bubbling
 
 We should check `example_mouseEvent_descending_bubbling`
+*This example exists only in Toplo for now, please load Toplo to your image to try it*
 
 ![event propagation](figures/EventPropagation.png)
 
-![Windows nested in each others in Toplo.](figures/4windows.png width=80)
+![Windows nested in each others in Toplo.](figures/4windows.png)
 
 #### Event Capturing Phase
 
 This event travels to all elements in the dispatch chain (from top to bottom), 
 starting from *BlSpace*. If any of these element has a handler for this event, 
 it will be executed, until it reach the target element which can process it.
+
+[Enzo : I would change the word 'handler' above for 'filter' because filters get the event before handlers and so before it reaches the target element]
 
 #### Event Bubbling Phase
 
@@ -60,17 +63,18 @@ the BlSpace element the process will be completed.
 ##### stop event propatation
 
 You can stop the event propagation in an event handler by adding
-`anEvent consumed: true.`
+`anEvent consume`
 
 ##### prevent event capture
 
-Sometime, you don't want your element to capture event. There is an option to
-forbid mouse events for an element. You just send *#preventMouseEvent* to it.
+Sometimes, you don't want your element to capture certain events. There is an option to
+forbid mouse events for an element. You just send `#preventMouseEvents` to it.
 `child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.`
 
-You can also prevent element and its children to capture event, with *#preventMeAndChildrenMouseEvents*
-message, or apply it only to its children with *#preventChildrenMouseEvents*
+You can also prevent element and its children to capture event, with `#preventMeAndChildrenMouseEvents`
+message, or apply it only to its children with `#preventChildrenMouseEvents`
 
+For now, you can only prevent mouseEvents ,including dragStartEvent that needs a mouseDownEvent to be sent. However, if you start a drag, you can send `#preventMouseEvents` and still have events such has dragEvent and dragEndEvent, more about this case later. 
 
 #### Event Handlers
 
@@ -84,14 +88,15 @@ An element can register more than one handler.
 
 **Note**
 `addEventHandlerOn:do:` returns the new handler so that we can store to remove 
-it in case. **Add a #yourself send after to return a BlElement.**
+it in case. **Add a `#yourself` send after to return a BlElement.**
 
 ##### Complex case - reusing event handling logic with an event Handler
 
 Instead of using addEventHandlerOn:do: you can also see users of `addEventHandler:`.
-An event handler can manage multiple element at once, by overriding the method `eventsToHandle`
+An event handler can manage multiple element at once, by overriding the method `eventsToHandle`.
+This implies that you define a new subclass of `BlCustomEventHandler` for your handler.
 
-This example is taken from `BlPullHandler` which demonstrate how you can dra around an
+This example is taken from `BlPullHandler` which demonstrate how you can drag around an
 element (more on this at the end of this chapter)
 
 ```smalltalk
@@ -99,7 +104,7 @@ eventsToHandle
 ^ {	BlDragStartEvent. BlDragEvent. BlDragEndEvent }
 ```
 
-You then add your event handler to your bloc element with method `addEventHandler`.
+You then add your event handler to your bloc element with method `addEventHandler:`.
 This allows complete flexibility.
 
 You can also declare dynamically event handler on specific event.
@@ -109,7 +114,7 @@ BlEventHandler on: BlClickEvent do: [ :anEvent | self inform: 'Click!' ]
 ```
 
 As a more general explanation, all UI related events can be controlled. Have a
-look at *BlElementFlags* and *BlElementEventDispatcherActivatedEvents* and how
+look at `BlElementFlags` and `BlElementEventDispatcherActivatedEvents` and how
 these classes are used.
 
 ```smalltalk
@@ -121,25 +126,27 @@ deco addEventHandler: (BlEventHandler on: BlMouseLeaveEvent
 
 You can also add event filter:
 
-`addEventFilterOn:do:` returns the new handler so that we can store to remove it in case.
+`addEventFilterOn:do:` returns the new filter so that we can store to remove it in case.
 Event filters receive events before general event handlers. Their main goal is
 to prevent some specific events from being handled by basic handlers. For that
-custom filters should mark event as *consumed: true* which instantly stops propagation
+custom filters should `consume` event to instantly stops propagation.
+You can also use filters to do some actions before the event reaches your target element.
+In this case, consuming the event is not recommanded
 
 In the example below, the element will catch `BlMouseEnterEvent`. If you uncomment
-`anEvent consumed: true`, you'll only have the filtered version. If the event keep
+`anEvent consume`, you'll only have the filtered version. If the event keep
 propagating, both will be called, filter and then handler.
 
 ```smalltalk
-addEventFilterOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true". self inform: 'event filter'];
-addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true". self inform: 'event handler' ];
+addEventFilterOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consume". self inform: 'event filter'];
+addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consume". self inform: 'event handler' ];
 ```
 
 #### event tips
 
 ##### Event inheritance.
 
- `BlPrimaryClickEvent`, `BlMiddleClickEvent` and `BlSecondaryClickEvent` are all subclasses of `BlClickEvent`. In Bloc logic, event handler will look for event that are from the defined event class, or inherit from its  parent (exact code is ` anEvent class == self eventClass or: [ anEvent class inheritsFrom: self eventClass ] `. For example, If you define handler for both `BlClickEvent` and `BlPrimaryClickEvent` on your element, and you left click on it, it will raise `BlPrimaryClickEvent`. Because `BlPrimaryClickEvent`inherit from `BlClickEvent`, both will be handled.
+ `BlPrimaryClickEvent`, `BlMiddleClickEvent` and `BlSecondaryClickEvent` are all subclasses of `BlClickEvent`. In Bloc logic, event handler will look for event that are from the defined event class, or inherit from its  parent (exact code is ` anEvent class == self eventClass or: [ anEvent class inheritsFrom: self eventClass ] `). For example, If you define handler for both `BlClickEvent` and `BlPrimaryClickEvent` on your element, and you left click on it, it will raise `BlPrimaryClickEvent`. Because `BlPrimaryClickEvent`inherit from `BlClickEvent`, both will be handled.
 
 In the example below, 'click' will be raised, whatever the mouse button you use to click on your element. 
 ```smalltalk
@@ -161,9 +168,22 @@ elt addEventHandlerOn: BlClickEvent do: [ :evt | evt secondaryButtonPressed ifTr
 elt addEventHandlerOn: BlClickEvent do: [ :evt | evt middleButtonPressed ifTrue: [ self inform: 'middle' ] ].
 elt openInNewSpace
 ```
-In the first way, you tell explicitely which mouse button event you want to catch. In the second, you have to filter it in the handler action.
 
-##### Remove all eventHandlers from a Blelement?
+The same example can also be written like this : 
+```st
+elt := BlElement new extent: 200 @ 200; border: (BlBorder paint: Color black width: 3); background: (BlBackground paint: Color blue).
+elt addEventHandlerOn: BlClickEvent do: [ :evt |
+	evt 
+	ifPrimary: [ self inform: 'primary' ]
+	secondary: [ self inform: 'secondary' ] 
+	middle: [ self inform: 'middle' ] 
+	other: [ self inform: 'other' ]].
+elt openInNewSpace
+```
+
+In the first way, you tell explicitely which mouse button event you want to catch. In the second and the third, you have to filter it in the handler action.
+
+##### Remove all eventHandlers from a BlElement?
 
 ```smalltalk
 el removeEventHandlersSuchThat: [:e|true] 
@@ -190,7 +210,7 @@ surface addEventHandlerOn: BlMouseWheelEvent
 
 ##### forbid mouse events on an element
 
-There is an option to forbid mouse events for an element. You just send `preventMouseEvent` to it
+There is an option to forbid mouse events for an element. You just send `preventMouseEvents` to it
 
 ```smalltalk
 container := BlElement new size: 500 asPoint; border: (BlBorder paint: Color red width: 2).
@@ -199,7 +219,7 @@ container := BlElement new size: 500 asPoint; border: (BlBorder paint: Color red
 child1 := BlElement new size: 300 asPoint; background: Color lightGreen; position: 100 asPoint; addEventHandlerOn: BlClickEvent do: [ self inform: '1' ]; yourself .
 
 "There is an option to forbid mouse events for an element. 
-You just send #preventMouseEvent to it."
+You just send #preventMouseEvents to it."
 child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.
 
 container addChild: child1.
@@ -250,6 +270,19 @@ using low level event
 					 self inform: 'source 1 alt key pressed' ] ].
 ```
 
+Be careful, if you add a handler for keyboardEvents to a `BlElement`, you should send it the message `requestFocus` for it to receive these events.
+
+```st
+elt := BlElement new size: 100 asPoint; background: Color blue; position: 100 asPoint.
+elt addEventHandlerOn: BlKeyDownEvent
+			 do: [ :evt |
+				 (evt key = KeyboardKey altLeft or: [
+					  evt key = KeyboardKey altRight ]) ifTrue: [
+					 self inform: 'source 1 alt key pressed' ] ].			
+elt requestFocus.
+elt openInNewSpace 
+```
+
 #### Keymap at system platform level
 
 `KeyboardKey` class is used when a key on the keyboard is pressed.
@@ -278,26 +311,28 @@ space root addChildren: { source1. source2. target. }.
 
 source1 addEventHandlerOn: BlDragStartEvent do: [ :event | event consumed: true. self inform: 'source1 BlStartDragEvent'. 
 	offset := event position - source1 position. 
-	source1 removeFromParent.].
-source1 addEventHandlerOn: BlDragEndEvent do: [ :event | event consumed: true. self inform: 'source1 BlDragEndEvent'. ].
+	source1 removeFromParent.
+	source1 preventMeAndChildrenMouseEvents].
+source1 addEventHandlerOn: BlDragEndEvent do: [ :event | event consumed: true. self inform: 'source1 BlDragEndEvent'. 
+	source1 allowMeAndChildrenMouseEvents ].
 source1 addEventHandlerOn: BlDragEvent do: [ :event | event consumed: true. "self inform:  'source1 BlDragEvent'."
 	source1 position: event position - offset.
-	source1 hasParent ifFalse: [space root addChild: source1].
-	source1 preventMeAndChildrenMouseEvents ].
+	source1 hasParent ifFalse: [space root addChild: source1]].
 
 source2 addEventHandlerOn: BlDragStartEvent do: [ :event | event consumed: true. self inform: 'source2 BlStartDragEvent'. 
 	offset := event position - source2 position.
-	source2  removeFromParent.].
-source2 addEventHandlerOn: BlDragEndEvent do: [ :event | event consumed: true. self inform: 'source2 BlDragEndEvent'. ].
+	source2  removeFromParent.
+	source2 preventMeAndChildrenMouseEvents].
+source2 addEventHandlerOn: BlDragEndEvent do: [ :event | event consumed: true. self inform: 'source2 BlDragEndEvent'. 
+	source2 allowMeAndChildrenMouseEvents ].
 source2 addEventHandlerOn: BlDragEvent do: [ :event | event consumed: true. "self inform:  'source BlDragEvent'."
 	source2 position: event position - offset.
-	source2 hasParent ifFalse: [space root addChild: source2].
-	source2 preventMeAndChildrenMouseEvents ].
+	source2 hasParent ifFalse: [space root addChild: source2] ].
 
 target addEventHandlerOn: BlDropEvent do: [ :event | event consumed: true. self inform: 'target BlDropEvent'.
 	event gestureSource background paint color = (Color red)
 			ifTrue: [ self inform: 'drop accepted' ]
-			ifFalse: [ self inform: 'drop rejected'. event gestureSource position: 100 @ 400; allowMeAndChildrenMouseEvents] ].
+			ifFalse: [ self inform: 'drop rejected'. event gestureSource position: 100 @ 400] ].
 target addEventHandlerOn: BlDragEnterEvent do: [ :event | event consumed: true. self inform: 'target BlDragEnterEvent' ].
 target addEventHandlerOn: BlDragLeaveEvent do: [ :event | event consumed: true. self inform: 'target BlDragLeaveEvent' ].
 

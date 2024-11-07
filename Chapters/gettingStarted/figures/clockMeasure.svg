@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="clock.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="1.6730219"
+     inkscape:cx="396.58776"
+     inkscape:cy="561.25984"
+     inkscape:window-width="3840"
+     inkscape:window-height="2126"
+     inkscape:window-x="3829"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:export-bgcolor="#ffffff00">
+    <inkscape:grid
+       id="grid1"
+       units="mm"
+       originx="0"
+       originy="0"
+       spacingx="0.99999998"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       dotted="false"
+       gridanglex="30"
+       gridanglez="30"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <rect
+       x="432.74987"
+       y="76.508264"
+       width="47.594445"
+       height="15.705839"
+       id="rect17" />
+    <marker
+       style="overflow:visible"
+       id="marker16"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Rounded arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.7)"
+         d="m -0.21114562,-4.1055728 6.42229122,3.21114561 a 1,1 90 0 1 0,1.78885438 L -0.21114562,4.1055728 A 1.236068,1.236068 31.717474 0 1 -2,3 v -6 a 1.236068,1.236068 148.28253 0 1 1.78885438,-1.1055728 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         id="path16" />
+    </marker>
+    <rect
+       x="432.74988"
+       y="76.508263"
+       width="49.211614"
+       height="16.014989"
+       id="rect17-7" />
+    <rect
+       x="432.74988"
+       y="76.508263"
+       width="48.564746"
+       height="14.77839"
+       id="rect17-0" />
+    <rect
+       x="432.74988"
+       y="76.508263"
+       width="48.564747"
+       height="14.77839"
+       id="rect17-0-4" />
+    <rect
+       x="432.74988"
+       y="76.508263"
+       width="48.564747"
+       height="14.77839"
+       id="rect17-0-4-0" />
+    <rect
+       x="432.74988"
+       y="76.508263"
+       width="48.564747"
+       height="14.77839"
+       id="rect17-0-0" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.065;stroke-dasharray:none;stroke-opacity:1"
+       d="m 174.27795,100.26517 c -149.607024,0 -149.607024,0 -149.607024,0 v 0"
+       id="path3" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.065;stroke-dasharray:none;stroke-opacity:1"
+       d="m 99.94888,24.98722 c 0.31629,150.71405 0,150.71405 0,150.71405"
+       id="path4" />
+    <path
+       style="fill:none;stroke:#3035e0;stroke-width:1.065;stroke-dasharray:none;stroke-opacity:1"
+       d="m 101.05591,99.474439 c 64.20767,-19.76837 64.04952,-19.76837 64.04952,-19.76837"
+       id="path5" />
+    <path
+       style="fill:none;stroke:#3035e0;stroke-width:1.065;stroke-dasharray:none;stroke-opacity:1"
+       d="M 100.98605,99.411148 C 119.88047,34.94089 119.7933,35.072849 119.7933,35.072849"
+       id="path5-9" />
+    <path
+       style="fill:none;stroke:#f8051f;stroke-width:1.065;stroke-dasharray:3.19500017,1.06500006;stroke-opacity:1;stroke-dashoffset:0"
+       d="m 165.10543,80.18051 c -0.15815,19.452076 -0.15815,19.452076 -0.15815,19.452076"
+       id="path6" />
+    <path
+       style="fill:none;stroke:#f8051f;stroke-width:1.065;stroke-dasharray:1.06500006,2.13000011;stroke-opacity:1;stroke-dashoffset:0"
+       d="M 119.75125,35.384994 C 100.2993,35.558068 100.2993,35.558068 100.2993,35.558068"
+       id="path6-2" />
+    <path
+       style="fill:none;stroke:#f8051f;stroke-width:1.065;stroke-dasharray:3.19500017,1.06500006;stroke-opacity:1;stroke-dashoffset:0"
+       d="m 100.42332,80.18051 c 64.68211,-0.316294 64.68211,-0.316294 64.68211,-0.316294"
+       id="path7" />
+    <path
+       style="fill:none;stroke:#f8051f;stroke-width:1.065;stroke-dasharray:1.06500006,2.13000011;stroke-opacity:1;stroke-dashoffset:0"
+       d="M 120.69369,99.96808 C 120.51548,35.285435 120.51548,35.285435 120.51548,35.285435"
+       id="path7-1" />
+    <circle
+       style="fill:none;stroke:#101000;stroke-width:1.065;stroke-dasharray:none;stroke-opacity:1"
+       id="path13"
+       cx="99.790726"
+       cy="100.10703"
+       r="68.477638" />
+    <path
+       style="fill:none;stroke:#101000;stroke-width:0.73583;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker16)"
+       id="path15"
+       sodipodi:type="arc"
+       sodipodi:cx="128.19916"
+       sodipodi:cy="100.38686"
+       sodipodi:rx="43.745888"
+       sodipodi:ry="56.750263"
+       sodipodi:start="5.9895198"
+       sodipodi:end="0.0055786525"
+       sodipodi:open="true"
+       sodipodi:arc-type="arc"
+       d="m 170.07225,83.959777 a 43.745888,56.750263 0 0 1 1.87211,16.743673" />
+    <path
+       style="fill:none;stroke:#101000;stroke-width:0.73583;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker16)"
+       id="path15-1"
+       sodipodi:type="arc"
+       sodipodi:cx="-37.097221"
+       sodipodi:cy="121.60214"
+       sodipodi:rx="43.745888"
+       sodipodi:ry="56.750263"
+       sodipodi:start="5.9895198"
+       sodipodi:end="0.0055786525"
+       sodipodi:open="true"
+       sodipodi:arc-type="arc"
+       d="m 4.7758735,105.17506 a 43.745888,56.750263 0 0 1 1.8721122,16.74367"
+       transform="rotate(-72.208528)" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.4889626,0,0,0.51155445,-105.64006,-18.322825)"
+       id="text17"
+       style="white-space:pre;shape-inside:url(#rect17);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.623622;stroke-dasharray:1.87087, 0.623622;stroke-dashoffset:0;stroke-opacity:1"><tspan
+         x="432.75"
+         y="87.455776"
+         id="tspan2">Time X</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.32034603,0,0,0.36069339,15.806277,73.223897)"
+       id="text17-5"
+       style="white-space:pre;shape-inside:url(#rect17-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.623622;stroke-dasharray:1.87087, 0.623622;stroke-dashoffset:0;stroke-opacity:1"><tspan
+         x="432.75"
+         y="87.455776"
+         id="tspan3">cos (x)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.32034603,0,0,0.36069339,-53.313954,5.4470281)"
+       id="text17-5-1"
+       style="white-space:pre;shape-inside:url(#rect17-0-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.623622;stroke-dasharray:1.87087, 0.623622;stroke-dashoffset:0;stroke-opacity:1"><tspan
+         x="432.75"
+         y="87.455776"
+         id="tspan4">-cos (x)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.32034603,0,0,0.36069339,-55.001859,49.530382)"
+       id="text17-5-5"
+       style="white-space:pre;shape-inside:url(#rect17-0-4);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.623622;stroke-dasharray:1.87087, 0.623622;stroke-dashoffset:0;stroke-opacity:1"><tspan
+         x="432.75"
+         y="87.455776"
+         id="tspan5">sin (x)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.32034603,0,0,0.36069339,-24.285805,75.001994)"
+       id="text17-5-5-7"
+       style="white-space:pre;shape-inside:url(#rect17-0-4-0);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.623622;stroke-dasharray:1.87087, 0.623622;stroke-dashoffset:0;stroke-opacity:1"><tspan
+         x="432.75"
+         y="87.455776"
+         id="tspan6">sin (x)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.4889626,0,0,0.51155445,-37.058893,45.670256)"
+       id="text17-2"
+       style="white-space:pre;shape-inside:url(#rect17-7);display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.623622;stroke-dasharray:1.87087, 0.623622;stroke-dashoffset:0;stroke-opacity:1"><tspan
+         x="432.75"
+         y="87.455776"
+         id="tspan7">angle X</tspan></text>
+  </g>
+</svg>

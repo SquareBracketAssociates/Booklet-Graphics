@@ -243,7 +243,7 @@ context
 
 ### Color
 
-You can select different color styles to paint your path: a color, a linear gradient, a radial gradient and a bitmap.
+You can select different color styles to paint your path: a color, a linear gradient, a radial gradient a bitmap and a mesh gradient.
 
 #### Single color.
   
@@ -252,6 +252,10 @@ context sourceColor: (Color yellow alpha: 0.2);
 ```
 
 #### Linear gradient.
+
+Generally speaking, a gradient is a smooth transition of colors defined by two
+or more stop-colors. In the case of a linear gradient, this transition is defined
+by a straight line.
 
 ```smalltalk
 gradient := AeCairoLinearGradientPattern
@@ -265,6 +269,16 @@ context source: gradient;
 
 #### Radial gradient.
 
+In the case of a radial gradient, the transition is defined by a center and a
+radius, between the two circles defined by innerCirle and outer circle
+Colors expand evenly in all directions from the inner center of the inner circle
+to outside of the outer circle. Before using the gradient pattern, a number of
+color stops should be defined
+
+The coordinates here are in pattern space. For a new pattern, pattern space is
+identical to user space, but the relationship between the spaces can be changed
+with `AeCairoPattern >> matrix:`.
+
 ```smalltalk
 gradient := AeCairoRadialGradientPattern
 	innerCenter: 50 @ 50
@@ -275,6 +289,72 @@ gradient := AeCairoRadialGradientPattern
 		(0 -> Color black).
 		(1 -> Color white) }.
 context source: gradient.
+```
+
+### Mesh gradient
+
+A mesh gradient is defined by a set of colors and control points. The most basic
+type of mesh gradient is a Gouraud-shading triangle mesh.
+
+```smalltalk
+| aSurface aContext aMeshPattern |
+aSurface := AeCairoImageSurface extent: 100 @ 100.
+aContext := aSurface newContext.
+
+aMeshPattern := AeCairoMeshPattern new.
+aMeshPattern
+	beginPatch;
+	moveTo: 50 @ 0;
+	lineTo: 100 @ 100;
+	lineTo: 0 @ 100;
+	cornerColors: {
+		Color red alpha: 0.5.
+		Color green.
+		Color blue };
+	endPatch.
+
+aContext
+	sourceColor: Color yellow;
+	paint;
+	source: aMeshPattern;
+	paint.
+
+^ aSurface
+```
+
+A more sophisticated patch of mesh gradient is a Coons patch. A Coons patch is
+a quadrilateral defined by 4 cubic Bézier curve and 4 colors, one for each vertex.
+A Bézier curve is defined by 4 points, so we have a total of 12 control points
+(and 4 colors) in a Coons patch.
+
+```smalltalk
+| aSurface aContext aMeshPattern |
+aSurface := AeCairoImageSurface extent: 150 @ 110.
+aContext := aSurface newContext.
+
+aMeshPattern := AeCairoMeshPattern new.
+aMeshPattern
+	beginPatch;
+	moveTo: 45 @ 12;
+	curveVia: 69 @ 24 via: 173 @ -15 to: 115 @ 50;
+	curveVia: 127 @ 66 via: 174 @ 47 to: 148 @ 104;
+	curveVia: 65 @ 58 via: 70 @ 69 to: 18 @ 103;
+	curveVia: 42 @ 43 via: 63 @ 45 to: 45 @ 12;
+	cornerColors: {
+		Color red.
+		Color green.
+		Color blue.
+		Color red alpha: 0.5 };
+	endPatch.
+
+aContext
+	sourceColor: Color yellow;
+	paint;
+	translateByX: -15 y: 0;
+	source: aMeshPattern;
+	paint.
+
+^ aSurface
 ```
 
 #### Bitmap.

@@ -381,6 +381,35 @@ destination, by manipulating the transformation matrix.
 * `rotateByRadians:` modifies the current transformation matrix by rotating the user-space axes by angle radians.
 * `setIdentityMatrix` resets the current transformation matrix by setting it equal to the identity matrix.
 
+### composition operator
+
+Normally, you will be using Alexandrie to draw objects on top of each other. But Alexandrie can do differently, if you need it! In fact, you can use all the compositing operators.
+
+In the example below, we'll have two rectangle, one red and one blue, on top
+of each other. Depending of the compositing operator used, the result will be
+completely different.
+
+This is the code for the **clear** operator. You can change it to all other operator
+available. Some are directly available at the context level, but for the majority
+of them, you need to specify the context operator.
+
+```smalltalk
+| surface context |
+surface := AeCairoImageSurface extent: 150 @ 120 format: AeCairoSurfaceFormat argb32.
+context := surface newContext.
+context sourceColor: Color transparent; paint.
+
+context sourceColorR: 0.7 g: 0 b: 0 a: 0.8; rectangle: (0 @ 0 extent: 120 @ 90); fill.
+
+context operator: AeCairoOperator clear.
+"or context setOperatorClear"
+
+context sourceColorR: 0 g: 0 b: 0.9 a: 0.4;	rectangle: (40 @ 30 extent: 120 @ 90); fill.
+
+^ surface asForm
+```
+
+![all cairo operators.](figures/all_cairo_operators.png width=60&label=mask)
 
 ### Mask and clip
 

@@ -251,6 +251,40 @@ BlElement new
 
 ![Background color.](figures/backgroundcolortype.png width=80)
 
+#### Element background and geometry tricks
+
+In general is the geometry (and also the transformation matrix) doesn't change 
+the BlElement size. The opposite, in general the geometry takes into account the 
+element's size (via matchExtent:). But this is not the case for polygon or polyline...
+
+If you don't pay attention to this, you can have a linear gradient that doesn't 
+cover all your element, as illustrated by:
+
+```smalltalk
+BlElement new geometry: (BlPolygonGeometry vertices: { (100 @ 0). (200 @ 0). (300 @ 100). (0 @ 100) }); 
+	background: (BlLinearGradientPaint vertical from: Color black to: Color white); 
+	border: (BlBorder paint: Color red width: 3).
+```
+
+![Wrong geometry size.](figures/geometry_size_painting.png width=80)
+
+Obviously, the white part take too much space. To fix this, you need to specify
+the size of your element, from the size of its geometry. Like:
+
+```smalltalk
+aGeometry := BlPolygonGeometry vertices: {(100 @ 0). (200 @ 0). (300 @ 100). (0 @ 100) }.
+
+BlElement new geometry: aGeometry;
+            size: aGeometry geometryBounds extent;
+            background: (BlLinearGradientPaint vertical from: Color black to: Color white); border: (BlBorder paint: Color red width: 3);
+            yourself
+```
+
+This will render as expected:
+
+![Wrong geometry size.](figures/geometry_size_painting_right.png width=80)
+
+
 ### Element effect
 
 You can get the list of all the effects available by executing: `BlElementEffect allSubclasses`

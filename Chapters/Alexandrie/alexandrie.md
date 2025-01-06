@@ -411,7 +411,7 @@ context sourceColorR: 0 g: 0 b: 0.9 a: 0.4;	rectangle: (40 @ 30 extent: 120 @ 90
 
 ![all cairo operators.](figures/all_cairo_operators.png width=60&label=mask)
 
-### Mask and clip
+### Mask
 
 The `mask` operations allow transfer according to the transparency/opacity of
 a second source pattern or surface. Where the pattern or surface is opaque,

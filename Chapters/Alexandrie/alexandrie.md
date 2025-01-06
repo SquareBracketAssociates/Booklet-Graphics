@@ -439,6 +439,9 @@ The `clip` establishes a new clip region by intersecting with the current path
 by effectively masking out any changes to the surface that are outside the
 current clip region.
 
+Like *stroke* or *fill*, the *context* will forget your path once applied.
+If you want to keep it for *clip* operations, you should use the `clipPreserve` messages.
+
 In the following snippet, we clip a circle in the middle of our picture which only shows part of the Pharo logo (as shown in Fig. *@clip@*).
 
 ```smalltalk

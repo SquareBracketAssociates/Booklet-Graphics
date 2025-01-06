@@ -141,6 +141,7 @@ The path expresses the shape you want to draw with a virtual pen. It's then appl
 to the destination using the `paint` message.
 
 It's expressed with simple primitives:
+
 * `moveTo:` moves to the specified location.
 * `relativeMoveTo:` moves to the specified location, relative to your starting point.
 * `lineTo:` adds a line to a specified location.
@@ -153,6 +154,7 @@ It's expressed with simple primitives:
 You can find more methods in the class `AeCairoContext`.
 
 #### Example.
+
 Here is a full example which results in Fig. *linepath*.
 
 ```smalltalk
@@ -357,7 +359,7 @@ aContext
 ^ aSurface
 ```
 
-#### Bitmap.
+#### Bitmap and PNG file.
   
 ```smalltalk
 form := AeCairoImageSurface fromForm:
@@ -365,7 +367,14 @@ form := AeCairoImageSurface fromForm:
 context sourceSurface: form x: 0 y: 0
 ```
 
-The `stroke` and `fill` messages with use the source color specified and apply itto your path.
+You can also get your surface from external files.
+
+```smalltalk
+aSurface := AeCairoImageSurface newFromPngFileAt: 'a.png' asFileReference.
+aSurface inspect
+```
+
+The `stroke` and `fill` messages will use the source color specified and apply it to your path.
 
 Figure *@colorpaint@* presents a full example with all color possibilities.
 

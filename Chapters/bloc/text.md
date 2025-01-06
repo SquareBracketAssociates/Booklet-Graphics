@@ -254,7 +254,7 @@ element text: 'hello world' asRopedText.
 label.
 ```
 
-## upload a font to bloc
+### upload a font to bloc
 
 you can load a directory with fonts (e.g. .ttf and .otf files) this way: 
 `AeFontManager globalInstance scanDirectory: '../../fonts' asFileReference`

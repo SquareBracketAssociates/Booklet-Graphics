@@ -473,7 +473,7 @@ context paint.
 
 ![Example of clip.](figures/clip.png width=60&label=clip)
 
-## Drawing on other surfaces
+### Drawing on other surfaces
 
 So far in this chapter, we have been only using *AeCairoImageSurface* to draw our
 elements. Alexandrie, being based on Cairo graphics library,  provide alternatives

@@ -66,7 +66,21 @@ You can stop the event propagation in an event handler by adding
 
 Sometime, you don't want your element to capture event. There is an option to
 forbid mouse events for an element. You just send *#preventMouseEvent* to it.
-`child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.`
+
+In the example below, *child2* will not capture mouse events.
+
+```smalltalk
+container := BlElement new size: 500 asPoint; border: (BlBorder paint: Color red width: 2).
+
+child1 := BlElement new size: 300 asPoint; background: Color lightGreen; position: 100 asPoint; addEventHandlerOn: BlClickEvent do: [ self inform: '1' ]; yourself .
+
+child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.
+
+container addChild: child1.
+container addChild: child2.
+
+container openInSpace.
+```
 
 You can also prevent element and its children to capture event, with *#preventMeAndChildrenMouseEvents*
 message, or apply it only to its children with *#preventChildrenMouseEvents*
@@ -83,8 +97,14 @@ An element can register more than one handler.
 2. anEventClass can be a subclass of `BlUIEvent`
 
 **Note**
-`addEventHandlerOn:do:` returns the new handler so that we can store to remove 
+`addEventHandlerOn:do:` returns the new handler so that we can store to remove
 it in case. **Add a #yourself send after to return a BlElement.**
+
+When adding two event handlers on the same event for the same element, event handler
+will be executed sequentialy. the order of processing will match event handler declaration order.
+
+If you want a single time action, you can use the message `#addEventHandlerOn: doOnce:`.
+It'll add an event handler that will be removed right before culling the received block closure.
 
 ##### Complex case - reusing event handling logic with an event Handler
 
@@ -100,6 +120,7 @@ eventsToHandle
 ```
 
 You then add your event handler to your bloc element using the method `addEventHandler`.
+
 This allows complete flexibility.
 
 You can also declare dynamically an event handler on specific event.
@@ -116,6 +137,25 @@ these classes are used.
 deco addEventHandler: (BlEventHandler on: BlMouseLeaveEvent
       do: [ :event | event currentTarget border: BlBorder empty ]).
 ```
+
+You can of course remove event handler associated with a specific element with
+the method `#removeEventHandler:`. In the example below, the handler will be 
+removed on the first key pressed on the element
+
+```smalltalk
+	|handler|
+	
+	handler := (BlEventHandler on: BlKeyDownEvent
+				   do: [ :anEvent | self inform: 'Key down: ' , anEvent key asString.
+						anEvent currentTarget removeEventHandler:handler. ]).
+  BlElement new size: 200 @ 200; background: Color red; addEventHandler: handler;
+		  requestFocus; openInNewSpace
+```
+
+If you create a new custom handler class that deals with multiple events and add it dynamically
+to your element, you can go back to the original state later by removing the new 'dynamically-added event' by simply using its reference. You can check if your element has a specific event handler with `#hasEventHandler:`. You can also avoid adding twice the same event handler with `#addEventHandlerIfNotPresent:`. There is no way to disable an event handling temporary.
+If you want to achieve such behavior, you should first remove its event handler, and
+add it again later.
 
 #### event filters
 
@@ -142,6 +182,7 @@ addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true".
  `BlPrimaryClickEvent`, `BlMiddleClickEvent` and `BlSecondaryClickEvent` are all subclasses of `BlClickEvent`. In Bloc logic, event handler will look for event that are from the defined event class, or inherit from its  parent (exact code is ` anEvent class == self eventClass or: [ anEvent class inheritsFrom: self eventClass ] `. For example, If you define handler for both `BlClickEvent` and `BlPrimaryClickEvent` on your element, and you left click on it, it will raise `BlPrimaryClickEvent`. Because `BlPrimaryClickEvent`inherit from `BlClickEvent`, both will be handled.
 
 In the example below, 'click' will be raised regardless of which mouse button you use to click on the element. 
+
 ```smalltalk
 elt := BlElement new extent: 200@200; border: (BlBorder paint: (Color black) width: 3 ); background: (BlBackground paint: Color blue).
 
@@ -154,6 +195,7 @@ elt openInNewSpace
 ```
 
 A similar effect can be achieve with:
+
 ```smalltalk
 elt := BlElement new extent: 200 @ 200; border: (BlBorder paint: Color black width: 3); background: (BlBackground paint: Color blue).
 elt addEventHandlerOn: BlClickEvent do: [ :evt | evt primaryButtonPressed ifTrue: [ self inform: 'primary' ] ].
@@ -161,6 +203,7 @@ elt addEventHandlerOn: BlClickEvent do: [ :evt | evt secondaryButtonPressed ifTr
 elt addEventHandlerOn: BlClickEvent do: [ :evt | evt middleButtonPressed ifTrue: [ self inform: 'middle' ] ].
 elt openInNewSpace
 ```
+
 In the first way, you tell explicitely which mouse button event you want to catch. In the second, you have to filter it in the handler action.
 
 ##### Remove all eventHandlers from a Blelement?
@@ -188,30 +231,11 @@ surface addEventHandlerOn: BlMouseWheelEvent
               elt transformDo: [ :t | t scaleBy: scaleFactor].].
 ```
 
-##### forbid mouse events on an element
-
-There is an option to forbid mouse events for an element. You just send `preventMouseEvent` to it
-
-```smalltalk
-container := BlElement new size: 500 asPoint; border: (BlBorder paint: Color red width: 2).
-
-"#addEventHandlerOn: do: returns the new event handler.  add a #yourself send after"
-child1 := BlElement new size: 300 asPoint; background: Color lightGreen; position: 100 asPoint; addEventHandlerOn: BlClickEvent do: [ self inform: '1' ]; yourself .
-
-"There is an option to forbid mouse events for an element. 
-You just send #preventMouseEvent to it."
-child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.
-
-container addChild: child1.
-container addChild: child2.
-
-container openInSpace.
-```
-
 ### Keyboard event handling -  Combination from Bloc framework
 
 Bloc comes with its own keymapping framework.
 BlShortcutWithAction would be the equivalent of KMKeymap.
+
 
 A Shortcut represents a keyboard shortcut that can be registered to any arbitrary BlElement.
 A Shortcut consist of an Action that is evaluated when a Shortcut is triggered and
@@ -221,10 +245,10 @@ such as alternative, compulsory or single key. See subclasses of BlKeyCombinatio
 Additionally, shortcut may provide its optional textual description and name.
 
 A shortcut can be added or removed from the element by using `BlElement>>#addShortcut:`
-or `BlElement>>#removeShortcut:` methods. BlElement>>#shortcuts message can be
+or `BlElement>>#removeShortcut:` methods. `BlElement>>#shortcuts` message can be
 sent to an element in order to access a list of all registered shortcuts.
 
-BlShortcutWithAction extend BlBasicShortcut with ability to specify a runtime
+*BlShortcutWithAction* extend *BlBasicShortcut* with ability to specify a runtime
 action that should be evaluated when shortcut is performed. In addition to that,
 shortcuts with action allow users to customise the name and description of the shortcut.
 
@@ -234,28 +258,86 @@ BlShortcutWithAction new
     action: [ flag := true ].
 ```
 
+To add a shortcut to an element:
+
 ```smalltalk
 addShortcut: (BlShortcutWithAction new
-      combination: (BlKeyCombination builder shift; meta; key: BlKeyboardKey arrowLeft; build);
+      combination: (BlKeyCombination builder shift; key: KeyboardKey left; build);
       action: [ :anEvent :aShortcut | self inform: 'Triggered ', aShortcut combination asString ]);
 ```
 
-using low level event
+For a single key combination, you can use *BlSingleKeyCombination* like: 
 
 ```smalltalk
-	space addEventHandlerOn: BlKeyDownEvent
-			 do: [ :evt |
-				 (evt key = KeyboardKey altLeft or: [
-					  evt key = KeyboardKey altRight ]) ifTrue: [
-					 self inform: 'source 1 alt key pressed' ] ].
+addShortcut: (BlShortcutWithAction new
+      combination: (BlSingleKeyCombination new key: KeyboardKey left);
+      action: [ :anEvent :aShortcut | self inform: 'Triggered ', aShortcut combination asString ]);
 ```
 
-#### Keymap at system platform level
+For *alternative* key combination, there is *BlAlternativeCombination* which
+represent an alternative "OR" combination of multiple distinct keys. (disjunction)
 
-`KeyboardKey` class is used when a key on the keyboard is pressed.
+It's very useful to support shortcuts that treat different keyboard keys as identical.
+For example there might be two SHIFT keys: SHIFTL (left shift) and SHIFTR (right shift). In most cases for the end user there should be no difference between those two.
 
-It's used ultimately by BlKeyCombinationBuilder to build keyboard shortcut
-in bloc. It's also used to convert key from event by BlOSWindowEventHandler.
+Here is an example of how to unify two shifts:
+
+```smalltalk
+BlAlternativeCombination new
+key: Key leftShift;
+key: Key rightShift;
+yourself
+```
+
+Unified meta (cmd):
+
+```smalltalk
+BlAlternativeCombination new
+with: (BlSingleKeyCombination key: Key leftMeta);
+with: (BlSingleKeyCombination key: Key rightMeta);
+yourself
+```
+
+You also have *BlCompulsoryCombination* which represent a compulsory "AND" combination of multiple distinct keys. (conjunction). It's useful when there is a need to create a key combination that should be matched when all subcombinations are matching.
+
+Example of a key combination that matches then and only then when both "arrowLeft" and "W" are pressed:
+
+```smalltalk
+BlCompulsoryCombination new
+key: Key arrowLeft;
+key: Key w;
+yourself
+```
+
+Unified meta (cmd):
+
+```smalltalk
+BlCompulsoryCombination new
+with: (BlSingleKeyCombination key: Key arrowLeft);
+with: (BlSingleKeyCombination key: Key w);
+yourself
+```
+
+You can of course specify key management using low level event. It should be obvious
+to the reader it's not the prefered way, and we should prefer proper object to handle
+keyboard key.
+
+```smalltalk
+space addEventHandlerOn: BlKeyDownEvent
+	do: [ :evt |
+		(evt key = KeyboardKey altLeft or: [
+			evt key = KeyboardKey altRight ]) ifTrue: [
+			self inform: 'source 1 alt key pressed' ] ].
+```
+
+When handling event, you can check if a specific modifier key (alt, ctrl, shift) has
+been pressed with the *modifiers* message, like:
+
+```smalltalk
+elt addEventHandlerOn: BlDragEvent do: [ :event | event modifiers isAlt ifTrue: [self inform: 'alt']].
+```
+
+This will catch all modifier pressed. For example If you specify *isCtrl* but you don't want *ctrl+shift+alt* to react, you will need to specify `isAlt and: isShift not and: isCmd not`
 
 ### Drag and Drop
 
@@ -264,8 +346,10 @@ Explore BlBaseDragEvent and subclasses.
 Full drag&drop example
 
 2 hints:
+
 - to allow drop event to reach other element, you have to sent `preventMeAndChildrenMouseEvents` to the dragged element.
 - To allow the dragged element to stay on top of the other, you must 1. remove it `removeFromParent` and 2. add it to the top most element. `space root addChild:` 
+
   
 ```smalltalk
 | source1 source2 target space offset |
@@ -325,4 +409,3 @@ elt addEventHandler: BlPullHandler new disallowOutOfBounds.
 
 parent openInSpace.
 ```
-

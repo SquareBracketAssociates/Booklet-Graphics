@@ -141,6 +141,7 @@ The path expresses the shape you want to draw with a virtual pen. It's then appl
 to the destination using the `paint` message.
 
 It's expressed with simple primitives:
+
 * `moveTo:` moves to the specified location.
 * `relativeMoveTo:` moves to the specified location, relative to your starting point.
 * `lineTo:` adds a line to a specified location.
@@ -153,6 +154,7 @@ It's expressed with simple primitives:
 You can find more methods in the class `AeCairoContext`.
 
 #### Example.
+
 Here is a full example which results in Fig. *linepath*.
 
 ```smalltalk
@@ -357,7 +359,7 @@ aContext
 ^ aSurface
 ```
 
-#### Bitmap.
+#### Bitmap and PNG file.
   
 ```smalltalk
 form := AeCairoImageSurface fromForm:
@@ -365,7 +367,14 @@ form := AeCairoImageSurface fromForm:
 context sourceSurface: form x: 0 y: 0
 ```
 
-The `stroke` and `fill` messages with use the source color specified and apply itto your path.
+You can also get your surface from external files.
+
+```smalltalk
+aSurface := AeCairoImageSurface newFromPngFileAt: 'a.png' asFileReference.
+aSurface inspect
+```
+
+The `stroke` and `fill` messages will use the source color specified and apply it to your path.
 
 Figure *@colorpaint@* presents a full example with all color possibilities.
 
@@ -411,7 +420,7 @@ context sourceColorR: 0 g: 0 b: 0.9 a: 0.4;	rectangle: (40 @ 30 extent: 120 @ 90
 
 ![all cairo operators.](figures/all_cairo_operators.png width=60&label=mask)
 
-### Mask and clip
+### Mask
 
 The `mask` operations allow transfer according to the transparency/opacity of
 a second source pattern or surface. Where the pattern or surface is opaque,
@@ -439,6 +448,9 @@ The `clip` establishes a new clip region by intersecting with the current path
 by effectively masking out any changes to the surface that are outside the
 current clip region.
 
+Like *stroke* or *fill*, the *context* will forget your path once applied.
+If you want to keep it for *clip* operations, you should use the `clipPreserve` messages.
+
 In the following snippet, we clip a circle in the middle of our picture which only shows part of the Pharo logo (as shown in Fig. *@clip@*).
 
 ```smalltalk
@@ -461,11 +473,36 @@ context paint.
 
 ![Example of clip.](figures/clip.png width=60&label=clip)
 
+### Drawing on other surfaces
+
+So far in this chapter, we have been only using *AeCairoImageSurface* to draw our
+elements. Alexandrie, being based on Cairo graphics library,  provide alternatives
+drawing surface that could be used in your project:
+
+* *AeCairoPDFSurface* to generate PDF (Portable Document Format) file.
+* *AeCairoSVGSurface* to generate SVG (Scalable Vector Graphics) files.
+
+Targeting external files, they can be used just like *AeCairoImageSurface* with the following differences:
+
+1. On instance creation, the user specifies 
+   1. output filename (as String)
+   2. the extent in points (1 point == 1/72.0 inch).
+2. When drawing is done, the user should send #finish to write the file trailer into the library buffer and then flush to disk.
+
+Please not that before `#finish`, the file may already exist in disk with 0 bytes.
+If the garbage collector finalizes the instance before `#close`, the exported file
+may have an invalid format.
+
+References:
+* http://zetcode.com/gfx/cairo/cairobackends/
+* http://www.ie.u-ryukyu.ac.jp/~e085739/c.cairo.3.html
+* https://cairographics.org/manual/cairo-PDF-Surfaces.html
+* https://cairographics.org/manual/cairo-SVG-Surfaces.html
 
 ### Conclusion
 
-Alexandrie is the foundation for the graphics Pharo layer. In addition, it lets 
-the programmer draws low-level graphics.
+Alexandrie is the foundation for the graphics Pharo layer. In addition, it lets
+the programmer draws low-level graphics or create external PDF or SVG files.
 
 
 

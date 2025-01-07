@@ -2,14 +2,14 @@
 
 In graphical applications, whenever a user interacts with the application (BlElements),
 an event is said to have been occurred. For example, clicking on a button, moving
-the mouse, entering a character through keyboard, selecting an item from list, etc.
+the mouse, entering a character through the keyboard, selecting an item from list, etc.
 are the activities that causes an event to happen.
 
 Bloc provides support to handle a wide varieties of events. The class named
 *BlEvent* is the base class for an event. An instance of any of its subclass
 is an event. Some of them are are listed below.
 
-- **Mouse Event**  − This is an input event that occurs when a mouse is clicked. It includes actions like mouse clicked, mouse pressed, mouse released, mouse moved, etc.
+- **Mouse Event**  − This is an input event triggered by mouse interactions . It includes actions like mouse clicked, mouse pressed, mouse released, mouse moved, etc.
 - **Key Event** − This is an input event that indicates the key stroke occurred on an element. Those events includes actions like key pressed, key released and key typed.
 - **Drag Event** − This occurs when an Element is dragged by mouse. It includes actions like drag entered, drag dropped, drag entered target, drag exited target, drag over, etc.
 
@@ -74,7 +74,7 @@ message, or apply it only to its children with *#preventChildrenMouseEvents*
 
 #### Event Handlers
 
-Event handlers are those which contains application logic to process an event. 
+Event handlers are responsible for containing the application logic required to process an event. 
 An element can register more than one handler.
 
 ##### Simple case for BlElement.
@@ -99,10 +99,10 @@ eventsToHandle
 ^ {	BlDragStartEvent. BlDragEvent. BlDragEndEvent }
 ```
 
-You then add your event handler to your bloc element with method `addEventHandler`.
+You then add your event handler to your bloc element using the method `addEventHandler`.
 This allows complete flexibility.
 
-You can also declare dynamically event handler on specific event.
+You can also declare dynamically an event handler on specific event.
 
 ```smalltalk
 BlEventHandler on: BlClickEvent do: [ :anEvent | self inform: 'Click!' ]
@@ -121,7 +121,7 @@ deco addEventHandler: (BlEventHandler on: BlMouseLeaveEvent
 
 You can also add event filter:
 
-`addEventFilterOn:do:` returns the new handler so that we can store to remove it in case.
+`addEventFilterOn:do:` returns the new handler, allowing us to store it for later removal if needed.
 Event filters receive events before general event handlers. Their main goal is
 to prevent some specific events from being handled by basic handlers. For that
 custom filters should mark event as *consumed: true* which instantly stops propagation
@@ -141,7 +141,7 @@ addEventHandlerOn:  BlMouseEnterEvent do: [ :anEvent | "anEvent consumed: true".
 
  `BlPrimaryClickEvent`, `BlMiddleClickEvent` and `BlSecondaryClickEvent` are all subclasses of `BlClickEvent`. In Bloc logic, event handler will look for event that are from the defined event class, or inherit from its  parent (exact code is ` anEvent class == self eventClass or: [ anEvent class inheritsFrom: self eventClass ] `. For example, If you define handler for both `BlClickEvent` and `BlPrimaryClickEvent` on your element, and you left click on it, it will raise `BlPrimaryClickEvent`. Because `BlPrimaryClickEvent`inherit from `BlClickEvent`, both will be handled.
 
-In the example below, 'click' will be raised, whatever the mouse button you use to click on your element. 
+In the example below, 'click' will be raised regardless of which mouse button you use to click on the element. 
 ```smalltalk
 elt := BlElement new extent: 200@200; border: (BlBorder paint: (Color black) width: 3 ); background: (BlBackground paint: Color blue).
 
@@ -210,13 +210,13 @@ container openInSpace.
 
 ### Keyboard event handling -  Combination from Bloc framework
 
-Bloc come with its own keymapping framework.
+Bloc comes with its own keymapping framework.
 BlShortcutWithAction would be the equivalent of KMKeymap.
 
-Shortcut represents a keyboard shortcut that can be registered to any arbitrary BlElement.
-Shortcut consist of an Action that is evaluated when a Shortcut is triggered and
+A Shortcut represents a keyboard shortcut that can be registered to any arbitrary BlElement.
+A Shortcut consist of an Action that is evaluated when a Shortcut is triggered and
 BlKeyCombination that describes when shortcut should be triggered. A combination
-is a logical formula expression that is composed of various key combinations
+is a logical formula expression composed of various key combinations
 such as alternative, compulsory or single key. See subclasses of BlKeyCombination.
 Additionally, shortcut may provide its optional textual description and name.
 
@@ -264,8 +264,8 @@ Explore BlBaseDragEvent and subclasses.
 Full drag&drop example
 
 2 hints:
-- to allow drop event to reach other element, you have to sent `preventMeAndChildrenMouseEvents` to dragged element.
-- To allow dragged element to stay on top of the other, you must 1. remove it `removeFromParent` and 2. add it to the top most element. `space root addChild:` 
+- to allow drop event to reach other element, you have to sent `preventMeAndChildrenMouseEvents` to the dragged element.
+- To allow the dragged element to stay on top of the other, you must 1. remove it `removeFromParent` and 2. add it to the top most element. `space root addChild:` 
   
 ```smalltalk
 | source1 source2 target space offset |
@@ -304,7 +304,7 @@ target addEventHandlerOn: BlDragLeaveEvent do: [ :event | event consumed: true. 
 space show
 ```
 
-You can catch modifier while dragging your element. This will catch the 'Alt' key
+You can catch the modifier while dragging your element. This will catch the 'Alt' key
 during a drag event.
 
 ```smalltalk

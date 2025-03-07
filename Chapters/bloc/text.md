@@ -254,4 +254,33 @@ element text: 'hello world' asRopedText.
 label.
 ```
 
+### upload a font to bloc
 
+you can load a directory with fonts (e.g. .ttf and .otf files) this way: 
+`AeFontManager globalInstance scanDirectory: '../../fonts' asFileReference`
+
+There is also 
+`AeFontManager globalInstance scanDefaultDirectories`
+which takes a second to find font files in the typical font directories in current platform (OS)
+
+For example, say you have a font called "Minecraft" in a relative directory. 
+This font has only "Medium" type (this is important, too):
+
+```smalltalk 
+AeFontManager globalInstance scanDirectory: '../../fonts' asFileReference.
+
+BlTextElement new
+    text: ('Hola, Bonjour, Hello!' asRopedText
+            fontName: 'Minecraft' "<--- family name";
+            medium; "<--- weight"
+            fontSize: 50;
+            yourself);
+    openInNewSpace.
+```
+
+This can be tricky: You must set carefully not only the "family name", but also
+3 font properties: "slant" (e.g.  normal/italic), "weight" (e.g. regular, bold,
+light) and "stretch". In my example, when I set the Minecraft family name but
+don't set the medium weight, then by default it will lookup for a Minecraft
+regular weight font, it won't find it (the TTF only comes with a Medium weight
+face), and then will use the default font.

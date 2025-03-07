@@ -11,8 +11,7 @@ All of the objects that you see on the screen when you run Pharo are
 
 The class `BlElement` itself is a large class with many methods; this makes it
 possible for subclasses to implement interesting behavior with little code. You
-can also customize an element directly. Contrary to the old Morphic environment,
-Bloc favors much more object composition over inheritance.
+can also customize an element directly. Unlike the old Morphic environment, Bloc strongly favors object composition over inheritance.
 
 To create a BlElement to represent a string object, execute the following code in a Playground.
 
@@ -46,8 +45,8 @@ object in Pharo: by sending messages, we can change their
 properties, create new subclasses of Morph, and so on.
 
 Every bloc element, when opened on the screen has a position and a
-size. If they are irregularly shaped, their position and size are
-those its *bounds*.
+size. If it is irregularly shaped, its position and size are
+determine by its *bounds*.
 
 - The `position` method returns a `Point` that describes the location of the bloc element upper-left corner of its bounding box. The origin of the coordinate system is the parent's upper left corner, with *y* coordinates increasing *down* the screen and *x* coordinates increasing to the right.
 - The `extent` method also returns a point, but this point specifies the width and height of the bloc element rather than a location.
@@ -135,7 +134,7 @@ some mouse interaction.
 
 To build live user interfaces using bloc elements, we need to be able to
 interact with them using the mouse and keyboard. 
-Moreover, the element needs to be able to respond to user input by changing their appearance and position -- that is, by animating themselves.
+Moreover, the elements need to be able to respond to user input by changing their appearance and position -- that is, by animating themselves.
 
 Let's extend our cross element to handle mouse events. Suppose that when we
 enter on the cross, we want to change the color of the cross to red, and when
@@ -328,8 +327,7 @@ cross requestFocus.
 
 ### Drag-and-drop
 
-Bloc has also basic support for drag-and-drop which needs to be further
-improved. In the coming example, if you change the order of appearance of the
+Bloc has also basic support for drag-and-drop which requires further improvement. In the coming example, if you change the order of appearance of the
 elements, drag&drop may not work - element will not catch the appropriate event.
 This example will however show all events used with a working example.
 

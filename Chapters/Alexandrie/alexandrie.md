@@ -141,6 +141,7 @@ The path expresses the shape you want to draw with a virtual pen. It's then appl
 to the destination using the `paint` message.
 
 It's expressed with simple primitives:
+
 * `moveTo:` moves to the specified location.
 * `relativeMoveTo:` moves to the specified location, relative to your starting point.
 * `lineTo:` adds a line to a specified location.
@@ -153,6 +154,7 @@ It's expressed with simple primitives:
 You can find more methods in the class `AeCairoContext`.
 
 #### Example.
+
 Here is a full example which results in Fig. *linepath*.
 
 ```smalltalk
@@ -243,7 +245,7 @@ context
 
 ### Color
 
-You can select different color styles to paint your path: a color, a linear gradient, a radial gradient and a bitmap.
+You can select different color styles to paint your path: a color, a linear gradient, a radial gradient a bitmap and a mesh gradient.
 
 #### Single color.
   
@@ -252,6 +254,10 @@ context sourceColor: (Color yellow alpha: 0.2);
 ```
 
 #### Linear gradient.
+
+Generally speaking, a gradient is a smooth transition of colors defined by two
+or more stop-colors. In the case of a linear gradient, this transition is defined
+by a straight line.
 
 ```smalltalk
 gradient := AeCairoLinearGradientPattern
@@ -265,6 +271,16 @@ context source: gradient;
 
 #### Radial gradient.
 
+In the case of a radial gradient, the transition is defined by a center and a
+radius, between the two circles defined by innerCirle and outer circle
+Colors expand evenly in all directions from the inner center of the inner circle
+to outside of the outer circle. Before using the gradient pattern, a number of
+color stops should be defined
+
+The coordinates here are in pattern space. For a new pattern, pattern space is
+identical to user space, but the relationship between the spaces can be changed
+with `AeCairoPattern >> matrix:`.
+
 ```smalltalk
 gradient := AeCairoRadialGradientPattern
 	innerCenter: 50 @ 50
@@ -277,7 +293,73 @@ gradient := AeCairoRadialGradientPattern
 context source: gradient.
 ```
 
-#### Bitmap.
+### Mesh gradient
+
+A mesh gradient is defined by a set of colors and control points. The most basic
+type of mesh gradient is a Gouraud-shading triangle mesh.
+
+```smalltalk
+| aSurface aContext aMeshPattern |
+aSurface := AeCairoImageSurface extent: 100 @ 100.
+aContext := aSurface newContext.
+
+aMeshPattern := AeCairoMeshPattern new.
+aMeshPattern
+	beginPatch;
+	moveTo: 50 @ 0;
+	lineTo: 100 @ 100;
+	lineTo: 0 @ 100;
+	cornerColors: {
+		Color red alpha: 0.5.
+		Color green.
+		Color blue };
+	endPatch.
+
+aContext
+	sourceColor: Color yellow;
+	paint;
+	source: aMeshPattern;
+	paint.
+
+^ aSurface
+```
+
+A more sophisticated patch of mesh gradient is a Coons patch. A Coons patch is
+a quadrilateral defined by 4 cubic Bézier curve and 4 colors, one for each vertex.
+A Bézier curve is defined by 4 points, so we have a total of 12 control points
+(and 4 colors) in a Coons patch.
+
+```smalltalk
+| aSurface aContext aMeshPattern |
+aSurface := AeCairoImageSurface extent: 150 @ 110.
+aContext := aSurface newContext.
+
+aMeshPattern := AeCairoMeshPattern new.
+aMeshPattern
+	beginPatch;
+	moveTo: 45 @ 12;
+	curveVia: 69 @ 24 via: 173 @ -15 to: 115 @ 50;
+	curveVia: 127 @ 66 via: 174 @ 47 to: 148 @ 104;
+	curveVia: 65 @ 58 via: 70 @ 69 to: 18 @ 103;
+	curveVia: 42 @ 43 via: 63 @ 45 to: 45 @ 12;
+	cornerColors: {
+		Color red.
+		Color green.
+		Color blue.
+		Color red alpha: 0.5 };
+	endPatch.
+
+aContext
+	sourceColor: Color yellow;
+	paint;
+	translateByX: -15 y: 0;
+	source: aMeshPattern;
+	paint.
+
+^ aSurface
+```
+
+#### Bitmap and PNG file.
   
 ```smalltalk
 form := AeCairoImageSurface fromForm:
@@ -285,7 +367,14 @@ form := AeCairoImageSurface fromForm:
 context sourceSurface: form x: 0 y: 0
 ```
 
-The `stroke` and `fill` messages with use the source color specified and apply itto your path.
+You can also get your surface from external files.
+
+```smalltalk
+aSurface := AeCairoImageSurface newFromPngFileAt: 'a.png' asFileReference.
+aSurface inspect
+```
+
+The `stroke` and `fill` messages will use the source color specified and apply it to your path.
 
 Figure *@colorpaint@* presents a full example with all color possibilities.
 
@@ -301,8 +390,37 @@ destination, by manipulating the transformation matrix.
 * `rotateByRadians:` modifies the current transformation matrix by rotating the user-space axes by angle radians.
 * `setIdentityMatrix` resets the current transformation matrix by setting it equal to the identity matrix.
 
+### composition operator
 
-### Mask and clip
+Normally, you will be using Alexandrie to draw objects on top of each other. But Alexandrie can do differently, if you need it! In fact, you can use all the compositing operators.
+
+In the example below, we'll have two rectangle, one red and one blue, on top
+of each other. Depending of the compositing operator used, the result will be
+completely different.
+
+This is the code for the **clear** operator. You can change it to all other operator
+available. Some are directly available at the context level, but for the majority
+of them, you need to specify the context operator.
+
+```smalltalk
+| surface context |
+surface := AeCairoImageSurface extent: 150 @ 120 format: AeCairoSurfaceFormat argb32.
+context := surface newContext.
+context sourceColor: Color transparent; paint.
+
+context sourceColorR: 0.7 g: 0 b: 0 a: 0.8; rectangle: (0 @ 0 extent: 120 @ 90); fill.
+
+context operator: AeCairoOperator clear.
+"or context setOperatorClear"
+
+context sourceColorR: 0 g: 0 b: 0.9 a: 0.4;	rectangle: (40 @ 30 extent: 120 @ 90); fill.
+
+^ surface asForm
+```
+
+![all cairo operators.](figures/all_cairo_operators.png width=60&label=mask)
+
+### Mask
 
 The `mask` operations allow transfer according to the transparency/opacity of
 a second source pattern or surface. Where the pattern or surface is opaque,
@@ -330,6 +448,9 @@ The `clip` establishes a new clip region by intersecting with the current path
 by effectively masking out any changes to the surface that are outside the
 current clip region.
 
+Like *stroke* or *fill*, the *context* will forget your path once applied.
+If you want to keep it for *clip* operations, you should use the `clipPreserve` messages.
+
 In the following snippet, we clip a circle in the middle of our picture which only shows part of the Pharo logo (as shown in Fig. *@clip@*).
 
 ```smalltalk
@@ -352,11 +473,36 @@ context paint.
 
 ![Example of clip.](figures/clip.png width=60&label=clip)
 
+### Drawing on other surfaces
+
+So far in this chapter, we have been only using *AeCairoImageSurface* to draw our
+elements. Alexandrie, being based on Cairo graphics library,  provide alternatives
+drawing surface that could be used in your project:
+
+* *AeCairoPDFSurface* to generate PDF (Portable Document Format) file.
+* *AeCairoSVGSurface* to generate SVG (Scalable Vector Graphics) files.
+
+Targeting external files, they can be used just like *AeCairoImageSurface* with the following differences:
+
+1. On instance creation, the user specifies 
+   1. output filename (as String)
+   2. the extent in points (1 point == 1/72.0 inch).
+2. When drawing is done, the user should send #finish to write the file trailer into the library buffer and then flush to disk.
+
+Please not that before `#finish`, the file may already exist in disk with 0 bytes.
+If the garbage collector finalizes the instance before `#close`, the exported file
+may have an invalid format.
+
+References:
+* http://zetcode.com/gfx/cairo/cairobackends/
+* http://www.ie.u-ryukyu.ac.jp/~e085739/c.cairo.3.html
+* https://cairographics.org/manual/cairo-PDF-Surfaces.html
+* https://cairographics.org/manual/cairo-SVG-Surfaces.html
 
 ### Conclusion
 
-Alexandrie is the foundation for the graphics Pharo layer. In addition, it lets 
-the programmer draws low-level graphics.
+Alexandrie is the foundation for the graphics Pharo layer. In addition, it lets
+the programmer draws low-level graphics or create external PDF or SVG files.
 
 
 

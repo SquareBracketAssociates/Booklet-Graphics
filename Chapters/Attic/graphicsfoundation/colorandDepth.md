@@ -6,14 +6,16 @@ For example, 1-bit color depth or 1bpp means a pixel can have a 1-bit color or 2
 
 The number of actual colors at these depths are: 2, 4, 16, 256, 32768, and 16 million. For different color depth, you can store a different number of pixel for each element comprising the array of data.
 
-`|Depth   | number of color  | pixel displayed |`
-`|--------|------------------|-----------------|`
-`|1       |2^1 = 2           | 32              |`
-`|2       |2^2 = 4           | 16              |`
-`|4       |2^4 = 16          | 8               |`
-`|8       |2^8 = 256         | 4               |`
-`|16      |2^16 = 32768      | 2               |`
-`|32      |2^32 = 16 millions| 1               |`
+```txt
+|Depth   | number of color  | pixel displayed |
+|--------|------------------|-----------------|
+|1       |2^1 = 2           | 32              |
+|2       |2^2 = 4           | 16              |
+|4       |2^4 = 16          | 8               |
+|8       |2^8 = 256         | 4               |
+|16      |2^16 = 32768      | 2               |
+|32      |2^32 = 16 millions| 1               |
+```
 
 The bits representing the bitmap pixels are packed in rows. The size of each row is rounded up to a multiple of 4 bytes (32 bits). The pixel array describes the image pixel by pixel. You can also have an alpha-channel to add transparency in the image using 32-bit color depth.
 
@@ -419,6 +421,11 @@ You can define the color of 2 pixel with color depth 16
 
 Data is stored in Byte - remember that 8 bits = 1 bytes. Each entry of the color palette takes 4 bytes to define a color
 
+32 bits Color in Pharo is used internally with ARBG format 
+(Alpha - Red - Blue - Green value)
+You should use the high level message to define your color. But when playing directly
+with pixel value, remember that alpha value come first.
+
 ```
 (Form extent: 3@3 "size of the form"
  depth: 32 "color depth")
@@ -428,7 +435,7 @@ Data is stored in Byte - remember that 8 bits = 1 bytes. Each entry of the color
      ALPHA    RED   BLUE     GREEN   "
   16rffff0000 "red"   16rff000000 "black" 16rff0000ff "blue"
   16rff000000 "black" 16rffffffff "white" 16rff000000 "black"
-  16rff00ff00 "green" 16rff000000 "black" 16rffffff00 "yello"
+  16rff00ff00 "green" 16rff000000 "black" 16rffffff00 "yellow"
 )
 ; magnifyBy: 15.
 ```

@@ -195,23 +195,23 @@ We create a new text element and place it inside the circle and then add the cir
 ```
 BlIntegerInputElement >> initializePlusButton
 
-	| circle |
-	circle := self createCircle.
-	circle constraintsDo: [ :c |
+	| textElt |
+	plus := self createCircle.
+	plus constraintsDo: [ :c |
 		c frame horizontal alignRight.
 		c frame vertical alignCenter ].
-	circle transformDo: [ :t | t translateBy: -15 @ 0 ].
+	plus transformDo: [ :t | t translateBy: -15 @ 0 ].
 
-	plus := BlTextElement new text: (self configuredString: '+').
-	plus text fontSize: 55.
-	plus constraintsDo: [ :c |
+	textElt := BlTextElement new text: (self configuredString: '+').
+	textElt text fontSize: 55.
+	textElt constraintsDo: [ :c |
 		c frame horizontal alignCenter.
 		c frame vertical alignCenter ].
-	circle
+	plus
 		addEventHandlerOn: BlMouseDownEvent
 		do: [ :e | self increaseInput ].
-	circle addChild: plus.
-	self addChild: circle.
+	plus addChild: textElt.
+	self addChild: plus.
 ```
 
 Note that in addition, we use the message `addEventHandlerOn:do:` to configure
@@ -253,24 +253,24 @@ Here we adjusted the size of the minus character so that it has a similar shape 
 ```
 BlIntegerInputElement >> initializeMinusButton
 
-	| circle |
-	circle := self createCircle.
-	circle constraintsDo: [ :c |
+	| textElt |
+	minus := self createCircle.
+	minus constraintsDo: [ :c |
 		c frame horizontal alignLeft.
 		c frame vertical alignCenter.
 		c margin: (BlInsets all: 10) ].
 
-	minus := BlTextElement new text: (self configuredString: '-').
-	minus text fontSize: 80.
-	minus constraintsDo: [ :c |
+	textElt := BlTextElement new text: (self configuredString: '-').
+	textElt text fontSize: 80.
+	textElt constraintsDo: [ :c |
 		c frame horizontal alignCenter.
 		c frame vertical alignCenter ].
-	circle
+	minus
 		addEventHandlerOn: BlMouseDownEvent
 		do: [ :e | self decreaseInput ].
 
-	circle addChild: minus.
-	self addChild: circle.
+	minus addChild: textElt.
+	self addChild: minus.
 ```
 
 FInally we update the initialize method to call the minus creation. 

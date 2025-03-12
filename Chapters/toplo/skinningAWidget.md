@@ -185,7 +185,7 @@ To see this token property from our new theme applied, we need to apply this the
 ```
 space := BlSpace new.
 space toTheme: ToInputTheme new.
-anInput := self ToIntegerInputElement position: 200 @ 200.
+anInput := ToIntegerInputElement new position: 200 @ 200.
 space root addChild: anInput.
 space show.
 ```
@@ -231,72 +231,65 @@ ToNumberInputElement >> onAddedToSceneGraph
 We should now how we can define a full new theme.
 We will 
 - define a theme class
-- define a skin class acting a root for the skins
+- define a skin class acting as root for the skins
 - define a specific skin for the widget
 
 #### Defining a new theme
 
+To start defining a new theme, we obviously create a class inheriting from `ToTheme`.
 ```
-
 ToTheme << #ToMooflooTheme
 	slots: {};
 	tag: 'Input';
 	package: 'myBecherBloc'
-
-ToTheme << #ToNewTheme
-	tag: 'Input';
-	package: 'Bloc-Book'
-
 ```
 
-
+A theme will try to apply skin corresponding to the type of skin defined in the theme, and those skins are called via the method we define in `newSkinInstanceFor:`.
+Indeed this method will be called on all elements when the theme is applied. This tells each element to search and return an instance of the skin to apply to it.
+The method called is by convention named "new[Theme name]Skin" 
 
 ```
-
-ToMooflooThemenewSkinInstanceFor: anElement
+ToMooflooTheme >> newSkinInstanceFor: anElement
 
 	^ anElement newMooflooSkin
+```
 
-ToNewTheme >> newSkinInstanceFor: anElement
-
-	^ anElement newNewThemeSkin
-
+As the theme tries to apply a skin to each element, they need to return a default skin even if they are not supposed to have one.
+We can then define the `ToBasicMooflooSkin` class as subclass of `ToBasicSkin` to have a 'default' skin.
+Instances of `ToBasicMooflooSkin` can then be returned when needing a default skin for elements.
+We then define `newMooflooSkin` as an extension method on BlElement.
+```
+ToBasicSkin << #ToBasicMooflooSkin
+	slots: {};
+	tag: 'Input';
+	package: 'myBecherBloc'
 ```
 
 ```
-ToNumberInputElement class >> openInputWithSkin
-
-	<script>
-	| space anInput |
-	space := BlSpace new.
-	space toTheme: ToMooflooTheme new.
-	space toTheme: ToNewTheme new.
-	anInput := self new position: 200 @ 200.
-	space root addChild: anInput.
-	space show.
-	^ anInput
-```
-
-```
-
 BlElement >> newMooflooSkin
-BlElement >> newNewThemeSkin
 
 	^ ToBasicMooflooSkin new
 ```
 
+For elements we want to skin, we can simply return an instance of the said skin in `newMooflooSkin`
+
 ```
 ToNumberInputElement >> newMooflooSkin
-ToNumberInputElement >> newNewThemeSkin
-
 
 	^ ToInputElementSkin new
 ```
 
+If we execute this script where we redefine the space's theme, we can see it is applied just like in the example of the previous section 
 
+```
+space := BlSpace new.
+space toTheme: ToMooflooTheme new.
+anInput := ToIntegerInputElement new position: 200 @ 200.
+space root addChild: anInput.
+space show.
 
-
+```
 
 ### Using a stylesheet
 
-
+TODO

@@ -41,7 +41,7 @@ We start by defining the shape of the main element. Notice that visual propertie
 
 
 ```
-BlIntegerInputElement >> inputExtent 
+BlIntegerInputElement >> widgetExtent 
 
 	^ 300@120
 ```
@@ -57,7 +57,7 @@ BlIntegerInputElement >> backgroundPaint
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self inputExtent.
+	self size: self widgetExtent.
 	self background: self backgroundPaint.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
@@ -88,8 +88,9 @@ BlIntegerInputElement >> label: aString
 	inputLabel := BlTextElement new.
 	inputLabel text: (self configuredString: aString).
 	inputLabel text fontSize: 25.
-	inputLabel constraintsDo: [ :c | c frame horizontal alignCenter ].
-	inputLabel transformDo: [ :t | t translateBy: 0 @ 10 ].
+	inputLabel constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c margin: (BlInsets all: 10) ].
 	self addChild: inputLabel
 ```	
 
@@ -102,7 +103,7 @@ We modify the initialize method to invoke the `label` method.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self inputExtent.
+	self size: self widgetExtent.
 	self background: self backgroundPaint.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
@@ -146,7 +147,7 @@ Then we change the `initialize` method to invoke `initializeInputValue:`.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self inputExtent.
+	self size: self widgetExtent.
 	self background: self backgroundPaint.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
@@ -194,23 +195,23 @@ We create a new text element and place it inside the circle and then add the cir
 ```
 BlIntegerInputElement >> initializePlusButton
 
-	| circle |
-	circle := self createCircle.
-	circle constraintsDo: [ :c |
+	| textElt |
+	plus := self createCircle.
+	plus constraintsDo: [ :c |
 		c frame horizontal alignRight.
 		c frame vertical alignCenter ].
-	circle transformDo: [ :t | t translateBy: -15 @ 0 ].
+	plus transformDo: [ :t | t translateBy: -15 @ 0 ].
 
-	plus := BlTextElement new text: (self configuredString: '+').
-	plus text fontSize: 55.
-	plus constraintsDo: [ :c |
+	textElt := BlTextElement new text: (self configuredString: '+').
+	textElt text fontSize: 55.
+	textElt constraintsDo: [ :c |
 		c frame horizontal alignCenter.
 		c frame vertical alignCenter ].
-	circle
+	plus
 		addEventHandlerOn: BlMouseDownEvent
 		do: [ :e | self increaseInput ].
-	circle addChild: plus.
-	self addChild: circle.
+	plus addChild: textElt.
+	self addChild: plus.
 ```
 
 Note that in addition, we use the message `addEventHandlerOn:do:` to configure
@@ -220,7 +221,7 @@ the circle element to react to mouse-down events.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self inputExtent.
+	self size: self widgetExtent.
 	self background: self backgroundPaint.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
@@ -252,24 +253,24 @@ Here we adjusted the size of the minus character so that it has a similar shape 
 ```
 BlIntegerInputElement >> initializeMinusButton
 
-	| circle |
-	circle := self createCircle.
-	circle constraintsDo: [ :c |
-		c frame horizontal alignLeft.
-		c frame vertical alignCenter ].
-	circle transformDo: [ :t | t translateBy: 15 @ 0 ].
-
-	minus := BlTextElement new text: (self configuredString: '-').
-	minus text fontSize: 80.
+	| textElt |
+	minus := self createCircle.
 	minus constraintsDo: [ :c |
+		c frame horizontal alignLeft.
+		c frame vertical alignCenter.
+		c margin: (BlInsets all: 10) ].
+
+	textElt := BlTextElement new text: (self configuredString: '-').
+	textElt text fontSize: 80.
+	textElt constraintsDo: [ :c |
 		c frame horizontal alignCenter.
 		c frame vertical alignCenter ].
-	circle
+	minus
 		addEventHandlerOn: BlMouseDownEvent
 		do: [ :e | self decreaseInput ].
 
-	circle addChild: minus.
-	self addChild: circle.
+	minus addChild: textElt.
+	self addChild: minus.
 ```
 
 FInally we update the initialize method to call the minus creation. 
@@ -277,7 +278,7 @@ FInally we update the initialize method to call the minus creation.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self inputExtent.
+	self size: self widgetExtent.
 	self background: self backgroundPaint.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.

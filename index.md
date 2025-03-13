@@ -15,7 +15,6 @@
 <!inputFile|path=Chapters/bloc/events.md!>
 
 <!inputFile|path=Chapters/bloc/blocArchitecture.md!>
-<!inputFile|path=Chapters/bloc/textHighLevel.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
 <!inputFile|path=Chapters/bloc/animation.md!>
 <!inputFile|path=Chapters/bloc/complexElement.md!>

@@ -32,7 +32,7 @@ Our widget will then inherit the behavior to install a skin when instantiated, w
 ### Define a skin
 
 We define a skin by inheriting from `ToRawSkin`, this class defines methods reacting to some events.
-The class `ToRawSkin` is th default skin class when using the `ToRawTheme` which is the default theme but themes are detailed later.
+The class `ToRawSkin` is the default skin class when using the `ToRawTheme` which is the default theme but themes are detailed later.
 In fact, skins in Toplo are EventHandlers we simply add to our elements, changing their visual properties according to incoming events
 
 ```

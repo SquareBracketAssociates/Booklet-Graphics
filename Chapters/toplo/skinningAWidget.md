@@ -50,7 +50,7 @@ can simply use values specific to this skin.
 
 ```
 ToInputElementSkin >> installSkinEvent: anEvent
-	"when installing the skin, changes the properties of widget mentionned down here"
+	"when installing the skin, changes the properties of widget mentioned down here"
 
 	super installSkinEvent: anEvent.
 	anEvent elementDo: [ :e |

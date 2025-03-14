@@ -99,7 +99,7 @@ target border: target valueOfTokenNamed: #'color-border-checkable’)
 ```
 
 
-Now that we defined our skin, we only need to tell our element to install this skins during initialization
+Now that we defined our skin, we only need to tell our element to install this skin during initialization
 In the `ToNumberInputElement` we define the method 
 
 ### Declaring the skin

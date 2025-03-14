@@ -14,7 +14,7 @@
 <!inputFile|path=Chapters/bloc/blocArchitecture.md!>
 <!inputFile|path=Chapters/bloc/text.md!>
 <!inputFile|path=Chapters/bloc/animation.md!>
-<!inputFile|path=Chapters/bloc/complexElement.md!>
+
 <!inputFile|path=Chapters/bloc/dragAndDropExample.md!>
 
 # Toplo: Bloc widget set
@@ -22,7 +22,7 @@
 <!inputFile|path=Chapters/toplo/toplo.md!>
 <!inputFile|path=Chapters/toplo/existingWidgets.md!>
 <!inputFile|path=Chapters/toplo/widgetList.md!>
-<!inputFile|path=Chapters/toplo/widget_creation.md!>
+
 <!inputFile|path=Chapters/toplo/skinningAWidget.md!>
 <!inputFile|path=Chapters/toplo/definingATheme.md!>
 <!inputFile|path=Chapters/toplo/stylesheet.md!>

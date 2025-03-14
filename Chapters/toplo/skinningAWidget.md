@@ -292,4 +292,187 @@ space show.
 
 ### Using a stylesheet
 
-TODO
+Stylesheet is another way to style an element. With stylesheet, we select on which element we want to apply our style using dedicated selector
+
+A style rule is an association between a selector and one or more writers. A rule can only be applied to a graphic element if the rule's selector corresponds to the graphic element. There are 5 types of selector, and they can be combined with different operators. The five selector types are:
+
+* **Any:** Selects any element.
+* **Action:** Evaluates a *block closure* with the graphic element as argument. If the block returns true, then the element is selected, otherwise it is not.
+* **Type:** Used to test whether the graphic element is an object of a given class. For example, it can check that the graphic element is a **ToButton**.
+* **Id:** Selects graphic elements according to their *id*. The id is a BlElement's property.
+* **Stamp:** Checks that the graphic element has a stamp with a given key.
+
+Selectors can be combined together using different operators. There are 6 different operators:
+
+* **Not:** Negates the selection.
+* **And:** Boolean combination of *and* between two selectors.
+* **Or:** Boolean *or* combination between two selectors.
+* **Child:** Used to apply a selector to the graphic element's children. It is possible to set a child depth level.
+* **Parent:** Allows you to apply a selector to the graphic element's parent. It is possible to set a parent depth level.
+* **Sibling:** Allows you to apply a selector to graphic elements having the same parent as the graphic element.
+
+All our element needs to be ToElement. Let's update our element creation
+accordingly:
+
+```smalltalk
+ToIntegerInputElement >>  createCircle
+
+| circle |
+circle := ToElement new
+				background: Color black;
+				border: (BlBorder paint: Color pink width: 2);
+				layout: BlFrameLayout new;
+				geometry: BlCircleGeometry new.
+^ circle
+```
+
+Let's adapt our input widget to ease sub-element selection, by adding an *id* to relevant parts:
+
+```smalltalk
+ToIntegerInputElement >> initialize
+
+	super initialize.
+	self layout: BlFrameLayout new.
+	self id: #coreInput.
+	self initializePlusButton.
+	self initializeMinusButton.
+	self initializeInputValue: 20.
+	self label: 'Input'
+```
+
+```smalltalk
+ToIntegerInputElement >> initializeInputValue: aValue
+
+	inputValue := BlTextElement new.
+	inputValue id: #input.
+	inputValue constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	self changeValueTo: aValue.
+	self addChild: inputValue
+```
+
+```smalltalk
+ToIntegerInputElement >> initializeMinusButton
+
+	| textElt |
+	minus := self createCircle.
+	minus id: #minus.
+	minus constraintsDo: [ :c |
+		c frame horizontal alignLeft.
+		c frame vertical alignCenter.
+		c margin: (BlInsets all: 10) ].
+	textElt := BlTextElement new text: (self configuredString: '-').
+	textElt text fontSize: 80.
+	textElt constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	minus
+		addEventHandlerOn: BlMouseDownEvent
+		do: [ :e | self decreaseInput ].
+	minus addChild: textElt.
+	self addChild: minus
+```
+
+```smalltalk
+ToIntegerInputElement >> initializePlusButton
+
+	| textElt |
+	plus := self createCircle.
+	plus id: #plus.
+	plus constraintsDo: [ :c |
+		c frame horizontal alignRight.
+		c frame vertical alignCenter ].
+	plus transformDo: [ :t | t translateBy: -15 @ 0 ].
+	textElt := BlTextElement new text: (self configuredString: '+').
+	textElt text fontSize: 55.
+	textElt constraintsDo: [ :c |
+		c frame horizontal alignCenter.
+		c frame vertical alignCenter ].
+	plus
+		addEventHandlerOn: BlMouseDownEvent
+		do: [ :e | self increaseInput ].
+	plus addChild: textElt.
+	self addChild: plus
+```
+
+The method `newRawSkin` is not used with StyleSheet, and can be safely removed. It's time now to define our stylesheet
+
+First, create your stylesheet class:
+
+```smalltalk
+ToStyleSheetTheme << #ToInputElementStyleSheet
+	slots: {};
+	tag: 'Input';
+	package: 'Bloc-Book'
+```
+
+Now, let's define the rule matching our element with custom appearance:
+
+```smalltalk
+ToInputElementStyleSheet >> initializeStyleRules
+
+	super initializeStyleRules.
+	self select: #coreInput asIdSelector style: [
+		self
+			write: (self property: #geometry)
+			with: [ :e | BlRoundedRectangleGeometry cornerRadius: 20 ];
+			write: (self property: #size) with: [ :e | 200 @ 100 ];
+			write: (self property: #background) with: [ :e | Color blue ];
+			write: (self property: #border)
+			with: [ :e | BlBorder paint: Color black width: 3 ] ].
+
+	self select: #minus asIdSelector style: [
+		self
+			write: (self property: #background) with: [ :e | Color brown ];
+			write: (self property: #border) with: [ :e |
+				BlBorder
+					paint: (e valueOfTokenNamed: #'color-border')
+					width: (e valueOfTokenNamed: #'line-width') ] ].
+
+	self select: #plus asIdSelector style: [
+		self
+			write: (self property: #background) with: [ :e | Color brown ];
+			write: (self property: #border) with: [ :e |
+				BlBorder
+					paint: (e valueOfTokenNamed: #'color-border')
+					width: (e valueOfTokenNamed: #'line-width') ] ]
+```
+
+You can noticed we use custom properties for specific element. 
+That's a good idea, as we can reuse those value to keep theme consistent.
+
+```smalltalk
+ToInputElementStyleSheet class >> defaultTokenProperties
+^ super defaultTokenProperties , {
+		(ToTokenProperty name: #'color-border' value: Color lightOrange).
+		(ToTokenProperty name: #'line-width' value: 2) }
+```
+
+Last, if you want some element to react to mouse event, like mouse hover, 
+you can define it like:
+
+```smalltalk
+self
+	when: ToHoveredSkinEvent 
+	write: (self property: #background)
+	with: [ :e | BlBackground paint:
+			(e valueOfTokenNamed: #'color-background-hover') ] ]
+```
+
+Let's now open our new element. We now specify which theme we use on startup, referencing our stylesheet:
+
+```smalltalk
+	| input space |
+	space := BlSpace new.
+	space toTheme: ToInputElementStyleSheet new.
+	input := self new.
+	space root addChild: input.
+	space show.
+```
+
+You may have noticed, we mixed element appearance definition in
+our code and in our stylesheet. With styling, your scene could be
+reduced to a tree of *ToElement* with custom *stamp* or *id*, and
+all their styling defined in stylesheet, with custom rules or ad-hoc
+definition.

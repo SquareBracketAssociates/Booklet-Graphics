@@ -1,6 +1,6 @@
 ## Building a simple widget
 
-In this chapter we will define a little widget to perform input integer with two buttons as shown in Figure *@inputFinal@*. It is inspired from the work of A. Cnokaert in the context of his internship to design the CoypuIDE (an IDE for live music) and Mooflod (a tool conceived to increase the audience’s awareness about a musical performance). 
+In this chapter we will define a little widget to perform input integer with two buttons as shown in Figure *@inputFinal@*. It is inspired from the work of A. Cnockaert in the context of his internship to design the CoypuIDE (an IDE for live music) and Mooflod (a tool conceived to increase the audience’s awareness about a musical performance). 
 
 ![An integer input widget. % anchor=inputFinal&width=50](figures/input.png )
 

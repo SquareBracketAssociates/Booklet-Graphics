@@ -137,6 +137,85 @@ While the Alexandrie canvas provides a foundational set of building drawing prim
 * **Square**: `BlSquareGeometry new matchExtent: 70 @ 70`
 * **Triangle**: `BlTriangleGeometry new matchExtent: 50 @ 100; beLeft`
 
+#### Star shape using Bloc Geometry
+
+Here, we can make a star with N branches using this code
+outerSize is for the length of the branches, innerSize for the width of the branches bases
+We could maybe use this implementation to define a new star geometry that could be configured with those 3 parameters
+
+```smalltalk
+outerSize := 100.
+innerSize := 40.
+numberOfPoints := N.
+angleStep := 360.0 / numberOfPoints.
+
+vertices := OrderedCollection new.
+0 to: 360 by: angleStep do: [ :angle |
+    vertices
+        add: (0@innerSize rotateBy: (angle - (angleStep * 0.5)) degreesToRadians about: 0 asPoint);
+        add: (0@outerSize rotateBy: angle degreesToRadians about: 0 asPoint);
+        add: (0@innerSize rotateBy: (angle + (angleStep * 0.5)) degreesToRadians about: 0 asPoint) ].
+
+starElement := BlElement new
+        geometry: (BlPolygonGeometry vertices: vertices);
+        background: Color black;
+        position: 200 @ 150;
+        yourself.
+
+space := BlSpace new.
+space root addChild: starElement.
+space show.
+```
+
+### Example of curved arrow
+
+This arrow is created using an annulus sector and a polyline geometry. This polyline geometry is used (instead of a polygon geometry) to give the impression of a single element when applying a border.
+
+This polyline geometry displays the background of the element in between the lines but when adding a click event handler, only clicking the lines work as if the element is "empty".
+
+For this examples, the polyline geometry is placed and rotated manually which isn't really pretty for the code but we get the result expected.
+
+Note that you can flip the arrow by applying `flipX` and `flipY` to the container transform.
+
+```st
+	| annulus arrow border container |
+	border := BlBorder paint: Color lightGray width: 2.
+	annulus := BlElement new
+		           background: Color lightGreen;
+		           size: 100 asPoint;
+		           geometry: (BlAnnulusSectorGeometry new
+				            startAngle: 45;
+				            endAngle: 135;
+				            innerRadius: 0.6;
+				            outerRadius: 0.95);
+		           border: border.
+
+	arrow := BlElement new
+		         background: Color lightGreen;
+		         geometry: (BlPolylineGeometry vertices: {
+						          (12 @ 20).
+						          (0 @ 20).
+						          (20 @ 0).
+						          (40 @ 20).
+						          (28 @ 20) });
+		         border: border.
+
+	arrow position: 50 @ 62.
+	arrow transformDo: [ :t | t rotateBy: 45 ].
+
+
+	container := BlElement new size: 100 asPoint.
+
+	container addChild: annulus.
+	container addChild: arrow.
+
+	container childrenDo: [ :each |
+		each addEventHandlerOn: BlClickEvent do: [ each inspect ] ].
+
+	container openInSpace.
+	^ container
+```
+
 ### Element border
 
 The geometry is like an invisible line on which your border is painted. The
@@ -215,6 +294,24 @@ If we specify outskirts inside, visual bound and geometry bounds will be the
 same. But if the outskirts is outside, then visual bounds are larger than
 geometry bounds to take border width into its calculation.
 
+#### need to define outskirts to have round cap/join border 
+
+```st
+elt := BlElement new background: Color lightGray; size: 100 asPoint; position: 50 asPoint.
+	
+elt geometry: BlTriangleGeometry new.
+	
+elt border: (BlBorder builder paint: Color black; width: 10; capRound; joinRound ; build).
+
+elt outskirts: BlOutskirts centered.
+
+elt openInSpace
+```
+
+In this example the border does not have cap/join round if the `outskirts:` message is commented.
+
+[Enzo] I don't know the meaning of the outskirts but it is weird sending `capRound`, `joinRound` to the border is not enough
+
 ### Element background
 
 quick set-up: `background: (Color red alpha: 0.8);`
@@ -283,6 +380,55 @@ BlElement new geometry: aGeometry;
 This will render as expected:
 
 ![Wrong geometry size.](figures/geometry_size_painting_right.png width=80)
+
+#### Scale an image according to its parent extent 
+
+This snippet shows how to deal with extent constraints when having a form as a background, here only in the case of matching parent both horizontally and vertically but this could be interesting to see when applying only one direction
+
+```smalltalk
+aForm := Smalltalk ui icons iconNamed: #pharoBig.
+image := BlElement new
+    background: aForm;
+    size: aForm extent;
+    yourself.
+imageWrapper := BlElement new
+    addChild: image;
+    layout: BlLinearLayout horizontal;
+    border: (BlBorder paint: Color green width: 3);
+    constraintsDo: [ :c |
+        c horizontal matchParent.
+        c vertical matchParent ];
+    addEventHandlerOn: BlElementExtentChangedEvent do: [ :evt |
+        "Scale the wrapped element to "
+        image transformDo: [ :builder |
+            builder
+                topLeftOrigin;
+                scaleBy: evt target extent / aForm extent ] ];
+    yourself.
+
+imageWrapper openInSpace
+```
+
+"What could be interesting is look if we can apply this transformation directly to the background instead of adding a child with the image."
+
+When trying the idea above we manage to do it using `Form>>scaledIntoFormOfSize:` but we can observe the form kept its aspect ratio, not giving the exact result as the previous snippet.
+
+```st
+aForm := Smalltalk ui icons iconNamed: #pharoBig.
+
+imageWrapper := BlElement new
+    background: aForm;
+    layout: BlLinearLayout horizontal;
+    border: (BlBorder paint: Color green width: 3);
+    constraintsDo: [ :c |
+        c horizontal matchParent.
+        c vertical matchParent ];
+    addEventHandlerOn: BlElementExtentChangedEvent do: [ :evt |
+        imageWrapper background: (aForm scaledIntoFormOfSize: evt currentTarget extent) ];
+    yourself.
+
+imageWrapper openInSpace
+```
 
 
 ### Element effect
@@ -460,8 +606,6 @@ parent := BlElement new
 parent openInSpace.
 ```
 
-
-
 ```
 | child parent |
 child := BlElement new 
@@ -480,8 +624,66 @@ parent whenLayoutedDoOnce: [
 	child  transformDo: [ :t | t translateBy: (child size negated / 2) ]  ].
 
 parent openInSpace.
-```` 
+```
 
+#### Show trajectories of corner with rotation animation 
+
+This snippet was written to prove the rotation animation didn't have the right feeling, by showing the trajectories of each corner of a totating square. By default, people expect each corner to draw a circle when the square is fully rotated but here we can see it is not the case.
+
+This might be an issue with the calcutation of the transform matrix when the rotation is applied
+
+```smalltalk
+container := BlElement new background: Color veryVeryLightGray; size: 500 asPoint.
+
+parent := BlElement new background: Color veryLightGray; size: 100 asPoint; position: 200 asPoint.
+
+elt1 := BlElement new background: Color red; size: 1 asPoint.
+elt2 := BlElement new background: Color blue; size: 1 asPoint; position: 99 @ 0.
+elt3 := BlElement new background: Color green; size: 1 asPoint; position: 0 @ 99.
+elt4 := BlElement new background: Color yellow; size: 1 asPoint; position: 99 @ 99.
+
+parent addChildren: { elt1. elt2. elt3. elt4 }.
+
+container addChild: parent.
+
+elt1Trajectory := OrderedCollection new add: 200 @ 200; yourself.
+elt2Trajectory := OrderedCollection new add: 299 @ 200; yourself.
+elt3Trajectory := OrderedCollection new add: 200 @ 299; yourself.
+elt4Trajectory := OrderedCollection new add: 299 @ 299; yourself.
+
+anim := (BlTransformAnimation rotate: 90) duration: 2 seconds.
+anim addEventHandlerOn: BlAnimationStepEvent do: [ elt1Trajectory add: elt1 positionInSpace. 
+	elt2Trajectory add: elt2 positionInSpace.
+	elt3Trajectory add: elt3 positionInSpace.
+	elt4Trajectory add: elt4 positionInSpace.].
+
+parent addEventHandlerOn: BlClickEvent do: [ parent addAnimation: anim copy. ].
+
+container openInSpace.
+
+elt1TrajectoryElt := BlElement new background: Color transparent; geometry: (BlPolylineGeometry vertices: elt1Trajectory); border: (BlBorder paint: Color red width: 5) .
+elt2TrajectoryElt := BlElement new background: Color transparent; geometry: (BlPolylineGeometry vertices: elt2Trajectory); border: (BlBorder paint: Color blue width: 5).
+elt3TrajectoryElt := BlElement new background: Color transparent; geometry: (BlPolylineGeometry vertices: elt3Trajectory); border: (BlBorder paint: Color green width: 5).
+elt4TrajectoryElt := BlElement new background: Color transparent; geometry: (BlPolylineGeometry vertices: elt4Trajectory); border: (BlBorder paint: Color yellow width: 5).
+
+container addChildren: { elt1TrajectoryElt. elt2TrajectoryElt.elt3TrajectoryElt.elt4TrajectoryElt.}.
+```
+
+
+#### Reset a transformation
+
+When applying a transformation to an object, its position doesn't change even if we translate it so the element might be displayed elsewhere than where it 'actually is', we can reset its transformation with this message `transformation: BlElementIdentityTransformation uniqueInstance` just like in this snippet:
+
+```smalltalk
+space := BlSpace new.
+elt := BlElement new background: Color purple.
+
+space root addChild: elt.
+space show.
+
+animation := (BlTransformAnimation translate: 250@250) duration: 2 seconds. 
+elt addAnimation: (animation onFinishedDo: [ elt transformation: BlElementIdentityTransformation uniqueInstance ])
+```
 
 ### Element custom painting (more here)
 

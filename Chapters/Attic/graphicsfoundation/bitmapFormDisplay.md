@@ -62,6 +62,41 @@ pict colors: map.
 pict initFromArray: bitmap.
 ```
 
+### transform a Form into ByteString and vice versa
+
+Starting from a ByteString (self), we can have a Form using this code:
+
+```st
+Form fromBinaryStream:
+			  self base64Decoded asByteArray readStream
+```
+
+and starting from a Form, we can translate it into a ByteString using this code: 
+
+```st
+byteString := (ByteArray streamContents: [ :out |
+	PNGReadWriter putForm: form onStream: out ]) base64Encoded.
+```
+
+It seems that doing the translation ByteString -> Form -> ByteString doesn't give the same ByteString between input/output but Form -> ByteString -> Form seems to work correctly (except maybe small changes invisible to the human eye).
+
+Also here we use `PNGReadWriter` but other subclasses of `ImageReadWriter` can be used depending on the format you want to save
+
+try this:
+
+```st
+String streamContents: [:s | self storeOn: s]
+```
+
+```st
+OpalCompiler new
+	source: self;
+	evaluate 
+```
+```st
+Object readFrom: byteString
+```
+
 ### Fun script
 
 We should revise it. 

@@ -247,6 +247,27 @@ BlTransformAnimation new
 	easing: BlEasing bounceOut.
 ```
 
+#### To go further with animations
+
+The most common animations are translations and rotations but, whenever we translate or rotate an object, its position doesn't change even if it does visually.
+
+But this doesn't mean that nothing changes, in fact the origin of the "transform axis" moves with the transformation, meaning that if we apply a horizontal translation to an element that was previously rotated for example 90 degrees, then the element will visually translate vertically like in this example.
+
+```st
+elt := BlElement new background: Color purple.
+
+t1 := (BlTransformAnimation translate: 150@0) duration: 2 seconds. 
+t2 := (BlTransformAnimation translate: 150@0) duration: 2 seconds.
+rotateAnimation := (BlTransformAnimation rotate: 90) duration: 2 seconds.
+
+elt addAnimation: (t1 onFinishedDo: [ elt addAnimation: (rotateAnimation onFinishedDo: [ elt addAnimation: (t2 onFinishedDo: [ elt position inspect ]) ]) ]).
+
+elt openInSpace.
+```
+
+And you will see that the position of the element hasn't changed and still is 0@0, but you can ask for `BlElement>>transformedBounds` to have the bounds of your element after its transformations if you need to exploit this visual position.
+
+
 #### Transform animation rotation pitfall
 
 A transform rotation has some peculiarities its worth highlighting.
@@ -352,6 +373,73 @@ BlNumberTransition new
 		aValue < 0.5
 			ifTrue: [ anElement background: Color red ]
 			ifFalse: [ anElement background: Color blue ] ].
+```
+
+### Example -  Explosion animation
+
+We create an explosion animation by creating some BlElements and making them translate along a rotating line starting from a center point
+
+Here we also add a rotation on the BlElements themselves with random color
+
+```smalltalk
+space := BlSpace new.
+explosionCenter := 400 @ 300.
+
+0 to: 359 by: 12 do: [ :angle |
+    | anElement relativeFinalPosition |
+    relativeFinalPosition := 0@400 rotateBy: angle degreesToRadians about: 0@0.
+
+    anElement := BlElement new
+        background: Color random;
+        position: explosionCenter;
+        addAnimation: (BlTransformAnimation new
+            duration: 1200 milliSeconds;
+            transformDo: [ :t |
+                t translateBy: relativeFinalPosition.
+                t rotateBy: 180 ];
+            onFinishedDo: [ anElement removeFromParent ];
+          yourself);
+        yourself.
+
+    space root addChild: anElement ].
+space show.
+
+```
+
+### Enqueue tasks 
+
+This snippet is an example of how to enqueue tasks and delay the time of the next instruction. This is also an example of a circular animation using an offset on a shadow effect
+
+```smalltalk
+a := BlElement new
+    position: 50 @ 100;
+    size: 100 asPoint;
+    background: Color green;
+    yourself.
+
+a addAnimation: 
+    (BlNumberTransition new
+        from: 0;
+        to: Float twoPi;
+        duration: 5 seconds;
+        onStepDo: [ :t |
+            | offset |
+            offset := (t cos * 50) @ (t sin * 50).
+            a effect:
+                (BlSimpleShadowEffect
+                    color: Color blue
+                    offset: offset) ];
+        onFinishedDo: [
+                | removeAction |
+                removeAction :=
+                    BlDelayedTaskAction new
+                        delay: 2 seconds;
+                        action: [ a removeFromParent ];
+                        yourself.
+                a enqueueTask: removeAction ];
+        yourself).
+
+a openInSpace
 ```
 
 ### Conclusion (missing)

@@ -284,3 +284,111 @@ light) and "stretch". In my example, when I set the Minecraft family name but
 don't set the medium weight, then by default it will lookup for a Minecraft
 regular weight font, it won't find it (the TTF only comes with a Medium weight
 face), and then will use the default font.
+
+### Dynamically change fontSize of a TextElement
+
+For now in Bloc, we can't change the fontSize of a text after its first definition. 
+To change it dynamically we'll have to create a new text which is a copy of the former text and define the new fontSize
+
+Don't forget to remove the former textElement from children of your element and replace it with the new textElement
+
+```smalltalk
+textElement := BlTextElement new.
+textElement text fontName: 'Source Sans Pro'.
+textElement text fontSize: 50.
+textElement text: 'A' asRopedText .
+
+container := BlElement new.
+container geometry: (BlRoundedRectangleGeometry cornerRadius: 50);
+	background: Color lightBlue;
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent  ].
+
+container addEventHandlerOn: BlElementExtentChangedEvent do: [ :evt | | newText fontSize| 
+	fontSize:= evt currentTarget size x // 2.
+	newText := BlTextElement new.
+	newText text: textElement text.
+	newText text fontSize: fontSize.
+	container removeChildNamed: 'text';
+	    addChild: newText as: 'text' ].
+
+container addChild: textElement as: 'text'.
+
+container openInNewSpace 
+```
+
+**Improvement**
+
+The former paragraph was notes written at a time we didn't know about this improvement.
+
+Apparently it seems, we can change the fontSize dynamically BUT it's the UI of the text that won't change... unless we tell it to !
+
+So we can basically just use announcements that are already implemented in Bloc and those will call `BlTextElement>>textChanged` that will change the UI.
+Here's the same example with this improved implementation: 
+
+```smalltalk
+textElement := BlTextElement new.
+textElement text fontName: 'Source Sans Pro'.
+textElement text fontSize: 50.
+textElement text: 'A' asRopedText .
+textElement text
+    when: BlTextStringsInserted send: #textChanged to: textElement;
+    when: BlTextsDeleted send: #textChanged to: textElement;
+    when: BlTextAttributeAdded send: #textChanged to: textElement;
+    when: BlTextAttributesRemoved send: #textChanged to: textElement.
+
+container := BlElement new.
+container geometry: (BlRoundedRectangleGeometry cornerRadius: 50);
+	background: Color lightBlue;
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent  ].
+
+container addEventHandlerOn: BlElementExtentChangedEvent do: [ | fontSize| 
+	fontSize:= (container extent x min: container extent y) // 2.
+	textElement text fontSize: fontSize.
+	].
+
+container addChild: textElement as: 'text'.
+
+container openInNewSpace
+```
+
+### Rotate a textElement in a parent
+
+```smalltalk
+label := BlTextElement text: ('HelloHiHolaBonjour' asRopedText fontSize: 40; yourself).
+
+handle := BlElement new.
+handle addChild: label.
+handle background: Color orange.
+handle padding: (BlInsets all: 10).
+handle geometry: (BlRoundedRectangleGeometry cornerRadii:
+			(BlCornerRadii new
+				topLeft: 0;
+				topRight: 15;
+				bottomLeft: 0;
+				bottomRight: 15;
+				yourself)).
+handle layout: BlLinearLayout horizontal.
+handle constraintsDo: [ :c |
+	c frame vertical alignCenter.
+	c vertical fitContent.
+	c horizontal fitContent ].
+
+space := handle openInNewSpace.
+space root layout: BlFrameLayout new.
+
+label forceLayout.
+textSize := label size.
+
+label transformDo: [ :t |
+	t translateBy: 0 @ textSize y negated.
+	t topLeftOrigin.
+	t rotateBy: 90 ].
+
+label size: label transformedBounds extent.
+```
+
+In this snippet we rotate the element containing the text (but not the textElement) using `TBlTransformable>>tranformDo:` but for that we need to force its layout and just like in the earlier example, the transformation didn't change the position nor the bounds hence the last line.

@@ -965,3 +965,35 @@ BlElement new
 
 ![Proportional layout from issue 562](figures/proportionalFromIssue562.png)
 
+### Square Layout 
+
+This example shows how the squareLayout works when applied to an element, in fact here we give constraints to match parent horizontally and vertically but the squareLayout forces our element to be of square shape meaning that this will draw the biggest square in the available space?
+
+```smalltalk
+anElement := 
+        BlElement new
+                background: Color blue;
+                geometry: (BlRoundedRectangleGeometry cornerRadius: 25);
+                margin: (BlInsets all: 5);
+                constraintsDo: [ :c |
+                        c horizontal matchParent.
+                        c vertical matchParent ];
+                yourself.
+
+squarifierElement :=
+        BlElement new
+                layout: ((BlSquaredLayout on: BlLinearLayout vertical alignCenter) beTight; yourself);
+                addChild: anElement;
+                constraintsDo: [ :c |
+                        c horizontal matchParent.
+                        c vertical matchParent ];
+                yourself.
+        
+space := BlSpace new.
+space root addChild: squarifierElement.
+space
+        extent: 200 @ 250;
+        show
+```
+
+Something interesting I found using a SquareLayout: If you use a gridLayout and want its elements contained to matchParent and stay as square while resizing the gridLayout, you can encapsulate the gridLayout into a squareLayout so the contained elements will matchParent with a square shape

@@ -339,6 +339,22 @@ elt addEventHandlerOn: BlDragEvent do: [ :event | event modifiers isAlt ifTrue: 
 
 This will catch all modifier pressed. For example If you specify *isCtrl* but you don't want *ctrl+shift+alt* to react, you will need to specify `isAlt and: isShift not and: isCmd not`
 
+#### RequestFocus for KeyboardEvent
+
+To deal with keyboard events, we need to specify our element to request the focus
+
+```smalltalk
+
+elt := BlElement new background: Color purple;
+    addEventHandlerOn: BlKeyboardEvent  do: [ :anEvent | anEvent inspect ];
+    constraintsDo: [ :c | c horizontal matchParent. c vertical matchParent ];
+requestFocus.
+    
+elt openInSpace
+```
+
+You can see with this example that the background of the element might change twice quickly, it's simply explained by the fact there is an event sent when a key is pressed and another when it is released so there's two events sent when quickly pressing a key.
+
 ### Drag and Drop
 
 Explore BlBaseDragEvent and subclasses.
@@ -408,4 +424,16 @@ parent addChild: elt.
 elt addEventHandler: BlPullHandler new disallowOutOfBounds.
 
 parent openInSpace.
+```
+
+You can even select the behavior to keep the child inside its parent's bounds with `BlPullHandler>>disallowOutOfBounds`
+
+```smalltalk
+hero := BlElement new
+    geometry: BlCircleGeometry new;
+    background: Color purple; 
+    addEventHandler: (BlPullHandler new disallowOutOfBounds; yourself);
+    yourself.
+
+hero openInSpace.
 ```

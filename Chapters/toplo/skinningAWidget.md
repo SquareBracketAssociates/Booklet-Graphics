@@ -2,12 +2,11 @@
 
 In this chapter we show how we can take the simple input widget developed in a previous chapter and make it skinnable. 
 
-In a first period, we will focus on what is called raw skins. The idea behind raw skins are that we define classes with states and methods to define the behavior of a skin in a given theme. At the end of this chapter we will see that we can also skin widgets
-using stylesheets following the spirit of CSS. 
+In a first period, we will focus on what is called raw skins. The idea behind raw skins are that we define classes with states and methods to define the behavior of a skin in a given theme. At the end of this chapter we will see that we can also skin widgets using stylesheets following the spirit of CSS. 
  
 The outline of this chapter is then: first we show that we can extend a theme and define a skin. 
 Then in a second time we show that we can define an autonomous theme. 
-Finally we will show that we can use stylesheet
+Finally we will show that we can use stylesheet.
 
 Remember that we want to create a widget as shown in Figure *@inputFinalSkin@*.
 
@@ -16,13 +15,12 @@ Remember that we want to create a widget as shown in Figure *@inputFinalSkin@*.
 ### Getting started
 
 If you implemented the widget as presented earlier, just copy the class giving it a new name for example `ToIntegerInputElement`.
-The definition of the `BlIntegerInputElement` is available SD:DefineAPlace.
 
 The first thing that we should do is to make `ToIntegerInputElement` inherit from `ToElement` as follows:
 
 ```
 ToElement << #ToIntegerInputElement
-	slots: { #plus . #minus . #inputValue . #value . #inputLabel };
+	slots: { #plus . #minus . #inputValue . #value . #inputLabel. #callbackBlock };
 	tag: 'Input';
 	package: 'Bloc-Book'
 ```
@@ -32,7 +30,7 @@ Our widget will then inherit the behavior to install a skin when instantiated, w
 ### Define a skin
 
 We define a skin by inheriting from `ToRawSkin`, this class defines methods reacting to some events.
-The class `ToRawSkin` is th default skin class when using the `ToRawTheme` which is the default theme but themes are detailed later.
+The class `ToRawSkin` is the default skin class when using the `ToRawTheme` which is the default theme but themes are detailed later.
 In fact, skins in Toplo are EventHandlers we simply add to our elements, changing their visual properties according to incoming events
 
 ```
@@ -50,7 +48,7 @@ can simply use values specific to this skin.
 
 ```
 ToInputElementSkin >> installSkinEvent: anEvent
-	"when installing the skin, changes the properties of widget mentionned down here"
+	"when installing the skin, changes the properties of widget mentioned down here"
 
 	super installSkinEvent: anEvent.
 	anEvent elementDo: [ :e |
@@ -84,11 +82,6 @@ ToIntegerInputElement >> minus
 Here we redefine the background of the element and its 'plus' and 'minus' sub-elements, but we also define a border to our element using tokens from our theme.
 We accessed our element through the event received, this can be done in both following ways
 
-
-##### Remark
-Notice that the two following forms are equivalent. 
-This is important if you want to maximize 
-
 ```
 anEvent elementDo: [ :e | 
 		e border: (e valueOfTokenNamed: #'color-border-checkable’).
@@ -98,8 +91,11 @@ target := anEvent currentTarget.
 target border: target valueOfTokenNamed: #'color-border-checkable’)
 ```
 
+##### Remark
+Notice that the two following forms are equivalent. 
 
-Now that we defined our skin, we only need to tell our element to install this skins during initialization
+
+Now that we defined our skin, we only need to tell our element to install this skin during initialization
 In the `ToNumberInputElement` we define the method 
 
 ### Declaring the skin
@@ -133,7 +129,7 @@ ToIntegerInputElement >> initialize
 
 We can now open our element and see our new skin installed.
 
-![An integer input widget with a new skin installed. % anchor=inputFinalSkin&width=50](figures/inputWithSkin.png )
+![An integer input widget with a new skin installed. %width=50](figures/inputWithSkin.png )
 
 
 ### Define a theme that extends an existing one
@@ -190,7 +186,7 @@ space root addChild: anInput.
 space show.
 ```
 
-![An integer input widget with a new skin and new theme installed. % anchor=inputFinalSkin&width=50](figures/inputWithTheme.png )
+![An integer input widget with a new skin and new theme installed. %width=50](figures/inputWithTheme.png )
 
 
 ### Decorating a BlElement to get a ToElement
@@ -214,16 +210,6 @@ When you use a trait you should also refine the initialize method to invoke the 
 ToNumberInputElement >> initialize
 	super initialize. 
 	self initializeForToplo
-```
-
-
-SD: we should check if the following is necessary
-```
-ToNumberInputElement >> onAddedToSceneGraph
-
-    super onAddedToSceneGraph.
-    self ensuredSkinManager requestInstallSkinIn: self.
-    self addEventHandler: ToSkinStateGenerator new
 ```
 
 ### Autonome theme

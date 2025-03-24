@@ -20,10 +20,9 @@ space root addChild: anInput.
 space show.
 ```
 
-The main widget is composed of four elements: two buttons, a label,  and  a value.
-Let us detail these elements: 
+The main widget is composed of four elements: two buttons (the circle with a "+" and the circle with the "-"), a label (that displays "input"), and a value (that displays "20"). Let us detail these elements:  
 - the label and the value are text elements,
-- the two buttons are, in fact, a composite element composed of a circle element with a text element inside.
+- the two buttons are, in fact, a composite element composed of an element with a circle geometry, holding a text element inside.
 
 
 ### Getting started
@@ -37,28 +36,15 @@ BlElement << #BlIntegerInputElement
 	package: 'ABlocPackage'
 ```
 
-We start by defining the shape of the main element. Notice that visual properties such the background, the border could be stored differently to be customized afterwards.This is what we will show in a following chapter using stylesheet and skins as done in Toplo.
-
-
-```
-BlIntegerInputElement >> widgetExtent 
-
-	^ 300@120
-```
-
-```
-BlIntegerInputElement >> backgroundPaint
-
-	^ Color black
-```
+We start by defining the shape of the main element. Notice that visual properties such as the background or the border could be stored differently to be customized afterwards. This is what we will show in a following chapter using stylesheet and skins as done in Toplo.
 
 
 ```
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self widgetExtent.
-	self background: self backgroundPaint.
+	self size: 300@120.
+	self background: Color black.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
 	self border: (BlBorder paint: Color pink).
@@ -80,13 +66,13 @@ BlIntegerInputElement >> configuredString: aString
 	^ aString asRopedText attributes: { (BlTextForegroundAttribute paint: Color white) }
 ```	
 
-The `label:` method creates a `BlTextElement`, sets its text using properties and translates it to place it above the center. 
+The `initializeInputLabel` method creates a `BlTextElement`, sets its text using properties and translates it to place it above the center. 
 
 ```
-BlIntegerInputElement >> label: aString
+BlIntegerInputElement >> initializeInputLabel
 
 	inputLabel := BlTextElement new.
-	inputLabel text: (self configuredString: aString).
+	inputLabel text: (self configuredString: 'Input').
 	inputLabel text fontSize: 25.
 	inputLabel constraintsDo: [ :c |
 		c frame horizontal alignCenter.
@@ -98,17 +84,17 @@ Note that we use `addChild:` method to add the text element in the composite (th
 
 ![With a label. % anchor=input1&width=50](figures/Input1.png)
 
-We modify the initialize method to invoke the `label` method.
+We modify the initialize method to invoke the `initializeInputLabel` method.
 ```
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self widgetExtent.
-	self background: self backgroundPaint.
+	self size: 300@120.
+	self background: Color black.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
 	self border: (BlBorder paint: Color pink).
-	self label: 'Input'
+	self initializeInputlabel
 ```
 
 We should get now a widget similar to the one shown in Fig *@input1@*.
@@ -128,8 +114,7 @@ BlIntegerInputElement >> initializeInputValue: aValue
 	self addChild: inputValue
 ```
 
-We define a little helper method `changeValueTo:` that we will expose as pubic API for example 
-to start the input with a specific value.
+We define a little helper method `changeValueTo:` that we will expose as public API but we will also use this method internally later.
 Note again that we add the input value element in the composite one. 
 
 ```
@@ -147,13 +132,14 @@ Then we change the `initialize` method to invoke `initializeInputValue:`.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self widgetExtent.
-	self background: self backgroundPaint.
+	self size: 300@120.
+	self background: Color black.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
 	self border: (BlBorder paint: Color pink).
-	self initializeInputValue: 20.
-	self label: 'Input'
+	self initializeInputLabel.
+	self initializeInputValue: 20
+	
 ```
 
 We should obtain now a widget similar to the one show in Fig *@input2@*.
@@ -221,14 +207,15 @@ the circle element to react to mouse-down events.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self widgetExtent.
-	self background: self backgroundPaint.
+	self size: 300@120.
+	self background: Color black.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
 	self border: (BlBorder paint: Color pink).
-	self initializePlusButton.
+	self initializeInputLabel.
 	self initializeInputValue: 20.
-	self label: 'Input'
+	self initializePlusButton.
+	
 ```
 
 We should now get a widget similar to the one shown in Fig *@input3@*.
@@ -278,15 +265,15 @@ FInally we update the initialize method to call the minus creation.
 BlIntegerInputElement >> initialize
 
 	super initialize.
-	self size: self widgetExtent.
-	self background: self backgroundPaint.
+	self size: 300@120.
+	self background: Color black.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
 	self layout: BlFrameLayout new.
 	self border: (BlBorder paint: Color pink).
-	self initializePlusButton.
-	self initializeMinusButton.
+	self initializeInputLabel.
 	self initializeInputValue: 20.
-	self label: 'Input'
+	self initializePlusButton.
+	self initializeMinusButton
 ```
 
 Now we should have the full widget. 
@@ -299,15 +286,19 @@ Any time the `inputValue` is changed we will value a block with the new value of
 First we initialize the callback block.
 
 ```
-BlIntegerInputElement >> initializeInputValue: aValue
+BlIntegerInputElement >> initialize.
 
+	super initialize.
+	self size: 300@120.
+	self background: Color black.
+	self geometry: (BlRoundedRectangleGeometry cornerRadius: 20).
+	self layout: BlFrameLayout new.
+	self border: (BlBorder paint: Color pink).
+	self initializeInputLabel.
+	self initializeInputValue: 20.
+	self initializePlusButton.
+	self initializeMinusButton
 	callbackBlock := [ :newInputValue | ].
-	inputValue := BlTextElement new.
-	inputValue constraintsDo: [ :c |
-		c frame horizontal alignCenter.
-		c frame vertical alignCenter ].
-	self changeValueTo: aValue.
-	self addChild: inputValue
 ```
 
 Then anytime we changed the state, we update the value.
@@ -321,10 +312,10 @@ BlIntegerInputElement >> changeValueTo: aValue
 	callbackBlock value: aValue
 ```
 
-Finnaly we create a mutator for the `callbackBlock` variable.
+Finnaly we create a mutator for the `callbackBlock` variable called `whenInputValueChangedDo:`.
 
 ```
-BlIntegerInputElement >> callbackBlock: aBlock
+BlIntegerInputElement >> whenInputValueChangedDo: aBlock
 
 	callbackBlock := aBlock
 ```
@@ -343,19 +334,6 @@ BlNumberInputElementTest >> testChildrenAreSet
 	| inputElem |
 	inputElem := BlNumberInputElement new.
 	self assert: inputElem children size equals: 4 
-```
-
-Let us see a more interesting test.
-The following test shows that we can effectively changes the label. 
-
-```
-BlNumberInputElementTest >> testCanChangeLabel
-
-	| inputElem |
-	inputElem := BlNumberInputElement new.
-	self assert: inputElem label text asString equals: 'Input'.
-	inputElem label: 'Volume'.
-	self assert: inputElem label text asString equals: 'Volume'.
 ```
 
 The following tests are checking that the interaction on the buttons is working correctly.
@@ -391,7 +369,7 @@ BlNumberInputElementTest >> testCallbackCallOnClick
 	testNumberOfCall := 0.
 	testValue := -1.
 	inputElem := BlNumberInputElement new.
-	inputElem callbackBlock: [ :val |
+	inputElem whenInputValueChangedDo: [ :val |
 		testNumberOfCall := testNumberOfCall + 1.
 		testValue := val.
 	]

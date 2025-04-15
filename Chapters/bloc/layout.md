@@ -427,6 +427,8 @@ root addChildren: { childA . childB . childC }.
 root openInNewSpace.
 ```
 
+![Linear layout.](figures/linearlayout1.png width=70)
+
 #### Child constraints
 
 Constraints can be added on the children relative position.
@@ -485,6 +487,7 @@ root addChildren: { childA . childB . childC }.
 root openInNewSpace.
 ```
 
+![Linear layout.](figures/linearlayout2.png width=70)
 
 ### Flow layout - BlFlowLayout
 
@@ -533,6 +536,8 @@ root := BlElement new
 
 root openInNewSpace.
 ```
+
+![Flow layout.](figures/flowlayout.png width=70)
 
 ### Grid layout - BlGridLayout
 

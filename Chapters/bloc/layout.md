@@ -367,49 +367,124 @@ Stef should continue down here.
 
 ### Linear layout - BlLinearLayout
 
-Children can use dynamic size with constraints. The number of element will then fit
-its parents available space.	 If you specify their size, and the total is
-over its parents, they will be hidden. need to specify their size. If they use
-constraint, the last one will hide previous one. They will fit available space +
-move to next line if necessary
+A linear layout is used when you need to display a multiple children elements next to each others.
+A linear layout can diplay the children elements horizontaly or verticaly.
+The size of a child element depends of the child's constraints.
+The constraints are:
 
-#### Parent definition
-
-- horizontal
-- vertical
-
-#### Child constraints
-
-- horizontal
-- alignCenter
-- alignLeft
-- alignRight
-- vertical
-- alignBottom
-- alignCenter
-- alignTop
+- `BlLayoutCommonConstraintsAxis exact:` to define an exact size for the child.
+- `BlLayoutCommonConstraintsAxis fitContent` to define a size that will match the content of the child.
+- `BlLinearLayoutConstraints weight:` to define a proportional size of the child compare to its siblings' weigths (only available if matchParent is set as the BlLayoutCommonConstraintsAxis). By default the weight equals 1.
 
 #### Example
+
+In this example the childA has a weight of 3, the childB has a default weight of 1 and the childC has a weight of 200.
+But the weight of the childC will not be considered because its horizontal size is defined has an exact value.
+
+- The childA will take `3 / (3 + 1) = 3 / 4` of the available space.
+- The childB will take `1 / (3 + 1) = 1 / 4` of the available space.
 
 ```smalltalk
 root := BlElement new
 	border: (BlBorder paint: Color red width: 1);
 	background: (Color red alpha: 0.2);
-	layout: BlLinearLayout horizontal ;
+	layout: BlLinearLayout horizontal;
 	  constraintsDo: [ :c |
-		c horizontal fitContent.
-		c vertical fitContent ].
-	
-	50 timesRepeat:  [  |elt| elt := BlElement new border: (BlBorder paint: Color blue width: 1);
-		size: 40@80;
-	   background: (Color blue alpha: 0.2);
-	   margin: (BlInsets all: 5);
-	   padding: (BlInsets all: 5).
+		c horizontal matchParent.
+		c vertical fitContent ];
+	yourself.
 
-			root addChild: elt. ].
+childA := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 10);
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical exact: 50.
+		c linear weight: 3 ];
+	yourself.
+
+childB := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 10);
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical exact: 50 ];
+	yourself.
+
+childC := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 10);
+	  constraintsDo: [ :c |
+		c horizontal exact: 50.
+		c vertical exact: 50.
+		c linear weight: 20 ];
+	yourself.
+
+root addChildren: { childA . childB . childC }.
+root openInNewSpace.
 ```
 
-![Linear layout.](figures/linearlayout.png width=70)
+#### Child constraints
+
+Constraints can be added on the children relative position.
+
+If the layout is vertical:
+- alignCenter
+- alignLeft
+- alignRight
+
+If the layout is horizontal:
+- alignBottom
+- alignCenter
+- alignTop
+
+```st
+root := BlElement new
+	border: (BlBorder paint: Color red width: 1);
+	background: (Color red alpha: 0.2);
+	layout: BlLinearLayout horizontal;
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical exact: 80 ];
+	yourself.
+
+childA := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 10);
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical exact: 20.
+		c linear vertical alignBottom ];
+	yourself.
+
+childB := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 10);
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical exact: 20.
+		c linear vertical alignCenter ];
+	yourself.
+
+childC := BlElement new
+	border: (BlBorder paint: Color blue width: 1);
+	background: (Color blue alpha: 0.2);
+	margin: (BlInsets all: 10);
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical exact: 20.
+		c linear vertical alignTop ];
+	yourself.
+
+root addChildren: { childA . childB . childC }.
+root openInNewSpace.
+```
+
 
 ### Flow layout - BlFlowLayout
 

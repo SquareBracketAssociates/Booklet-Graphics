@@ -488,26 +488,16 @@ root openInNewSpace.
 
 ### Flow layout - BlFlowLayout
 
-Children need to specify their size. If they use constraint, the last one will hide
-previous one. They will fit available space + move to next line if necessary.
-Flow will fill all available space in its parent, and parent can be resized to
-match the space needed to display all its children.
+A flow layout is used when you need to display a multiple children elements next to each others.
+A flow layout can diplay the children elements horizontaly or verticaly.
+If a flow layout does not have enought place to display the next child element, it will create a new row or column to display the next children.
+It works like a text editor, a word is added to the next line when the space is not enought to fit it.
 
-#### Parent definition
+There is special display constraint for the children elements: the value is either `inline` or `float`.
+By default, all children are `inline`.
+In the case of a horizontal flow layout, the height of a line is equal to the maximum height of all inline elements of this line.
+If a child element has a display equals to `flow`, the other elements will be placed around it.
 
-- horizontal
-- vertical
-
-#### Child constraints
-
-- horizontal
-- alignCenter
-- alignLeft
-- alignRight
-- vertical
-- alignBottom
-- alignCenter
-- alignTop
 
 #### Example
 
@@ -516,21 +506,33 @@ root := BlElement new
 	border: (BlBorder paint: Color red width: 1);
 	background: (Color red alpha: 0.2);
 	layout: BlFlowLayout horizontal;
-	constraintsDo: [ :c |
-		c horizontal matchParent .
-		c vertical fitContent  ].
+	  constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent ];
+	yourself.
+	
+1 to: 100 do: [ :index | | child |
+	child := BlElement new 
+		border: (BlBorder paint: Color blue width: 1);
+		background: (Color blue alpha: 0.2);
+		margin: (BlInsets all: 5);
+		addChild: (BlTextElement text: index printString asRopedText);
+		constraintsDo: [ :c |
+			c horizontal exact: 20.
+			c vertical exact: 20. ];
+		yourself.
+	index = 22 ifTrue: [ 
+		child background: Color blue;
+		size: 50 @ 60;
+		constraintsDo: [ :c | c flow float ] ].
+	index = 60 ifTrue: [ 
+		child background: Color green;
+		size: 50 @ 60 ].
+	root addChild: child
+	].
 
-50 timesRepeat: [
-	| elt |
-	elt := BlElement new
-	size: 40 @ 80;
-	border: (BlBorder paint: Color blue width: 1);
-	background: (Color blue alpha: 0.2);
-	margin: (BlInsets all: 5).
-	root addChild: elt ].
+root openInNewSpace.
 ```
-
-![Flow layout.](figures/flowlayout.png width=70)
 
 ### Grid layout - BlGridLayout
 

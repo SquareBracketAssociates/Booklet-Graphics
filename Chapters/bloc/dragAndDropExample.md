@@ -1,8 +1,8 @@
-### Drag and Drop
+## Drag and Drop
 
 Bloc has basic support for drag-and-drop which needs to be further improved. In this chapter we try to explain the basics of drag-and-drop with Bloc events and we display some valuable examples.
 
-#### Three basic events
+### Three basic events
 
 To start understanding the Drag-and-drop process, you must acknowledge the following 3 basic events:
 
@@ -10,7 +10,7 @@ To start understanding the Drag-and-drop process, you must acknowledge the follo
 - BlDragEvent : sent whenever you move the cursor during the drag process. **Needs the BlDragStartEvent to be consumed in order to be sent**.
 - BlDragEndEvent : Ends the drag process, sent when you lift your cursor (i.e. send a MouseUpEvent) 
 
-#### First drag and drop
+### First drag and drop
 
 Using the basic events we can write the simplest drag and drop snippet 
 
@@ -30,9 +30,9 @@ element openInSpace
 
 Here we add a small offset variable that is defined when starting to drag the element so that we can redefine the element's position according to the mouse position and have a smooth drag and drop. 
 
-#### Custom Drag Handlers
+### Custom Drag Handlers
 
-##### DragHandler 
+#### DragHandler 
 
 In Bloc, there is a an implementation of an object called DragHandler. This object is a a CustomEventHandler aiming to deal with basic drag and drop without having to write again the lines above.
 
@@ -47,7 +47,7 @@ element openInSpace
 ```
 However you can see the default behavior when dropping the Element is to bring the element back to its original position.
 
-##### PullHandler
+#### PullHandler
 
 There is also the BlPullHandler which has a more detailed API allowing you more behaviours.
 
@@ -113,7 +113,7 @@ element addEventHandlerOn: BlClickEvent do: [ :event |
 element  openInSpace
 ```
 
-#### Events for the environment
+### Events for the environment
 
 Other Events related to Drag and Drop are available in Bloc but they mainly concern the environment in which an Element is dragged.
 
@@ -296,7 +296,7 @@ One thing important in this snippet is to use the messages `requestFocus` and `l
 
 The example is not exactly perfect nor practical but it serves as a good example on how to dynamically change the drag behaviour with keyboard events.
 
-#### Other Examples 
+### Other Examples 
 
 You can find more examples/experiments on Drag and Drop in the class `BlDragAndDropExamples`.
 We suggest looking at the class `BlDragAndDropLetterExampleDemo` that shows an example of a letter sorter with letters reacting if hovering the 'vowel' or 'consonant' areas.

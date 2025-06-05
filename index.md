@@ -24,6 +24,7 @@
 <!inputFile|path=Chapters/toplo/widgetList.md!>
 
 <!inputFile|path=Chapters/toplo/skinningAWidget.md!>
+<!inputFile|path=Chapters/toplo/skinInAction.md!>
 <!inputFile|path=Chapters/toplo/definingATheme.md!>
 <!inputFile|path=Chapters/toplo/stylesheet.md!>
 

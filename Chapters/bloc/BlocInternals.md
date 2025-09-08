@@ -11,8 +11,8 @@ Rendering is done by a dedicated render class, BARenderer by default.
 Host has their own pulse loop which are then transmitted to their BlSpace
 My loop follows the next rules:
 
-•	The #pulsePeriod duration is the minimum amount of time between two subsequent sends of #pulse.
-•	If a pulse took more time than #pulsePeriod, then the next pulse may either send the next #pulse immediately, or do a small wait before if another process with lower priority is suspended (and may be starving).
+- The #pulsePeriod duration is the minimum amount of time between two subsequent sends of #pulse.
+- If a pulse took more time than #pulsePeriod, then the next pulse may either send the next #pulse immediately, or do a small wait before if another process with lower priority is suspended (and may be starving).
 
 The opened spaces listen the pulse to be synchronized and to update their state when it is needed.
 

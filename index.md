@@ -17,6 +17,9 @@
 
 <!inputFile|path=Chapters/bloc/dragAndDropExample.md!>
 
+% Check blocStack.md
+% Check complexElement.md
+
 # Toplo: Bloc widget set
 
 <!inputFile|path=Chapters/toplo/toplo.md!>

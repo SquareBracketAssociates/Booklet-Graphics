@@ -206,6 +206,13 @@ When the parent uses "fit content" and the child uses "match parent", there is
 no way to determine the size. In such cases, the size of both the parent and
 the child will be 0@0.
 
+#### getting element extent.
+At first, you may be surprised to see that your element bounds is 0@0. The bounds are computed during the layout phase.
+In order to have bounds, the elements must be added to a space and the space need to pulse (full render loop) at least once.
+If you add element before the space have pulsed, it'll have the default bounds and not the "real" bounds.
+If you need the extent, you can either wait for *BlElementExtentChangedEvent* event. If you need it to position your element, 
+your best choice would be to use the various layout strategy, and pick the most appropriate to position your element. 
+
 
 ### Layout strategy and constraints
 

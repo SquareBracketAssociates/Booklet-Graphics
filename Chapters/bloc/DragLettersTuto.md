@@ -1,4 +1,5 @@
-# Letters Sorter Drag Example
+## Letters Sorter Drag Example
+
 
 Let's create a complete example of a Letters Sorter where you drag letters elements and drop them on the right containers depending if the letter is a consonant or a vowel.
 
@@ -30,7 +31,7 @@ BlSortLettersExample>>initialize
 
 We can the add the two methods to initialize the containers and the letters with it.
 
-## Containers
+### Containers
 
 We define 3 containers :
 - the Letters container, where all letters will be at the initialization
@@ -239,7 +240,7 @@ Similar to the vowels container, the consonant container add a letter to its chi
 
 Now that our containers are defined, let's display them before adding letters.
 
-Here we define a small method to help us display the containers with a bit of text above it :
+Here we define a small method to help us display the containers with a bit of text above it:
 
 ```st
 BlSortLettersExample>>labelContainer: anElement with: aText
@@ -253,7 +254,7 @@ BlSortLettersExample>>labelContainer: anElement with: aText
 		  addChild: anElement
 ```
 
-this method can be used in the `initializeContainers` method
+This method can be used in the `initializeContainers` method
 
 ```st
 BlSortLettersExample>>initializeContainers
@@ -276,8 +277,8 @@ Let's also define a `run` method to launch our example
 
 ```st
 BlSortLettersExample>>run
-
 	<script: 'self new openInSpace'>
+	
 ```
 
 Defining this method with the script pragma adds a small button next to the method's name in our browser.
@@ -285,7 +286,7 @@ If you hit this button, the code should run and give you this visual
 
 ![Containers of the Letters Sorter Example](figures/LettersSorterContainers.png)
 
-## Letters
+### Adding Letters
 
 The containers are ready to welcome the letters so let's define those.
 
@@ -311,7 +312,7 @@ BlElement << #BlLetter
 	tag: '';
 	package: 'LetterSorter'
 ```
-It is a BlElement that will hold a TextElement with the character assigned as a Text.
+It is a `BlElement` that will hold a `TextElement` with the character assigned as a Text.
 
 ```st
 BlLetter>>initialize
@@ -327,7 +328,7 @@ BlLetter>>initialize
 	self initializeEvents
 ```
 
-We can initialize the events for this element to allow us to drag it 
+We can initialize the events for this element to allow us to drag it. 
 
 ```st
 BlLetter>>initializeEvents
@@ -367,7 +368,6 @@ Finally, we create accessors for our instance variables `defaultContainer` and `
 BlLetter>>character: aCharacter
 
 	character := aCharacter.
-
 	self addChild: (BlTextElement new
 			 labelMeasurement;
 			 text: aCharacter asString asRopedText)
@@ -389,7 +389,7 @@ BlSortLettersExample>>initialize
     self initializeLetters.
 ```
 
-## Testing our code
+### Testing our code
 
 Everything is now ready to be executed, we can hit `run` to try our example.
 
@@ -400,7 +400,7 @@ You should see the letters in their container and you can drag them above the co
 
 You now have a good first application where you defined some drag and drop behaviours with containers accepting or rejecting an element depending on a specific condition.
 
-## Going beyond this example
+### Going beyond this example
 
 You might however come across the case where you drop a letter out of any container and the letter stays on the space root but we would like the letter to go back at least in a container even if dropped outside. 
 
@@ -432,3 +432,4 @@ BlSortLettersExample>>initializeDropEvent
 					element removeFromParent.
 					element defaultContainer addChild: element ] ]
 ```
+

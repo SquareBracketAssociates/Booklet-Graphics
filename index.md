@@ -4,7 +4,8 @@
 
 <!inputFile|path=Chapters/gettingStarted/miniTutorial.md!>
 <!inputFile|path=Chapters/gettingStarted/buildingAWidget.md!>
-<!inputFile|path=Chapters/gettingStarted/sortingLetters.md!>
+%<!inputFile|path=Chapters/gettingStarted/sortingLetters.md!>
+<!inputFile|path=Chapters/bloc/DragLettersTuto.md!>
 
 # Bloc: A graphics framework
 

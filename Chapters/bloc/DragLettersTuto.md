@@ -2,6 +2,9 @@
 
 Let's create a complete Letters Sorter example where you drag letter elements and drop them into the right container depending on whether the letter is a consonant or a vowel.
 
+
+![A letter sorter application.%width=80](figures/DD-blocLetter.png)
+
 This code can also be found in the `Bloc-Demo` package 
 
 We can start by creating a class for our main element; it will inherit from `BlElement`:

@@ -1,6 +1,6 @@
 ## Drag and Drop
 
-Bloc supports drag-and-drop of elements. In this chapter, we explain the basics of drag-and-drop with Bloc events. We present some custom event handles encapsulated drag-and-drop behavior. Finally we present some how the element behind an element can also get event in addition to the element being dragged.
+Bloc supports drag-and-drop of elements. In this chapter, we explain the basics of the drag-and-drop with Bloc events. We present some custom event handles encapsulated drag-and-drop behavior. Finally we describe how the element behind an element can also get event in addition to the element being dragged.
 
 ### Three basic events
 
@@ -8,29 +8,64 @@ To start understanding the Drag-and-drop process, you must know the following th
 
 - `BlDragStartEvent`: This event is raised at the start of the drag process. It is sent when you move the cursor for the first time after having a `MouseDownEvent`.
 - `BlDragEvent`: This event is sent whenever you move the cursor during the drag process. Notice that it is required that the `BlDragStartEvent` is consumed first, else the `BlDragEvent` is not raised.
-- `BlDragEndEvent`: This event ends the drag process. It is sent when you lift your cursor (i.e., after a `MouseUpEvent` event) 
+- `BlDragEndEvent`: This event ends the drag process. It is sent when you lift your cursor (i.e., after a `MouseUpEvent` event).
 
 
 ### First drag and drop
 
-Using the basic events mentioned earlier, we can write a simple drag-and-drop example as shown by the following snippet:
+Let us start with an example not working. 
+If we just register an action to the `BlDragEvent` the drag and drop is not working. 
+
+```
+| element |
+element := BlElement new background: Color lightGreen.
+element 
+	addEventHandlerOn: BlDragEvent 
+	do: [ :event | 
+		event consume.
+		element position: event position - (element size /2) ].
+element openInSpace.
+```
+
+This is because as explained above the drag event is only received after the start event is consumed.
+
+The following script introduce an action associated to the `BlDragStartEvent`: it consumes the event. This script is working.
+
+```
+| element |
+element := BlElement new background: Color lightGreen.
+element 
+	addEventHandlerOn: BlDragStartEvent 
+	do: [ :event | event consume ].
+element 
+	addEventHandlerOn: BlDragEvent 
+	do: [ :event | 
+		event consume.
+		element position: event position - (element size /2) ].
+element openInSpace.
+```
+
+### Possible refinement
+
+We can then improve a bit the visual of the drag and drop. 
+Here we use an `offset` variable whose value is set when starting to drag the element. We use this value to compute the relative position since the beginning of the start and we redefine the element's position according to the mouse position and have a smooth drag and drop. 
 
 ```st
 element := BlElement new background: Color lightGreen.
 offset := 0.
-element addEventHandlerOn: BlDragStartEvent do: [ :event |
-	offset := event position - element position.
-	event consume. ].
-
-element addEventHandlerOn: BlDragEvent do: [ :event | 
-	event consume.
-	element position: event position - offset.].
-
+element 
+	addEventHandlerOn: BlDragStartEvent 
+	do: [ :event |
+		offset := event position - element position.
+		event consume ].
+element 
+	addEventHandlerOn: BlDragEvent 
+	do: [ :event | 
+		event consume.
+		element position: event position - offset ].
 element openInSpace 
 ```
 
-
-Here we use an `offset` variable whose value is set when starting to drag the element. We use this value to compute the relative position since the beginning of the start and we redefine the element's position according to the mouse position and have a smooth drag and drop. 
 
 ### Custom Drag Handlers
 
@@ -45,32 +80,33 @@ Bloc defines a custom event handler named `BlDragHandler`. It supports simple dr
 As an EventHandler you can simply add it to an Element and use it to start dragging the Element.
 
 
-
 ```st
 element := BlElement new background: Color lightGreen.
 element addEventHandler: BlDragHandler new.
-
 element openInSpace
 ```
 
-You can see the default behavior when dropping the element is to bring it back to its original position.
+You can see that the default behavior when dropping the element is to bring it back to its original position. Notice that there is an animation placing the dragged element at its original position.
 
 
 
 #### PullHandler
 Another possibility is to use another `BlCustomEventHandler`: the `BlPullHandler` it has a more detailed API allowing you more behaviors.
 
+You can for example constraint the drag to an horizontal or vertical axis, or that the dragged element can be pull outside its parent.
+
 Adapting the same snippet, we can have a basic drag and drop with the `PullHandler` however, here the default drop behavior is to leave the element right where it currently is.
 
 ```st
 element := BlElement new background: Color lightGreen.
 element addEventHandler: BlPullHandler new.
-
-element  openInSpace
+element openInSpace
 ```
 #### Out of the bounds strategy with `BlPullHandler`
 
-This handler allows you to confine or not your draggable element into its parents bounds using the messages `disallowOutOfBounds`/`allowOutOfBounds`.
+The `PullHandler` handler allows you to confine or not your draggable element into its parents bounds using the messages `disallowOutOfBounds`/`allowOutOfBounds`.
+
+With the following example, you can drag the green element outside the red one (See Figure *@dragOut@*). 
 
 ```st
 element := BlElement new background: Color lightGreen.
@@ -84,10 +120,15 @@ parent addChild: element.
 parent  openInSpace
 ```
 
-![Dragging an element outside its parent using the `allowOutOfBounds` configuration message.](figures/dragPullOutOfBounds.png)
+![Dragging an element outside its parent using the `allowOutOfBounds` configuration message.%width=70&anchor=dragOut](figures/dragPullOutOfBounds.png)
+
+You can change this behavior using `BlPullHandler new disallowOutOfBounds ;yourself` in the previous code snippet.
+
+
 
 
 #### Different dragging strategies with `BlPullHandler`
+
 You can also have different dragging strategies such as dragging only horizontally or vertically. The default strategy is called 'free' and those strategies can be switched dynamically.
 
 In the following example, you can click the element to switch to the next strategy.
@@ -124,11 +165,10 @@ element  openInSpace
 
 ### Events for the environment
 
-There are other events related to Drag-and-Drop. However they mainly concern the environment in which an element is dragged.
+There are other events related to Drag-and-Drop. They, however, are mainly concerned with the space or the element under which an element is dragged.
 
 These events are: 
-
-- `BlSpaceDragLiftEvent` 
+- `BlSpaceDragLiftEvent`: similar to `BlDragStartEvent` but sent to the space.
 - `BlDropEvent`
 - `BlDragEnterEvent`
 - `BlDragLeaveEvent`
@@ -139,7 +179,7 @@ These events are:
 Let's start with `BlSpaceDragLiftEvent` that acts similarly to the `BlDragStartEvent`: it is sent once at the beginning of the drag phase but contrary to the `BlDragStart`, `BlSpaceDragLift` is an event sent to the space itself.
 
 The following snippet shows that both an element and its space will receive different events. 
-The code illustrates this by making the child changes its border while the space changes the child background color but only once at the beginning of the drag.
+The code illustrates this by making the child changes its border while the space changes its root background color but only once at the beginning of the drag.
 
 ```st
 | child space border |
@@ -150,15 +190,15 @@ child := BlElement new
 space := BlSpace new.
 space root addChild: child.
 
-child addEventHandlerOn: BlDragEvent do: [
-    border := BlBorder paint: Color random width: 5.
-    child border: border ].
-	
 "event sent during each frame of the drag"
-space
-    addEventHandlerOn: BlSpaceDragLiftEvent
-    do: [ child background: Color random ].
+child addEventHandlerOn: BlDragEvent do: [
+	border := BlBorder paint: Color random width: 5.
+	child border: border ].
+
 "event sent at the beginning of the drag"
+space
+	addEventHandlerOn: BlSpaceDragLiftEvent
+	do: [ space root background: Color random ].
 
 space show
 ```
@@ -189,13 +229,11 @@ target
 	do: [
 		'Drop on target' traceCr.
 		target background: Color random ].
-
 child
 	addEventHandlerOn: BlDragEndEvent
 	do: [ 'Drag Ended' traceCr ].
 
-"This should never trigger only target will receive this DropEvent"
-
+"This should never trigger! Only target will receive this DropEvent"
 child 
 	addEventHandlerOn: BlDropEvent 
 	do: [ 'Dropped' traceCr].
@@ -204,14 +242,18 @@ space show
 ```
 
 
-![]{figures/dragandropTarget.png}
+![A BlDropEvent configured to change the color of the element receiving the drop event. %width=70]{figures/dragandropTarget.png}
 
 #### `BlDragEnterEvent` and `BlDragLeaveEvent`
 
 The last two events are quite similar as `BlDragEnterEvent` and `BlDragLeaveEvent` check if your cursor enters or leaves the bounds of an Element while dragging. However, it is **important** to know these events are sent to the element directly under the cursor during the drag process. This means that because we usually drag an element that follows the cursor, it won't be possible for the cursor to know if it entered another element's bounds behind.
 
 The following snippet shows this behavior:
-It creates a light green and a target light red element 
+It creates a light green and a target light red element.
+In this snippet, we add a border to the red element whenever the green element enters its bounds while dragging, and we remove this border when it leaves.
+
+
+SD! Not true
 
 ```st
 element := BlElement new background: Color lightGreen.
@@ -239,7 +281,7 @@ space root addChildren: { target. element }.
 space show
 ```
 
-In this snippet, we add a border to the red element whenever the green element enters its bounds while dragging, and we remove this border when it leaves.
+
 
 We can see that the border doesn't appear as intended (unless you drag too quickly the element meaning the cursor will enter the parent first and then consider leaving it when the green element will be brought to the right position).
 

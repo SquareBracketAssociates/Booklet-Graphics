@@ -248,12 +248,10 @@ space show
 
 The last two events are quite similar as `BlDragEnterEvent` and `BlDragLeaveEvent` check if your cursor enters or leaves the bounds of an Element while dragging. However, it is **important** to know these events are sent to the element directly under the cursor during the drag process. This means that because we usually drag an element that follows the cursor, it won't be possible for the cursor to know if it entered another element's bounds behind.
 
-The following snippet shows this behavior:
-It creates a light green and a target light red element.
-In this snippet, we add a border to the red element whenever the green element enters its bounds while dragging, and we remove this border when it leaves.
+The following snippet shows this behavior: In its first definition it does not fully work. 
+It creates two elements: a light green and a target light red.
+We add a border to the red element whenever the green element enters its bounds while dragging, and we remove this border when it leaves. However it is not clearly happening.
 
-
-SD! Not true
 
 ```st
 element := BlElement new background: Color lightGreen.
@@ -281,11 +279,12 @@ space root addChildren: { target. element }.
 space show
 ```
 
-
-
 We can see that the border doesn't appear as intended (unless you drag too quickly the element meaning the cursor will enter the parent first and then consider leaving it when the green element will be brought to the right position).
 
-To avoid this, we can make the green element 'transparent to the events' when starting to drag it. Meaning the cursor will know 'see through' the green element and send the correct enter and leave events to the red one. For this we can simply use the messages `preventMouseEvents` and `allowMouseEvents` by adding the next lines :
+To avoid this, we can make the green element 'transparent to the events' when starting to drag it. Meaning the cursor will now 'see through' the green element and send the correct enter and leave events to the red one. For this we can simply use the messages `preventMouseEvents` and `allowMouseEvents` by adding the next lines :
+
+
+SD: to be investigated because it does not really work.
 
 ```st
 element 
@@ -302,7 +301,8 @@ element
 ```
 
 This example now works as we wanted, adding and removing a border to the red element when the cursor enters it while dragging. 
-Remember this looks if the **cursor** enters and leaves the bounds and not if the green element itself enters or leaves. To see if two elements 'collide' you need to use the `BlBounds` API.
+
+Remember this looks if the **cursor** (and not the dragged element) enters and leaves the bounds and not if the green element itself enters or leaves. To see if two elements 'collide' you need to use the `BlBounds` API.
 
 ### Keyboard events 
 

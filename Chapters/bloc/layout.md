@@ -94,6 +94,17 @@ and this element always appears on top (current situation or bug) when it overla
 
 ### element rendering
 
+Placing an element on screen involves three concerns, and each one uses its own
+set of messages:
+ 
+1. **Spacing**: how much room surrounds the element (`margin:`) and its
+   content (`padding:`).
+2. **Sizing**: how big the element is. The size is either fixed (`extent:`) or
+   computed (`matchParent`, `fitContent`), within optional `minWidth:`,
+   `maxWidth:`, `minHeight:` and `maxHeight:` limits.
+3. **Positioning**: where the element goes. This is decided by the *layout
+   strategy* of its **parent**.
+
 By default, all your bloc scene will be rendered using the same Alexandrie Canvas and surface.
 In scenarios of "complex enough" elements that don't change on every frame, you can improve performance 
 by using composition layer to saves time by caching the pixels instead of rasterizing on next space redraw.
@@ -117,6 +128,11 @@ define how close your elements will be from each other, with those 2 properties
 
 - `padding:` space between the element and its children.
 - `margin:` space between the element and its parent
+
+Margin and padding belong to different roles. The margin is a property of the
+child that its parent's layout honors: it keeps the child away from its
+siblings and from the parent border. The padding is a property of the parent
+that its own layout honors: it keeps all its children away from its border.
 
 Constraints can apply to margin and padding as well.
 Here is a typical constraint expression: 
@@ -213,6 +229,22 @@ If you add element before the space have pulsed, it'll have the default bounds a
 If you need the extent, you can either wait for *BlElementExtentChangedEvent* event. If you need it to position your element, 
 your best choice would be to use the various layout strategy, and pick the most appropriate to position your element. 
 
+The size of an element is defined independently on each axis, with a *resizer*:
+ 
+- `c horizontal exact: 100`: a fixed size. The message `extent: aPoint` sets an
+  exact resizer on both axes. The former `size:` message is deprecated in favor
+  of `extent:`.
+- `c horizontal matchParent`: take the space available in the parent.
+- `c horizontal fitContent`: take the space needed by the children.
+If you do not specify anything, an element has an exact size of `50@50`.
+ 
+Sizing is negotiated between the child and its parent layout. The same
+`matchParent` does not mean exactly the same thing in every layout. For
+example, in a `BlLinearLayout`, `matchParent` along the orientation axis shares
+the remaining space between the children according to their `weight:`.
+ 
+A child with `matchParent` inside a parent with `fitContent` on the same axis
+has no size to match, so it ends up with a size of 0.
 
 ### Layout strategy and constraints
 
@@ -260,44 +292,79 @@ their position constraints. You'll find some example below.
 
 ### Ignoring or interacting with parent layout
 
-You can ignore the layout defined by the parent using `ignoreLayout`. When you
-use this constraint, your element will be removed from parent layout rules,
-and follow *BlBasicLayout* instead, meaning you can place your element at
-arbitrary position within your parent element.
-
+Behind the scenes, `c frame` is simply `c at: BlFrameLayout`. An element keeps
+one constraints object per layout class, and a layout only reads the
+constraints registered for its own class. As a consequence:
+ 
+- `c frame horizontal alignCenter` has an effect **only if the parent uses a
+  `BlFrameLayout`**. With any other parent layout, it is silently ignored. No
+  error is raised.
+- An element can hold constraints for several layouts at once. Only the ones
+  that match the current layout of its parent are used. If the parent changes
+  its layout at runtime, the other set of constraints takes over.
+The following example shows both roles on the same element. `first` uses a
+linear layout for *its own* children, and uses frame constraints to be placed
+*by its parent* `second`, which uses a frame layout.
+ 
 ```smalltalk
-	constraintsDo: [ :c | c ignoreByLayout ].
-```
-
-You can also interact with parent layout constraint using `flow`, `frame`,
-`grid`, `linear`, or `relative` messages. 
-
-In the example below, the second element will use all the space of its parent, and manage the position of its children
-using `BlFrameLayout` strategy. The first element, which could act as a
-container for other sub-elements, apply `BlLinearLayout` strategy, but positions
-itself on its parent using the *frame* constraint.
-
-```smalltalk
+| first second |
 first := BlElement new
-	layout: BlLinearLayout horizontal alignCenter;
-	background:  Color red;
+	layout: BlLinearLayout horizontal;
+	background: Color red;
+	padding: (BlInsets all: 10);
 	constraintsDo: [ :c |
-		c vertical fitContent.
 		c horizontal fitContent.
+		c vertical fitContent.
 		c frame horizontal alignCenter.
-		c frame vertical alignCenter ].
+		c frame vertical alignCenter ];
+	yourself.
+ 
+"first needs children, otherwise fitContent gives it a size of 0 (plus padding)"
+3 timesRepeat: [
+	first addChild: (BlElement new
+		background: Color white;
+		extent: 30 @ 30;
+		margin: (BlInsets all: 5);
+		yourself) ].
+ 
 second := BlElement new
-	background:  Color blue;
+	background: Color blue;
 	layout: BlFrameLayout new;
 	constraintsDo: [ :c |
-		c vertical matchParent.
-		c horizontal matchParent ];
-	addChild: first.
+		c horizontal matchParent.
+		c vertical matchParent ];
+	addChild: first;
+	yourself.
+ 
 second openInSpace
 ```
-SD: I do not see it. 
+ 
+If you replace `BlFrameLayout new` by `BlLinearLayout vertical` in `second`, the
+`c frame` constraints of `first` are no longer used, and `first` goes back to
+the top-left corner.
 
-
+### Leaving the layout: ignoreByLayout
+ 
+Sometimes a child should not take part in the layout of its parent: a badge
+over an icon, a selection overlay, a popup. The constraint `c ignoreByLayout`
+takes the child out of the layout of its parent. This is similar to
+`position: absolute` in CSS.
+ 
+```smalltalk
+child constraintsDo: [ :c | c ignoreByLayout ].
+```
+ 
+An ignored child:
+ 
+- is still measured, and `matchParent` still refers to the size of the parent;
+- is not taken into account to measure or place the other children, so a
+  parent with `fitContent` does not grow to include it;
+- is placed at its own `position:`, or according to its anchors if it has any
+  (see *Anchor layout*);
+- can be aligned inside its parent with `c ignored horizontal alignCenter`,
+  `c ignored vertical alignBottom`, and so on.
+This mechanism is implemented in the base class `BlLayout`, so it works with
+every parent layout.
 
 ### Example
 
@@ -1086,3 +1153,221 @@ space
 ```
 
 Something interesting I found using a SquareLayout: If you use a gridLayout and want its elements contained to matchParent and stay as square while resizing the gridLayout, you can encapsulate the gridLayout into a squareLayout so the contained elements will matchParent with a square shape
+
+### Anchor layout - BlAnchorLayout
+ 
+Most layouts compute the position and size of children with an algorithm: a
+linear layout stacks them, a flow layout wraps them, a grid layout puts them in
+cells. An *anchor* takes the opposite approach. You describe geometric
+relations between elements, and Bloc applies them. For example:
+ 
+- "my left edge is on the right edge of that element, plus 10 pixels"
+- "my center is on the center of my parent"
+- "my width is the width of my parent"
+This is how a UI designer usually thinks: *align this with that*. Anchors also
+make it possible to align an element with a sibling or with any other element,
+not only with its parent. Classical hierarchical layouts cannot do that.
+
+Anchors are not a good fit for content whose size or number of items varies (lists,
+wrapping content, distribution of free space). For these, `BlLinearLayout`,
+`BlFlowLayout` or `BlGridLayout` remain the right choice. 
+
+#### Anchors and rules
+ 
+An *anchor* is a named geometric property of an element: an edge, a corner, a
+center, a point on its outline, or a dimension. Every `BlElement` answers its
+own anchors:
+ 
+| Kind | Messages | Value |
+| --- | --- | --- |
+| Edges | `leftAnchor`, `rightAnchor`, `topAnchor`, `bottomAnchor` | a number |
+| Axis centers | `horizontalCenterAnchor`, `verticalCenterAnchor` | a number |
+| Corners and center | `topLeftAnchor`, `topRightAnchor`, `bottomLeftAnchor`, `bottomRightAnchor`, `centerAnchor` | a point |
+| Arbitrary points | `pointAnchor` (with `point:`), `perimeterAnchor` (with `degrees:` or `radians:`) | a point |
+| Dimensions | `widthAnchor`, `heightAnchor`, `extentAnchor` | a number or a point |
+| Utilities | `neutralAnchor:`, `nilAnchor`, `actionAnchor: [ :value :element \| ... ]` | anything |
+ 
+A *rule* (`BlAnchorLayoutRule`) binds two anchors with the message `on:`. The
+anchor on the left is the property of the child to modify. The anchor on the
+right provides the value:
+ 
+```smalltalk
+child leftAnchor on: parent leftAnchor
+```
+ 
+reads as "put the left edge of `child` on the left edge of `parent`". Rules are
+added to the child constraints with `c anchors add:`.
+ 
+Anchors support the arithmetic messages `+`, `-`, `*` and `/`, so you can add
+offsets or ratios:
+ 
+```smalltalk
+child leftAnchor on: parent leftAnchor + 20.
+child widthAnchor on: parent widthAnchor * 0.5.
+child extentAnchor on: parent extentAnchor - (40 @ 40).
+```
+ 
+At the time of writing, the right operand should be a number or a point.
+ 
+#### Referencing elements
+ 
+There are two ways to write anchors. The first one uses the elements directly:
+ 
+```smalltalk
+blue constraintsDo: [ :c |
+	c anchors add: (blue leftAnchor on: pane leftAnchor) ].
+```
+ 
+The second one is relative. Inside `constraintsDo:`, `c anchors` answers the
+anchors of the child itself, and `c anchors parent` answers the anchors of the
+parent, whatever it is:
+ 
+```smalltalk
+blue constraintsDo: [ :c |
+	c anchors add: (c anchors bottomAnchor on: c anchors parent bottomAnchor) ].
+```
+ 
+The relative form is resolved when the layout is computed. It is handy when you
+write a reusable builder that does not know the parent yet.
+ 
+### Examples
+ 
+#### the parent uses BlAnchorLayout
+ 
+Set `BlAnchorLayout new` as the layout of the parent. Every child is then
+placed according to its anchor rules, without `c ignoreByLayout`. A child
+without rules keeps its measured bounds, that is its `position:` and its size.
+ 
+```smalltalk
+| pane icon label |
+pane := BlElement new
+	layout: BlAnchorLayout new;
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent ];
+	yourself.
+ 
+icon := BlElement new
+	background: Color orange;
+	extent: 32 @ 32;
+	yourself.
+icon constraintsDo: [ :c |
+	c anchors add: (icon topLeftAnchor on: pane topLeftAnchor + (10 @ 10)) ].
+ 
+label := BlElement new
+	background: Color lightGray;
+	extent: 120 @ 20;
+	yourself.
+label constraintsDo: [ :c |
+	c anchors add: (label leftAnchor on: icon rightAnchor + 8).
+	c anchors add: (label verticalCenterAnchor on: icon verticalCenterAnchor) ].
+ 
+pane addChildren: { icon. label }.
+pane openInSpace
+```
+ 
+Here `label` is placed relative to its sibling `icon`, not to the parent. Add
+`icon` before `label`, so that the icon position is computed first.
+ 
+Use this case when anchors describe the whole content of the parent.
+ 
+#### the parent uses another layout
+ 
+Keep the layout of the parent for the regular content, and take the anchored
+child out of it with `c ignoreByLayout`. The child then *floats* on top of the
+other children and is placed by its anchors.
+ 
+```smalltalk
+| pane blue |
+pane := BlElement new
+	layout: BlLinearLayout horizontal;
+	border: Color red;
+	constraintsDo: [ :c |
+		c horizontal matchParent.
+		c vertical matchParent ];
+	yourself.
+ 
+"regular children, placed by the linear layout"
+5 timesRepeat: [
+	pane addChild: (BlElement new
+		background: (Color gray alpha: 0.4);
+		extent: 60 @ 60;
+		margin: (BlInsets all: 5);
+		yourself) ].
+ 
+"floating child, placed by its anchors"
+blue := BlElement new
+	background: Color blue;
+	extent: 40 @ 40;
+	yourself.
+blue constraintsDo: [ :c |
+	c ignoreByLayout.
+	c anchors add: (blue bottomRightAnchor on: pane bottomRightAnchor) ].
+ 
+pane addChild: blue.
+pane openInSpace
+```
+ 
+The gray squares are laid out horizontally, while the blue square sticks to the
+bottom-right corner of the pane and stays there when the window is resized.
+Without `c ignoreByLayout`, the blue square would simply be the sixth element of
+the row, and its anchor would be ignored.
+ 
+Keep in mind that an ignored child does not take part in the layout of its
+parent: it does not push its siblings, and a parent with `fitContent` does not
+grow to include it.
+ 
+#### Example: filling the parent
+ 
+To make an element take the whole space of its parent, bind its dimensions to
+the parent dimensions:
+ 
+```smalltalk
+blue constraintsDo: [ :c |
+	c ignoreByLayout.
+	c anchors add: (blue widthAnchor on: pane widthAnchor).
+	c anchors add: (blue heightAnchor on: pane heightAnchor) ].
+```
+ 
+The same result can be written with a single rule:
+`c anchors extentAnchor on: c anchors parent extentAnchor`.
+ 
+#### Example: nested centering
+ 
+Anchors can reference any element, even one in another branch of the tree. In
+this example (`BlAnchorExamples class >> example_CenterLayout`), `blue` is
+centered in `pane`, `pink` is a child of `blue` and is centered in it, and `red`
+is a child of `pane` but is centered on `pink`. Finally, `green` takes the top of
+`red`, the height of `pink`, and sticks its right edge to the left edge of
+`blue`.
+ 
+Note that `pink` is a child of `blue`, not of `pane`. The rule of the previous
+section applies to each parent: `blue` uses the default `BlBasicLayout`, so
+`pink` needs `c ignoreByLayout` too. In a case 1 version, `blue` would also need
+`layout: BlAnchorLayout new`.
+ 
+```smalltalk
+blue constraintsDo: [ :c |
+	c ignoreByLayout.
+	c anchors add: (blue centerAnchor on: pane centerAnchor) ].
+ 
+pink constraintsDo: [ :c |
+	c ignoreByLayout.
+	c anchors add: (pink centerAnchor on: blue centerAnchor) ].
+ 
+red constraintsDo: [ :c |
+	c ignoreByLayout.
+	c anchors add: (red centerAnchor on: pink centerAnchor) ].
+ 
+green constraintsDo: [ :c |
+	c ignoreByLayout.
+	c anchors add: (c anchors topAnchor on: red topAnchor).
+	c anchors add: (c anchors heightAnchor on: pink heightAnchor).
+	c anchors add: (c anchors rightAnchor on: blue leftAnchor) ].
+```
+ 
+
+ 
+
+ 
+

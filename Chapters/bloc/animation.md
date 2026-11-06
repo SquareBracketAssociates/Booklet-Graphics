@@ -42,6 +42,10 @@ animation addEventHandler: (BlEventHandler
 element addAnimation: animation; openInNewSpace.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 This example is quite limited and don't allow for much customization. 
 We'll see in the next section how you can define your own animation.
 
@@ -75,6 +79,10 @@ space root addChild: element.
 space show.
 ^space
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 **Important**
 Animation is automatically started when added to an element.
@@ -114,6 +122,10 @@ blank := BlElement new.
 space root addChild: blank.
 blank addAnimation: parallelTranslate .
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 ### Creating your own animation
 
@@ -167,6 +179,10 @@ BlRotateAnimation >> angle: anAngle
     angle := anAngle
 ```
 
+> [!note] Diff with Code
+> This block holds both the class definition and a method, so it cannot be evaluated as is: define `BlRotateAnimation` first, then compile `angle:` in it. The animation hooks it relies on are still current: `BlAnimation>>#doStep` is `self applyValue: (self valueForStep: (easing interpolate: progress))`.
+
+
 At every step, we need to compute the angle reached by transformation
 
 ```smalltalk
@@ -195,6 +211,10 @@ elt addEventHandlerOn: BlClickEvent do: [ elt addAnimation: anim copy ].
 
 container openInSpace
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 ### Pre-defined animations
 
@@ -280,6 +300,10 @@ elt := BlElement new    background: (Color red alpha: 0.5);    position: 100 asP
 frame := BlElement new background: Color yellow; position: 100 asPoint; size: 100 asPoint.
 container := BlElement new background: Color lightGreen; size: 500 asPoint; addChildren: { frame. elt }.
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 Transformation are affine transformation. For more detail, you can search on the internet,
 there are countless references to it. To simplify it, I'll say we apply a
@@ -441,5 +465,9 @@ a addAnimation:
 
 a openInSpace
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 ### Conclusion (missing)

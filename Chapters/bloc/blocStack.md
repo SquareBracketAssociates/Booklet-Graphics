@@ -29,6 +29,10 @@ Alexandrie is a low-level canvas based on Cairo and harfbuzz for the text render
 Think about it has a canvas like in painting. Instructions are sent to draw on this canvas. 
 
 - Important class: `Ae Canvas` 
+
+> [!note] Diff with Code
+> The class is `AeCanvas` (no space).
+
 Instructions support drawing of:
 - lines, geometrics, and bezier curves with absolute & relative path.
 - linear, radial, solid, translucent color drawing, or bitmap
@@ -63,6 +67,10 @@ Toplo offers:
 - widget state and internal model (view-model pattern) - ToViewModel
 - widget specific behavior, implemented through method & traits (like any other object).
 
+> [!note] Diff with Code
+> There is no `ToViewModel` class in the current Toplo.
+
+
 The widget list includes (as of this writing)
 - Album a Text Editor - `ToAlbum`
 -  Button - `ToButton`, `ToCheckbox`, `ToRadioButton`, `ToToggleButton`
@@ -77,11 +85,21 @@ The widget list includes (as of this writing)
 - Tooltip - `ToTooltipWindow`
 - Space window - `ToWindowElement`
 
+> [!note] Diff with Code
+> Several of these classes no longer exist: `ToChoiceBox` and `ToComboBox` are replaced by `ToSelectElement`;
+> `ToListInfiniteElement` by `ToListElement` (an infinite layout is the default, see `ToBasicListElement>>#useInfiniteLayout:`);
+> `ToMenuBar` by `ToMenuPane`; `ToNotebook` by `ToTabPaneElement`; `ToWindowElement` by `ToInnerWindow` (inner window) or a plain `BlSpace`.
+
+
 #### Spec 
 Spec is a UIbuilder framework focusing on the reuse of component interaction.
 As such is an user interface description, working on multiple backends such Toplo (underway), Morphic and GTK.
 
 Important classes: SpPresenter, SpAbstractWidgetPresenter SpApplication, SpLayout, 
+
+> [!note] Diff with Code
+> There is no `SpLayout` class; Spec layouts are `SpBoxLayout`, `SpPanedLayout`, `SpGridLayout`, ... (subclasses of `SpExecutableLayout`).
+
 
 Spec is based on 
 - the Command design pattern.
@@ -127,6 +145,11 @@ EpMonitor disableDuring: [
   ].
 ]
 ```
+
+> [!note] Diff with Code
+> The class `Author` and `Author>>#useAuthor:during:` no longer exist in Pharo 15: remove the `Author useAuthor: 'Load' during: [ ... ]` wrapper.
+> The text also mentions Pharo 11, and the image used for this check loads Toplo from the `dev` branch, not `master`.
+
 
 **Bloc** distinguishes itself by prioritizing object composition over
 inheritance as its core design principle. This means that instead of relying

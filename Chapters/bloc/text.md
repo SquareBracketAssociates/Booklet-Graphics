@@ -267,6 +267,10 @@ BlElement new
 
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `BlElement new extent: 0 @ 0`.
+
+
 whose result is shown in Figure *@rect@*.
 
 ![Rectangle with numbers.](figures/rectangleWithNumbers.png width=60&label=rect)
@@ -338,6 +342,10 @@ container addChild: textElement as: 'text'.
 
 container openInNewSpace 
 ```
+
+> [!note] Diff with Code
+> `BlElement` has no `removeChildNamed:`: a child added with `addChild:as:` gets that id, and is removed with `removeChildWithId: 'text'`. `evt currentTarget size` uses the deprecated `size`: use `extent`.
+
 
 **Improvement**
 
@@ -412,4 +420,12 @@ label transformDo: [ :t |
 label size: label transformedBounds extent.
 ```
 
+> [!note] Diff with Code
+> `label size` and `label size: ...` are deprecated (Bloc issue 802): use `label extent` and `label extent: label transformedBounds extent`.
+
+
 In this snippet we rotate the element containing the text (but not the textElement) using `TBlTransformable>>tranformDo:` but for that we need to force its layout and just like in the earlier example, the transformation didn't change the position nor the bounds hence the last line.
+
+> [!note] Diff with Code
+> The method is `transformDo:` (defined in `BlElement`); `tranformDo:` does not exist.
+

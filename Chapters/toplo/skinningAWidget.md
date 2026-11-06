@@ -68,6 +68,10 @@ ToInputElementSkin >> installSkinEvent: anEvent
 			width: (e valueOfTokenNamed: #'line-width')).].
 ```
 
+> [!note] Diff with Code
+> `e size: 200 @ 100` uses `BlElement>>#size:`, deprecated (Bloc issue 802): use `e extent: 200 @ 100`. `installSkinEvent:`, `elementDo:`, `valueOfTokenNamed:` and the tokens `#'color-border'` and `#'line-width'` still exist.
+
+
 We also need to add the accessors of 'plus' and 'minus' elements.
 
 ```
@@ -91,6 +95,10 @@ target := anEvent currentTarget.
 target border: target valueOfTokenNamed: #'color-border-checkable’)
 ```
 
+> [!note] Diff with Code
+> These two snippets do not compile: the token name ends with a typographic quote (`’`) instead of `'`, and the second one misses a parenthesis: `target border: (target valueOfTokenNamed: #'color-border-checkable')`.
+
+
 ##### Remark
 Notice that the two following forms are equivalent. 
 
@@ -102,6 +110,10 @@ In the `ToNumberInputElement` we define the method
 
 The last step is to declare the skin to be used by the element. 
 To do so we define the method `newRawSkin` in the class `ToNumberInputElement`.
+
+> [!note] Diff with Code
+> The class is `ToIntegerInputElement` (defined above); `ToNumberInputElement` does not exist.
+
 
 
 ```
@@ -126,6 +138,10 @@ ToIntegerInputElement >> initialize
 	self initializeInputValue: 20.
 	self label: 'Input'.
 ```
+
+> [!note] Diff with Code
+> `ToElement` does not understand `label:`, and the chapter never defines it. The earlier version of the widget used `self initializeInputLabel`.
+
 
 We can now open our element and see our new skin installed.
 
@@ -153,6 +169,10 @@ ToInputTheme class >> defaultTokenProperties
 		   value: Color lightGreen) }
 ```
 
+> [!note] Diff with Code
+> This still works: `ToTheme` answers `defaultTokenProperties` on both the class side and the instance side, and `ToTokenProperty name:value:` exists.
+
+
 Here we defined a new theme that holds a new token property we could use in our skins.
 For now our skin is used within the `ToRawTheme` which has no token property called #'widget-color' but we just defined one so let's use it.
 * Note : We could override token properties by giving a new value for a same name but this token might already be used where you don't expect it. 
@@ -175,6 +195,10 @@ ToInputElementSkin >> installSkinEvent: anEvent
 			paint: (e valueOfTokenNamed: #'color-border')
 			width: (e valueOfTokenNamed: #'line-width')).].
 ```
+
+> [!note] Diff with Code
+> `e size:` is deprecated: use `e extent: 200 @ 100`.
+
 
 To see this token property from our new theme applied, we need to apply this theme to a space with the message `toTheme:`
 
@@ -212,6 +236,10 @@ ToNumberInputElement >> initialize
 	self initializeForToplo
 ```
 
+> [!note] Diff with Code
+> The class is `ToIntegerInputElement`, not `ToNumberInputElement`. `initializeForToplo` still exists.
+
+
 ### Autonome theme
 
 We should now how we can define a full new theme.
@@ -240,6 +268,10 @@ ToMooflooTheme >> newSkinInstanceFor: anElement
 	^ anElement newMooflooSkin
 ```
 
+> [!note] Diff with Code
+> Themes no longer call `newSkinInstanceFor:`: the hook is `ToTheme>>#newSkinFor:` (`ToRawTheme>>#newSkinFor:` answers `anElement newRawSkin`). Override `newSkinFor:` in `ToMooflooTheme`.
+
+
 As the theme tries to apply a skin to each element, they need to return a default skin even if they are not supposed to have one.
 We can then define the `ToBasicMooflooSkin` class as subclass of `ToBasicSkin` to have a 'default' skin.
 Instances of `ToBasicMooflooSkin` can then be returned when needing a default skin for elements.
@@ -250,6 +282,10 @@ ToBasicSkin << #ToBasicMooflooSkin
 	tag: 'Input';
 	package: 'myBecherBloc'
 ```
+
+> [!note] Diff with Code
+> There is no `ToBasicSkin` class: the default skin answered by `ToTheme>>#newSkinFor:` is `ToGeneralSkin` (a `ToSkin`).
+
 
 ```
 BlElement >> newMooflooSkin
@@ -264,6 +300,10 @@ ToNumberInputElement >> newMooflooSkin
 
 	^ ToInputElementSkin new
 ```
+
+> [!note] Diff with Code
+> The class is `ToIntegerInputElement`, not `ToNumberInputElement`.
+
 
 If we execute this script where we redefine the space's theme, we can see it is applied just like in the example of the previous section 
 
@@ -325,6 +365,10 @@ ToIntegerInputElement >> initialize
 	self initializeInputValue: 20.
 	self label: 'Input'
 ```
+
+> [!note] Diff with Code
+> `label:` is not understood by `ToElement` and is not defined in the chapter.
+
 
 ```smalltalk
 ToIntegerInputElement >> initializeInputValue: aValue
@@ -425,6 +469,10 @@ ToInputElementStyleSheet >> initializeStyleRules
 					width: (e valueOfTokenNamed: #'line-width') ] ]
 ```
 
+> [!note] Diff with Code
+> `self property: #size` still answers a `ToFeatureProperty [size]`, which writes through the deprecated `BlElement>>#size:`; there is no `#extent` property yet (`property: #extent` answers `nil`).
+
+
 You can noticed we use custom properties for specific element. 
 That's a good idea, as we can reuse those value to keep theme consistent.
 
@@ -446,6 +494,10 @@ self
 			(e valueOfTokenNamed: #'color-background-hover') ] ]
 ```
 
+> [!note] Diff with Code
+> This snippet has one closing bracket too many (`] ]`).
+
+
 Let's now open our new element. We now specify which theme we use on startup, referencing our stylesheet:
 
 ```smalltalk
@@ -456,6 +508,10 @@ Let's now open our new element. We now specify which theme we use on startup, re
 	space root addChild: input.
 	space show.
 ```
+
+> [!note] Diff with Code
+> `input := self new` only works in a class-side method of `ToIntegerInputElement`; in a playground write `ToIntegerInputElement new`.
+
 
 You may have noticed, we mixed element appearance definition in
 our code and in our stylesheet. With styling, your scene could be

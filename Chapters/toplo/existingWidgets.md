@@ -28,6 +28,10 @@ page := book addPageTitle: 'page 1' bodyFactory: [
 
 book openInSpace
 ```
+
+> [!note] Diff with Code
+> `ToNotebook` and `addPageTitle:bodyFactory:` no longer exist. Tabs are now built with `ToTabPaneElement`: give it an `itemBuilder: [ :tabItem :data | tabItem labelText: data asString; paneBuilder: [ :body :btn :holder | body addChild: ... ] ]`, then send `addTabItemData:` for each tab. See `ToSandBox class>>#example_SimpleTabPane`. The other messages (`labelText:`, `BlGridLayout horizontal columnCount:`, `cellSpacing:`) are still valid.
+
 To make our buttons take the whole space, we have to apply the matchParent constraint to each button and not to the container layout
 
 ### Cool color gradient displayed in notebook
@@ -72,3 +76,6 @@ space := BlSpace new.
 space root addChild: notebook.
 space show
 ```
+
+> [!note] Diff with Code
+> `ToNotebook` and `addPageTitle:body:` no longer exist: use `ToTabPaneElement` with `itemBuilder:` and `addTabItemData:` (see `ToSandBox class>>#example_SimpleTabPane`). `asScrollableElement`, `BlVerticalScrollbarElement>>#attachTo:` and `c ignoreByLayout` are still valid.

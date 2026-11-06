@@ -220,6 +220,10 @@ Note that once you *stroke* or *fill* your path, the *context* will forget it.
 If you want to keep your path for both *stroke* and *fill* operations, you
 should use the `strokePreserve` or `fillPreserve` messages.
 
+> [!note] Diff with Code
+> There is no `strokePreserve` in `AeCairoContext`: the message is `strokePreservingPath`. `fillPreserve` still exists (as well as `fillPreservingPath`).
+
+
 ```smalltalk
 "fill first and stroke second. The color of the stroke appears on the top of fill"
 context
@@ -269,6 +273,10 @@ gradient := AeCairoLinearGradientPattern
 context source: gradient;
 ```
 
+> [!note] Diff with Code
+> `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
+
 #### Radial gradient.
 
 In the case of a radial gradient, the transition is defined by a center and a
@@ -292,6 +300,10 @@ gradient := AeCairoRadialGradientPattern
 		(1 -> Color white) }.
 context source: gradient.
 ```
+
+> [!note] Diff with Code
+> `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
 
 ### Mesh gradient
 
@@ -323,6 +335,10 @@ aContext
 
 ^ aSurface
 ```
+
+> [!note] Diff with Code
+> `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
 
 A more sophisticated patch of mesh gradient is a Coons patch. A Coons patch is
 a quadrilateral defined by 4 cubic Bézier curve and 4 colors, one for each vertex.
@@ -358,6 +374,10 @@ aContext
 
 ^ aSurface
 ```
+
+> [!note] Diff with Code
+> `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
 
 #### Bitmap and PNG file.
   

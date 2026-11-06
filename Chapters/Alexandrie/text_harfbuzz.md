@@ -194,6 +194,10 @@ or
 		(1 -> Color darkGray ) });
 ```
 
+> [!note] Diff with Code
+> `AeCairoContext` has no `strokePreserve`: use `strokePreservingPath`. `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
+
 ### Text display directly with Cairo
 
 If you don't want to use Harfbuzz, you can ask Alexandrie to render your text
@@ -216,6 +220,10 @@ or
 	    (0 -> Color white).
 	    (1 -> Color darkGray ) });
 ```
+
+> [!note] Diff with Code
+> `AeCairoContext` has no `strokePreserve`: use `strokePreservingPath`. `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
 
 ### A full example
 
@@ -283,6 +291,10 @@ context
 
 ^ surface asForm
 ```
+
+> [!note] Diff with Code
+> `AeCairoContext` has no `strokePreserve`: use `strokePreservingPath`. `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
 
 ![Rendering without harfbuzz.](figures/renderingwithoutharfbuzz.png)
 
@@ -362,6 +374,10 @@ context
 
 ^ surface asForm
 ```
+
+> [!note] Diff with Code
+> `AeCairoContext` has no `strokePreserve`: use `strokePreservingPath`. `AeCairoContext` does not understand `source:`: set a pattern with `sourcePattern:` (other setters are `sourceColor:` and `sourceSurface:`).
+
 
 ![rendering with  harfbuzz.](figures/renderingwithharfbuzz.png)
 

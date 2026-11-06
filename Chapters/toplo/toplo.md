@@ -8,6 +8,10 @@ Metacello new
     load
 ```
 
+> [!note] Diff with Code
+> Toplo now lives in `github://pharo-graphics/Toplo/src` (the image used for this check loads it from the `dev` branch), not `github://plantec/Toplo/src`.
+
+
 
 
 
@@ -41,6 +45,10 @@ to create:
 - `ToButtonLinkType`
 - `ToButtonTextType`
 - etc.
+
+> [!note] Diff with Code
+> `ToButton>>#defaultSkin` no longer exists: a widget answers its skin with `newRawSkin` (for example `ToCheckbox>>#newRawSkin` answers `ToCheckboxSkin new`). The button types `ToButtonDefaultType`, `ToButtonLinkType` and `ToButtonTextType` were removed, and `ToButtonSkin` does not understand `type:`.
+
 
 ### Spec styles
 
@@ -78,6 +86,10 @@ ToCheckLook. Look connec event to appearance (like clicked, hover, etc.)
 
 Theme are subclasses of ToAbstractTheme, added to a BlElement (toTheme method)
 
+> [!note] Diff with Code
+> Most names of this section are gone: `ToWidgetSkin` is now `ToSkin` (still a `BlCustomEventHandler`); `ToCheckBox` is `ToCheckbox`; dressers (`defaultDresser`, `ToCheckableButtonDresser`), `TToCheckboxSkin`, `ToCheckableSkin`, `ToCheckLook`, `childSkinsToHandle` and `skinnablePropertyChangedEvent:` no longer exist; `ToAbstractTheme` is now `ToTheme` (subclasses `ToRawTheme`, `ToRawDarkTheme`, `ToBeeTheme`, `ToStyleSheetTheme`, ...). `toTheme` / `toTheme:` still exist.
+
+
 When element change, raise an event: ToSkinnablePropertyChangedEvent
 
 childSkinsToHandle
@@ -92,6 +104,10 @@ childSkinsToHandle
         builder: [ :e | self labelSkinIn: e ];
         yourself) }
 
+> [!note] Diff with Code
+> `ToChildSkinBuilder` and `childSkinsToHandle` no longer exist.
+
+
 ToChildSkinBuilder >> updateIn: anElement
 childElement withSkin: skin
 
@@ -100,6 +116,10 @@ ToCheckableButtonDresser >> whenAddedToSpace: anEvent in: anElement
 self flag: 'Leads to ToSpaceFrameSkinInstallationPhase installation in space frame. Should be revised to avoid this kind of workaround'.
     anElement space checkSpaceFrameSkinInstallationPhase.
     anElement checkSkinInstallation
+
+> [!note] Diff with Code
+> `whenAddedToSpace:in:`, `checkSpaceFrameSkinInstallationPhase` and `ToSpaceFrameSkinInstallationPhase` no longer exist. Toplo spaces install skins with the frame phases `ToSpaceSkinInstallerPhase` and `ToSpaceSkinStateApplicationPhase` (plus `ToSpaceConfigurationPhase`).
+
 
 ## Process for Skin
 
@@ -149,6 +169,10 @@ Look must be added for each widget state.
 For CheckBox button, default type is *ToButtonTextType* or *ToClickableType*
 Button will call its *privateUpdateChildren* to update all internal properties.
 
+> [!note] Diff with Code
+> This description of the skin process is outdated: `checkSkinInstallation`, `launchSkinInstallationIn:`, `switchToSkinState:`, `ToInitialState`, `ToElementStateChangedEvent`, `ToElementLookEvent`, looks, `TToSkinable`, `withSkin:`, `onSkinInstalledIn:`, `privateUpdateChildren`, `ToButtonTextType` and `ToClickableType` no longer exist. Skins now react to `ToSkinEvent` subclasses (`ToInstallSkinEvent`, `ToHoveredSkinEvent`, `ToPressedSkinEvent`, ...), produced through `ToSkinStateGenerator`.
+
+
 
 ## note from video presentation
 
@@ -175,3 +199,6 @@ Theme -> factory de skin pour tes objets, incluant les propriétés pour décore
 
 Look -> skin event. 
 Skin -> élément central 
+
+> [!note] Diff with Code
+> The example class is `ToSandBox` (package `Toplo-Examples`). `requestInstallStyle` and `installLookEvent:` no longer exist; `installRawStyle` is still implemented by the raw skins.

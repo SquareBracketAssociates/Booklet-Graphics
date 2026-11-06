@@ -50,6 +50,10 @@ BlIntegerInputElement >> initialize
 	self border: (BlBorder paint: Color pink).
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `self extent: 300 @ 120`. The same applies to every later version of `initialize` in this chapter.
+
+
 
 ![Empty integer input widget. % anchor=input0&width=50](figures/Input0.png)
 
@@ -97,6 +101,10 @@ BlIntegerInputElement >> initialize
 	self initializeInputlabel
 ```
 
+> [!note] Diff with Code
+> The method is named `initializeInputLabel` (capital `L`) above: `self initializeInputlabel` raises a `doesNotUnderstand:`. `size:` is deprecated: use `extent:`.
+
+
 We should get now a widget similar to the one shown in Fig *@input1@*.
 
 ### Adding the input representation
@@ -141,6 +149,10 @@ BlIntegerInputElement >> initialize
 	self initializeInputValue: 20
 	
 ```
+
+> [!note] Diff with Code
+> `size:` is deprecated: use `extent:`.
+
 
 We should obtain now a widget similar to the one show in Fig *@input2@*.
 
@@ -218,6 +230,10 @@ BlIntegerInputElement >> initialize
 	
 ```
 
+> [!note] Diff with Code
+> `size:` is deprecated: use `extent:`.
+
+
 We should now get a widget similar to the one shown in Fig *@input3@*.
 ![With a plus button.](figures/Input3.png label=input3&width=50)
 
@@ -276,6 +292,10 @@ BlIntegerInputElement >> initialize
 	self initializeMinusButton
 ```
 
+> [!note] Diff with Code
+> `size:` is deprecated: use `extent:`.
+
+
 Now we should have the full widget. 
 
 ### Adding callback methods
@@ -300,6 +320,11 @@ BlIntegerInputElement >> initialize.
 	self initializeMinusButton
 	callbackBlock := [ :newInputValue | ].
 ```
+
+> [!note] Diff with Code
+> This code does not compile: the header `initialize.` has a trailing period and the period after `self initializeMinusButton` is missing.
+> `callbackBlock` is assigned after `self initializeInputValue: 20`, which calls `changeValueTo:`; with the version of `changeValueTo:` below, `callbackBlock value: aValue` is then sent to `nil`. Initialize `callbackBlock` first. `size:` is deprecated: use `extent:`.
+
 
 Then anytime we changed the state, we update the value.
 
@@ -336,6 +361,11 @@ BlNumberInputElementTest >> testChildrenAreSet
 	self assert: inputElem children size equals: 4 
 ```
 
+> [!note] Diff with Code
+> The tests use `BlNumberInputElement` and `BlNumberInputElementTest`, but the chapter defines `BlIntegerInputElement` (and no test class).
+> The tests also need accessors the chapter never defines: `plus`, `minus` and `value`. Without a `value` accessor, `inputElem value` runs `Object>>#value` and answers the element itself.
+
+
 The following tests are checking that the interaction on the buttons is working correctly.
 ```
 BlNumberInputElementTest >> testValueUpdatedOnClick
@@ -348,6 +378,10 @@ BlNumberInputElementTest >> testValueUpdatedOnClick
 	self assert: inputElem value equals: 25
 ```
 
+> [!note] Diff with Code
+> `BlSpace class>>#simulateClickOn:` is deprecated (since 2026-06-26): use `inputElem minus eventSimulator click`.
+
+
 
 ```
 BlNumberInputElementTest >> testValueCantBeNegative
@@ -359,6 +393,10 @@ BlNumberInputElementTest >> testValueCantBeNegative
 	value := inputElem value. 
 	self assert: value equals: 0
 ```
+
+> [!note] Diff with Code
+> `BlSpace class>>#simulateClickOn:` is deprecated: use `inputElem minus eventSimulator click`.
+
 
 The following tests are checking that the callback block is working correctly.
 
@@ -388,6 +426,10 @@ BlNumberInputElementTest >> testCallbackCallOnClick
 	self assert: testNumberOfCall equals: 8.
 	self assert: testValue equals: 0.
 ```
+
+> [!note] Diff with Code
+> A period is missing after the block passed to `whenInputValueChangedDo:` (line `]`), so the method does not compile. `BlSpace class>>#simulateClickOn:` is deprecated: use `anElement eventSimulator click`.
+
 
 
 ### Conclusion

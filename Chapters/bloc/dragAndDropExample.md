@@ -10,6 +10,10 @@ To start understanding the Drag-and-drop process, you must know the following th
 - `BlDragEvent`: This event is sent whenever you move the cursor during the drag process. Notice that it is required that the `BlDragStartEvent` is consumed first, else the `BlDragEvent` is not raised.
 - `BlDragEndEvent`: This event ends the drag process. It is sent when you lift your cursor (i.e., after a `MouseUpEvent` event).
 
+> [!note] Diff with Code
+> The Bloc events are `BlMouseDownEvent` and `BlMouseUpEvent`; there are no `MouseDownEvent` / `MouseUpEvent` classes.
+
+
 
 ### First drag and drop
 
@@ -26,6 +30,10 @@ element
 		element position: event position - (element size /2) ].
 element openInSpace.
 ```
+
+> [!note] Diff with Code
+> `element size` is deprecated (Bloc issue 802): use `element extent / 2`.
+
 
 This is because as explained above the drag event is only received after the start event is consumed.
 
@@ -44,6 +52,10 @@ element
 		element position: event position - (element size /2) ].
 element openInSpace.
 ```
+
+> [!note] Diff with Code
+> `element size` is deprecated: use `element extent / 2`.
+
 
 ### Possible refinement
 
@@ -97,6 +109,10 @@ You can for example constraint the drag to an horizontal or vertical axis, or th
 
 Adapting the same snippet, we can have a basic drag and drop with the `PullHandler` however, here the default drop behavior is to leave the element right where it currently is.
 
+> [!note] Diff with Code
+> `PullHandler` stands for the class `BlPullHandler` (a `BlCustomEventHandler`). Its API for axes is `beHorizontal`, `beVertical` and `horizontal:`.
+
+
 ```st
 element := BlElement new background: Color lightGreen.
 element addEventHandler: BlPullHandler new.
@@ -119,6 +135,10 @@ parent addChild: element.
 
 parent  openInSpace
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 ![Dragging an element outside its parent using the `allowOutOfBounds` configuration message.%width=70&anchor=dragOut](figures/dragPullOutOfBounds.png)
 
@@ -177,6 +197,10 @@ These events are:
 #### `BlSpaceDragLiftEvent`
 
 Let's start with `BlSpaceDragLiftEvent` that acts similarly to the `BlDragStartEvent`: it is sent once at the beginning of the drag phase but contrary to the `BlDragStart`, `BlSpaceDragLift` is an event sent to the space itself.
+
+> [!note] Diff with Code
+> The names are `BlDragStartEvent` and `BlSpaceDragLiftEvent`; there are no `BlDragStart` / `BlSpaceDragLift` classes.
+
 
 The following snippet shows that both an element and its space will receive different events. 
 The code illustrates this by making the child changes its border while the space changes its root background color but only once at the beginning of the drag.
@@ -241,6 +265,10 @@ child
 space show
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 
 ![A BlDropEvent configured to change the color of the element receiving the drop event. %width=70]{figures/dragandropTarget.png}
 
@@ -278,6 +306,10 @@ space := BlSpace new.
 space root addChildren: { target. element }.
 space show
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 We can see that the border doesn't appear as intended (unless you drag too quickly the element meaning the cursor will enter the parent first and then consider leaving it when the green element will be brought to the right position).
 
@@ -362,6 +394,10 @@ child addEventHandlerOn: BlKeyUpEvent do: [ :evt |
 ].
 child openInSpace.
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 One thing important in this snippet is to use the messages `requestFocus` and `loseFocus` so that keyboard events can be listened and we send them only at the start and end of the drag and drop meaning this behavior can §only appear during this process.
 

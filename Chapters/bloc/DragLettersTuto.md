@@ -7,6 +7,10 @@ Let's create a complete Letters Sorter example where you drag letter elements an
 
 This code can also be found in the `Bloc-Demo` package 
 
+> [!note] Diff with Code
+> In `Bloc-Demo` the classes have other names: `BlDragSortLettersExample` (here `BlSortLettersExample`), `BlDragLetterContainer` (here `BlLetterContainer`) and `BlDragLetter` (here `BlLetter`).
+
+
 We can start by creating a class for our main element; it will inherit from `BlElement`:
 
 ```st
@@ -14,6 +18,10 @@ BlElement << #BlSortLettersExample
 	slots: {};
 	package: 'LetterSorter'
 ```
+
+> [!note] Diff with Code
+> The class is defined with `slots: {}`, but its methods use `lettersContainer`, `vowelsContainer` and `consonantsContainer`. In `Bloc-Demo`, `BlDragSortLettersExample` declares `slots: { #lettersContainer . #consonantsContainer . #vowelsContainer }`.
+
 
 We define its initialization method with constraints to take the whole space and a linear layout that will help us position our letter containers.
 
@@ -146,6 +154,10 @@ BlLetterContainer>>initializeDropEvent
 				ifFalse: [
 						self dropRejectBehavior value: element.]]
 ```
+
+> [!note] Diff with Code
+> The methods use `self dropAcceptCondition`, `self dropAcceptBehavior`, ... but the chapter never asks for the getters and setters of `BlLetterContainer`; `BlDragLetterContainer` in `Bloc-Demo` defines them all. Also, `BlDragLetterContainer>>#initializeDropEvent` does not use the behaviour blocks: it moves the element itself, and on reject it also sends `allowMeAndChildrenMouseEvents`.
+
 
 ```st
 BlLetterContainer>>initializeDragEnterEvent
@@ -305,6 +317,10 @@ BlSortLettersExample>>initializeLetters
 				 defaultContainer: lettersContainer ])
 ```
 
+> [!note] Diff with Code
+> `defaultContainer:` is sent here, but the chapter only shows `BlLetter>>#character:`; the accessors `defaultContainer` and `defaultContainer:` must be defined too (they exist in `BlDragLetter`).
+
+
 We take a some random letters and create a `BlLetter` element for each assigning it the letter and the lettersContainer as its defaultContainer, i.e., the container it will be sent if rejected.
 
 				 The class `BlLetter` is defined like such:
@@ -316,6 +332,10 @@ BlElement << #BlLetter
 	package: 'LetterSorter'
 ```
 It is a `BlElement` that will hold a `TextElement` with the character assigned as a Text.
+
+> [!note] Diff with Code
+> There is no `TextElement` class: it is `BlTextElement`.
+
 	
 
 ```st
@@ -331,6 +351,10 @@ BlLetter >> initialize
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 3).
 	self initializeEvents
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent: 30 @ 30`. `BlDragLetter>>#initialize` in `Bloc-Demo` also adds a `BlGaussianShadowEffect`.
+
 
 We can initialize the events for this element to allow us to drag it. 
 
@@ -442,4 +466,8 @@ BlSortLettersExample>>initializeDropEvent
 					element removeFromParent.
 					element defaultContainer addChild: element ] ]
 ```
+
+> [!note] Diff with Code
+> `BlSortLettersExample>>#initializeDropEvent` has no counterpart in `Bloc-Demo`: `BlDragSortLettersExample>>#initialize` does not install a drop handler on the parent.
+
 

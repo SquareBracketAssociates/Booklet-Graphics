@@ -36,6 +36,10 @@ BlElement new
   openInNewSpace 
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 ### About event bubbling
 
 We should check `example_mouseEvent_descending_bubbling`
@@ -81,6 +85,10 @@ container addChild: child2.
 
 container openInSpace.
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 You can also prevent element and its children to capture event, with *#preventMeAndChildrenMouseEvents*
 message, or apply it only to its children with *#preventChildrenMouseEvents*
@@ -151,6 +159,10 @@ removed on the first key pressed on the element
   BlElement new size: 200 @ 200; background: Color red; addEventHandler: handler;
 		  requestFocus; openInNewSpace
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 If you create a new custom handler class that deals with multiple events and add it dynamically
 to your element, you can go back to the original state later by removing the new 'dynamically-added event' by simply using its reference. You can check if your element has a specific event handler with `#hasEventHandler:`. You can also avoid adding twice the same event handler with `#addEventHandlerIfNotPresent:`. There is no way to disable an event handling temporary.
@@ -289,6 +301,10 @@ key: Key rightShift;
 yourself
 ```
 
+> [!note] Diff with Code
+> There is no `Key` class any more: use `KeyboardKey`. The selectors changed too: `KeyboardKey shiftLeft` and `KeyboardKey shiftRight` (not `leftShift` / `rightShift`).
+
+
 Unified meta (cmd):
 
 ```smalltalk
@@ -297,6 +313,10 @@ with: (BlSingleKeyCombination key: Key leftMeta);
 with: (BlSingleKeyCombination key: Key rightMeta);
 yourself
 ```
+
+> [!note] Diff with Code
+> Use `KeyboardKey metaLeft` and `KeyboardKey metaRight` (there is no `Key` class nor `leftMeta` / `rightMeta`).
+
 
 You also have *BlCompulsoryCombination* which represent a compulsory "AND" combination of multiple distinct keys. (conjunction). It's useful when there is a need to create a key combination that should be matched when all subcombinations are matching.
 
@@ -309,6 +329,10 @@ key: Key w;
 yourself
 ```
 
+> [!note] Diff with Code
+> Use `KeyboardKey left` and `KeyboardKey W` (there is no `Key` class, and no `arrowLeft` / `w` selectors).
+
+
 Unified meta (cmd):
 
 ```smalltalk
@@ -317,6 +341,10 @@ with: (BlSingleKeyCombination key: Key arrowLeft);
 with: (BlSingleKeyCombination key: Key w);
 yourself
 ```
+
+> [!note] Diff with Code
+> Use `KeyboardKey left` and `KeyboardKey W` instead of `Key arrowLeft` and `Key w`.
+
 
 You can of course specify key management using low level event. It should be obvious
 to the reader it's not the prefered way, and we should prefer proper object to handle
@@ -404,6 +432,10 @@ target addEventHandlerOn: BlDragLeaveEvent do: [ :event | event consumed: true. 
 space show
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 You can catch the modifier while dragging your element. This will catch the 'Alt' key
 during a drag event.
 
@@ -425,6 +457,10 @@ elt addEventHandler: BlPullHandler new disallowOutOfBounds.
 
 parent openInSpace.
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 You can even select the behavior to keep the child inside its parent's bounds with `BlPullHandler>>disallowOutOfBounds`
 

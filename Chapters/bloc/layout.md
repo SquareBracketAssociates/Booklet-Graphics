@@ -82,6 +82,10 @@ container addChildren: {elt1 . elt2 . elt3}.
 container.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 we have different ways to manage the overlap of your elements in a Bloc scene.
 This also depends of the layout strategy used for your element.
 
@@ -172,6 +176,10 @@ child := BlElement new
 element addChild: child.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 In Figure *@padding1@*, we have 3 elements on top of each other. The purple one
 has a margin of 15 pixels with the red one and a padding of 35 pixels with the
 yellow one.
@@ -195,6 +203,10 @@ will be `50@50`, which will certainly be different from *your* own element.
 #### Statically.
 If you use the message `size:`, the size of the element will be static.
 Note that the expression `element size: aPoint` is a synonym for
+
+> [!note] Diff with Code
+> This paragraph still recommends `size:`, which is deprecated (see below in this chapter and Bloc issue 802): use `extent:` (`element extent: aPoint` sets an exact resizer on both axes).
+
 
 ```smalltalk
 constraintsDo: [ :c |
@@ -264,6 +276,10 @@ Here is the list of layouts available by default
 * `BlFrameLayout`
 * `BlZoomLayout`
 * `BlProportionalLayout`
+
+> [!note] Diff with Code
+> There is no `BlZoomLayout`: the class is `BlZoomableLayout`. Other layouts not listed here are available as well, such as `BlAnchorLayout`, `BlRelativeLayout`, `BlSquaredLayout` and `BlFitLayout`.
+
 
 The list of all layouts available: `BlLayout allSubclasses`
 
@@ -432,6 +448,10 @@ elt2 := BlElement new
 
 	root addChildren: { elt1 . elt2 }
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 ![Basic layout.](figures/basiclayout.png width=40&label=defaultlayout)
 
@@ -611,6 +631,10 @@ root := BlElement new
 root openInNewSpace.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 ![Flow layout.](figures/flowlayout.png width=70)
 
 ### Grid layout - BlGridLayout
@@ -729,6 +753,10 @@ grid addChild: square.
 grid openInSpace.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 ![Grid Layout span example.](figures/gridLayout_SpanExample.png width=35&label=gridspan1)
 
 This snippet creates a 4x4 grid and adds a 2x2 purple square in the middle (See Figure *@gridspan1@*). 
@@ -834,6 +862,10 @@ child := BlElement new
 container addChild: child.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 ![Frame layout.](figures/framelayout.png width=50)
 
 #### Example: multiple children
@@ -901,6 +933,10 @@ root addChild: elt1.
 "...code continue for the 8 other children"
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 ![Frame layout](figures/MultipleElementFrameWithFixedSize.png)
 
 ### Zoom layout
@@ -937,6 +973,10 @@ zoom := BlElement new
 zoom openInNewSpace 
 ```
 
+> [!note] Diff with Code
+> There is no `BlSvgIcons` class: the icons of this example are now instance methods of `BlSvgIconExamples` (`BlSvgIconExamples new settingsIcon`). `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
+
 #### Example
 
 ```smalltalk
@@ -965,6 +1005,10 @@ container := BlElement new
 		addChild: elt;
 		yourself.
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+
 
 As this example is dynamic, it's better if you look at the example or try this
 code directly into Pharo. As a screenshot couldn't render it properly.

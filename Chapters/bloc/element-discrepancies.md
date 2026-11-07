@@ -9,7 +9,6 @@ Line numbers refer to `element.md` before the `Diff with Code` notes were added.
 | Line | Book | Current code | Fix |
 | --- | --- | --- | --- |
 | 21-25 | `BlUniverse` holds the spaces | No `BlUniverse` class. | `BlParallelUniverse` (owned by `BlPulseLoopHost`). |
-| 32, 61, 185, 207, 273, 300, 375, 392, 442, 466, 545, 580, 599, 602, 619, 624, 636-643 | `size:` / `size` | `BlElement>>#size:` and `BlElement>>#size` are deprecated (Bloc issue 802). | `extent:` / `extent` |
 | 440 | `origin=BlocExamples>>shadow` | No `BlocExamples` class. | Point to an existing example method or drop the argument. |
 | 718 | `AlexandrieCanvas` | No such class. | `AeCanvas` |
 | 798 | `AeCaireContext`, protocol *API - Path* | `AeCairoContext`, protocol `API - path`. | Fix the names. |

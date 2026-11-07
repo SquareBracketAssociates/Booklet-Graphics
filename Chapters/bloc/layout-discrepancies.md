@@ -6,8 +6,6 @@ Line numbers refer to `layout.md` before the `Diff with Code` notes were added.
 
 | Line | Book | Current code | Fix |
 | --- | --- | --- | --- |
-| 74-78, 147, 424, 429, 603, 607, 713, 720, 826, 891, 918, 944 | `size:` | `BlElement>>#size:` is deprecated (Bloc issue 802). | `extent:` |
-| 190-197 | "you **must** define it using the message `size:`", "`element size: aPoint` is a synonym for ..." | Contradicts lines 234-236 of the same chapter, which already say `size:` is deprecated. | Use `extent:` in this paragraph too. |
 | 265 | `BlZoomLayout` | No such class. | `BlZoomableLayout` |
 | 258-266 | List of layouts | Other layouts exist: `BlAnchorLayout` (described later in the chapter), `BlRelativeLayout`, `BlSquaredLayout`, `BlFitLayout`, `BlFitChildrenLayout`, `BlCompositeLayout`, ... | Complete the list or refer to `BlLayout allSubclasses` only. |
 | 914 | `BlSvgIcons settingsIcon` | No `BlSvgIcons` class. | `BlSvgIconExamples new settingsIcon` |

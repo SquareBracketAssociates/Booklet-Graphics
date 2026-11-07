@@ -6,7 +6,6 @@ Line numbers refer to `events.md` before the `Diff with Code` notes were added.
 
 | Line | Book | Current code | Fix |
 | --- | --- | --- | --- |
-| 30-98, 146, 373-375, 420-421 | `size:` | `BlElement>>#size:` is deprecated (Bloc issue 802). | `extent:` |
 | 287-288 | `Key leftShift`, `Key rightShift` | No `Key` class. | `KeyboardKey shiftLeft`, `KeyboardKey shiftRight` |
 | 296-297 | `Key leftMeta`, `Key rightMeta` | No `Key` class. | `KeyboardKey metaLeft`, `KeyboardKey metaRight` |
 | 307-308, 316-317 | `Key arrowLeft`, `Key w` | No `Key` class. | `KeyboardKey left`, `KeyboardKey W` |

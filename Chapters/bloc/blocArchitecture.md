@@ -92,13 +92,13 @@ space addChild: rootUniqueChild.
 
 "Gradually expand element in a background process"
 [ 	50 to: 400 by: 50 do: [ :sideLength |
-		rootUniqueChild size: (sideLength*2) @ sideLength.
+		rootUniqueChild extent: (sideLength*2) @ sideLength.
 		500 milliSeconds wait ].
 	space close ] fork
 ```
 
 > [!note] Diff with Code
-> `BlSpace` does not understand `addChild:`: use `space root addChild: rootUniqueChild`. `size:` is deprecated (Bloc issue 802): use `extent:`.
+> `BlSpace` does not understand `addChild:`: use `space root addChild: rootUniqueChild`.
 
 
 Here, space extent is redefined whenever the extent of its child changes using a basic eventHandler
@@ -147,7 +147,7 @@ a := BlElement new.
 aSpace := BlSpace new.
 aSpace root addChild: a.
 aSpace root background: Color blue.
-aSpace root size: 100 asPoint.
+aSpace root extent: 100 asPoint.
 aSpace extent: 150 asPoint; show.
 	
 wheel := Color wheel: 20.
@@ -156,9 +156,6 @@ wheel := Color wheel: 20.
 		a position: (a position + 5 asPoint).
 		a background: eachColor ] ] fork.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated: use `aSpace root extent: 100 asPoint`.
 
 
 "When you set an exact root size, only a portion of the space might be cleared between frames"

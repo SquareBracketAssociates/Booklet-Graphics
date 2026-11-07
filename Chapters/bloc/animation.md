@@ -27,7 +27,7 @@ every 5 seconds, with a delay of 5 seconds between each loop.
 
 ```smalltalk
 |element animation|
-element := BlElement new size: 150 @ 150; background: Color red.
+element := BlElement new extent: 150 @ 150; background: Color red.
 
 animation := BlAnimation new beInfinite; delay: 5 seconds; duration: 5 seconds.
 
@@ -41,9 +41,6 @@ animation addEventHandler: (BlEventHandler
 
 element addAnimation: animation; openInNewSpace.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 This example is quite limited and don't allow for much customization. 
@@ -70,7 +67,7 @@ sequential := BlSequentialAnimation new addAll: {
 
 element := BlElement new
    background: Color blue;
-   size: 100 @ 100;
+   extent: 100 @ 100;
    position: 100 @ 100.
 element addAnimation: sequential.
 
@@ -79,9 +76,6 @@ space root addChild: element.
 space show.
 ^space
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 **Important**
@@ -104,7 +98,7 @@ elt1 := BlElement new background: Color random.
 elt2 := BlElement new background: Color random; position: 0 @ 100.
 elt3 := BlElement new background: Color random; position: 0 @ 200.
 
-container := BlElement new size: 600 asPoint.
+container := BlElement new extent: 600 asPoint.
 
 container addChildren: { elt1. elt2. elt3 }.
 
@@ -122,9 +116,6 @@ blank := BlElement new.
 space root addChild: blank.
 blank addAnimation: parallelTranslate .
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ### Creating your own animation
@@ -201,9 +192,9 @@ you can then use it like:
 
 ```smalltalk
 | elt frame container anim |
-elt := BlElement new background: (Color red alpha: 0.5); position: 100 asPoint; size: 100 asPoint.
-frame := BlElement new background: Color yellow; position: 100 asPoint; size: 100 asPoint.
-container := BlElement new background: Color lightGreen; size: 500 asPoint; addChildren: {frame. elt}.
+elt := BlElement new background: (Color red alpha: 0.5); position: 100 asPoint; extent: 100 asPoint.
+frame := BlElement new background: Color yellow; position: 100 asPoint; extent: 100 asPoint.
+container := BlElement new background: Color lightGreen; extent: 500 asPoint; addChildren: {frame. elt}.
 
 anim := BlRotateAnimation new angle: 90; duration: 1 second.
 
@@ -211,9 +202,6 @@ elt addEventHandlerOn: BlClickEvent do: [ elt addAnimation: anim copy ].
 
 container openInSpace
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ### Pre-defined animations
@@ -296,13 +284,10 @@ Let's take the initial step-up to show how it works:
 
 ```smalltalk
 | elt frame container anim |
-elt := BlElement new    background: (Color red alpha: 0.5);    position: 100 asPoint;    size: 100 asPoint.
-frame := BlElement new background: Color yellow; position: 100 asPoint; size: 100 asPoint.
-container := BlElement new background: Color lightGreen; size: 500 asPoint; addChildren: { frame. elt }.
+elt := BlElement new    background: (Color red alpha: 0.5);    position: 100 asPoint;    extent: 100 asPoint.
+frame := BlElement new background: Color yellow; position: 100 asPoint; extent: 100 asPoint.
+container := BlElement new background: Color lightGreen; extent: 500 asPoint; addChildren: { frame. elt }.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 Transformation are affine transformation. For more detail, you can search on the internet,
@@ -437,7 +422,7 @@ This snippet is an example of how to enqueue tasks and delay the time of the nex
 ```smalltalk
 a := BlElement new
     position: 50 @ 100;
-    size: 100 asPoint;
+    extent: 100 asPoint;
     background: Color green;
     yourself.
 
@@ -465,9 +450,6 @@ a addAnimation:
 
 a openInSpace
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ### Conclusion (missing)

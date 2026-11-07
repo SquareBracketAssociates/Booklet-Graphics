@@ -344,7 +344,7 @@ BlLetter >> initialize
 	super initialize.
 	self
 		layout: BlLinearLayout horizontal alignCenter;
-		size: 30 @ 30;
+		extent: 30 @ 30;
 		margin: (BlInsets all: 5);
 		background: Color veryVeryLightGray;
 		border: (BlBorder paint: Color veryLightGray width: 1);
@@ -353,7 +353,7 @@ BlLetter >> initialize
 ```
 
 > [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent: 30 @ 30`. `BlDragLetter>>#initialize` in `Bloc-Demo` also adds a `BlGaussianShadowEffect`.
+> `BlDragLetter>>#initialize` in `Bloc-Demo` also adds a `BlGaussianShadowEffect`.
 
 
 We can initialize the events for this element to allow us to drag it. 

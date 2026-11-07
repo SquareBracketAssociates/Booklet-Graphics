@@ -71,19 +71,16 @@ With zIndex, you can reorder the order of display of the elements. Note that
 zIndex can be negative.
 
 ```smalltalk
-container:= BlElement new geometry: BlRectangleGeometry new; size: 150@150; background: Color lightGray .
+container:= BlElement new geometry: BlRectangleGeometry new; extent: 150@150; background: Color lightGray .
         
-elt1 := BlElement new geometry: BlCircleGeometry new;  size: 100 asPoint; zIndex: 1;  background:Color  black.
-elt2 := BlElement new geometry: BlCircleGeometry new;  size: 100 asPoint; zIndex: 2; position:10@10; background: Color blue.
-elt3 := BlElement new geometry: BlCircleGeometry new; size: 100 asPoint; zIndex: -1; position:20@20; background: Color red.
+elt1 := BlElement new geometry: BlCircleGeometry new;  extent: 100 asPoint; zIndex: 1;  background:Color  black.
+elt2 := BlElement new geometry: BlCircleGeometry new;  extent: 100 asPoint; zIndex: 2; position:10@10; background: Color blue.
+elt3 := BlElement new geometry: BlCircleGeometry new; extent: 100 asPoint; zIndex: -1; position:20@20; background: Color red.
         
 container addChildren: {elt1 . elt2 . elt3}.
 
 container.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 we have different ways to manage the overlap of your elements in a Bloc scene.
@@ -148,7 +145,7 @@ element constraintsDo: [ :c | c margin: (BlInsets all: 10) ]
 ```smalltalk
 container := BlElement new
 	"no dynamic constraints, we specify element size"
-	size: 400 @ 400;
+	extent: 400 @ 400;
 	border: (BlBorder paint: Color red width: 1);
 	background: (Color red alpha: 0.2);
 	layout: BlFlowLayout horizontal alignCenter.
@@ -176,9 +173,6 @@ child := BlElement new
 element addChild: child.
 ```
 
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
-
 
 In Figure *@padding1@*, we have 3 elements on top of each other. The purple one
 has a margin of 15 pixels with the red one and a padding of 35 pixels with the
@@ -195,18 +189,14 @@ geometry shows you the difference (See Figure *@padding2@*).
 ### Element size
 
 Size can be determined **statically** or **dynamically**.
-Attention, if you don't use dynamic size, you **must** define it using the message `size:`. 
+Attention, if you don't use dynamic size, you **must** define it using the message `extent:`. 
 
 The overall bounds of an element are not deduced from its geometry, and its default size
 will be `50@50`, which will certainly be different from *your* own element.
 
 #### Statically.
-If you use the message `size:`, the size of the element will be static.
-Note that the expression `element size: aPoint` is a synonym for
-
-> [!note] Diff with Code
-> This paragraph still recommends `size:`, which is deprecated (see below in this chapter and Bloc issue 802): use `extent:` (`element extent: aPoint` sets an exact resizer on both axes).
-
+If you use the message `extent:`, the size of the element will be static.
+Note that the expression `element extent: aPoint` is a synonym for
 
 ```smalltalk
 constraintsDo: [ :c |
@@ -437,20 +427,17 @@ root := BlElement new
 
 elt1 := BlElement new
 	border: (BlBorder paint: Color blue width: 1);
-	size: 40 @ 80;
+	extent: 40 @ 80;
 	background: (Color blue alpha: 0.2);
 	position: 50 @ 40.
 elt2 := BlElement new
 	border: (BlBorder paint: Color yellow width: 1);
-	size: 40 @ 80;
+	extent: 40 @ 80;
 	background: (Color yellow alpha: 0.2);
 	position: 60 @ 60.
 
 	root addChildren: { elt1 . elt2 }
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ![Basic layout.](figures/basiclayout.png width=40&label=defaultlayout)
@@ -620,19 +607,16 @@ root := BlElement new
 		yourself.
 	index = 22 ifTrue: [ 
 		child background: Color blue;
-		size: 50 @ 60;
+		extent: 50 @ 60;
 		constraintsDo: [ :c | c flow float ] ].
 	index = 60 ifTrue: [ 
 		child background: Color green;
-		size: 50 @ 60 ].
+		extent: 50 @ 60 ].
 	root addChild: child
 	].
 
 root openInNewSpace.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ![Flow layout.](figures/flowlayout.png width=70)
@@ -734,14 +718,14 @@ It is possible to add a child with a larger span and still add smaller elements 
 
 ```st
 grid := BlElement new 
-	size: 400 asPoint; 
+	extent: 400 asPoint; 
 	layout: (BlGridLayout horizontal columnCount: 4).
 
 children := (1 to: 12) collect: [ :i | BlElement new background: Color lightGreen; border: (BlBorder paint: Color black width: 1) ].
 
 square := BlElement new 
 	background: Color purple; 
-	size: 100 asPoint.
+	extent: 100 asPoint.
 square constraintsDo: [ :c | 
 	c grid horizontal span: 2. 
 	c grid vertical span: 2 ].
@@ -752,9 +736,6 @@ grid addChild: square.
 
 grid openInSpace.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ![Grid Layout span example.](figures/gridLayout_SpanExample.png width=35&label=gridspan1)
@@ -851,7 +832,7 @@ container := BlElement new
 			 c vertical matchParent ].
 
 child := BlElement new
-	 size: 400 @ 400;
+	 extent: 400 @ 400;
 	 clipChildren: false;
 	 background: (Color blue alpha: 0.2);
 	 border: (BlBorder paint: Color blue width: 1);
@@ -861,9 +842,6 @@ child := BlElement new
 
 container addChild: child.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ![Frame layout.](figures/framelayout.png width=50)
@@ -920,7 +898,7 @@ root := BlElement new
 		c vertical matchParent ].
 
 elt1 := BlElement new
-		size: 80 @ 80;
+		extent: 80 @ 80;
 		border: (BlBorder paint: Color blue width: 1);
 		background: Color random;
 		margin: (BlInsets all: 5);
@@ -932,9 +910,6 @@ root addChild: elt1.
 
 "...code continue for the 8 other children"
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ![Frame layout](figures/MultipleElementFrameWithFixedSize.png)
@@ -951,7 +926,7 @@ elt := BlSvgIcons settingsIcon.
 elt
 	border: (BlBorder paint: Color red width: 2);
 	background: Color yellow;
-	size: 24@24;
+	extent: 24@24;
 	transformDo: [ :t | t scaleBy: 2 ];
 	constraintsDo: [ :c |
 		c accountTransformation ].
@@ -974,14 +949,14 @@ zoom openInNewSpace
 ```
 
 > [!note] Diff with Code
-> There is no `BlSvgIcons` class: the icons of this example are now instance methods of `BlSvgIconExamples` (`BlSvgIconExamples new settingsIcon`). `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
+> There is no `BlSvgIcons` class: the icons of this example are now instance methods of `BlSvgIconExamples` (`BlSvgIconExamples new settingsIcon`).
 
 
 #### Example
 
 ```smalltalk
 elt := BlElement new
-	size: 200@200;
+	extent: 200@200;
 	  background: (Color blue alpha: 0.2);
 	  border: (BlBorder paint: Color blue width: 1);
 		constraintsDo: [ :c | c accountTransformation ].
@@ -1005,9 +980,6 @@ container := BlElement new
 		addChild: elt;
 		yourself.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 As this example is dynamic, it's better if you look at the example or try this

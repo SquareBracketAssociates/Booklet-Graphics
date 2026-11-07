@@ -27,12 +27,9 @@ element
 	addEventHandlerOn: BlDragEvent 
 	do: [ :event | 
 		event consume.
-		element position: event position - (element size /2) ].
+		element position: event position - (element extent /2) ].
 element openInSpace.
 ```
-
-> [!note] Diff with Code
-> `element size` is deprecated (Bloc issue 802): use `element extent / 2`.
 
 
 This is because as explained above the drag event is only received after the start event is consumed.
@@ -49,12 +46,9 @@ element
 	addEventHandlerOn: BlDragEvent 
 	do: [ :event | 
 		event consume.
-		element position: event position - (element size /2) ].
+		element position: event position - (element extent /2) ].
 element openInSpace.
 ```
-
-> [!note] Diff with Code
-> `element size` is deprecated: use `element extent / 2`.
 
 
 ### Possible refinement
@@ -129,15 +123,12 @@ element := BlElement new background: Color lightGreen.
 element addEventHandler: BlPullHandler new.
 
 parent := BlElement new 
-		size: 200@200; 
+		extent: 200@200; 
 		border: (BlBorder paint: Color red width: 2); yourself.
 parent addChild: element.
 
 parent  openInSpace
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 ![Dragging an element outside its parent using the `allowOutOfBounds` configuration message.%width=70&anchor=dragOut](figures/dragPullOutOfBounds.png)
@@ -242,7 +233,7 @@ child := BlElement new
 target := BlElement new
 	background: Color lightGreen;
 	border: (BlBorder paint: Color green width: 3);
-	size: 200@200;
+	extent: 200@200;
 	position: 200@200.
 
 space := BlSpace new.
@@ -265,9 +256,6 @@ child
 space show
 ```
 
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
-
 
 
 ![A BlDropEvent configured to change the color of the element receiving the drop event. %width=70]{figures/dragandropTarget.png}
@@ -287,7 +275,7 @@ element addEventHandler: BlPullHandler new.
 
 target := BlElement new 
 	background: Color lightRed; 
-	size: 100@100; 
+	extent: 100@100; 
 	position: 200@200.
 
 target 
@@ -306,9 +294,6 @@ space := BlSpace new.
 space root addChildren: { target. element }.
 space show
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 We can see that the border doesn't appear as intended (unless you drag too quickly the element meaning the cursor will enter the parent first and then consider leaving it when the green element will be brought to the right position).
@@ -346,7 +331,7 @@ The following example lets us drag an element freely, however we add some event 
 | handler child space strategy |
 handler := BlPullHandler new.
 child := BlElement new
-                size: 100@100;
+                extent: 100@100;
                 background: Color red;
                 addEventHandler: handler.
 
@@ -394,9 +379,6 @@ child addEventHandlerOn: BlKeyUpEvent do: [ :evt |
 ].
 child openInSpace.
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent:`.
 
 
 One thing important in this snippet is to use the messages `requestFocus` and `loseFocus` so that keyboard events can be listened and we send them only at the start and end of the drag and drop meaning this behavior can §only appear during this process.

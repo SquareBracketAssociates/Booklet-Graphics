@@ -6,7 +6,6 @@ Line numbers refer to `animation.md` before the `Diff with Code` notes were adde
 
 | Line | Book | Current code | Fix |
 | --- | --- | --- | --- |
-| 30, 69, 99, 188-190, 279-281, 416 | `size:` | `BlElement>>#size:` is deprecated (Bloc issue 802). | `extent:` |
 | 160-168 | Class definition and method `angle:` in the same code block | Not evaluable as one block. | Split it in two blocks (definition, then method). |
 
 Checked and still valid: `BlAnimation>>#doStep` is exactly the code quoted at line 126; `valueForStep:` and `applyValue:`

@@ -16,12 +16,6 @@ Line numbers refer to `DragLettersTuto.md` before the `Diff with Code` notes wer
 | `BlLetter>>#initialize` | Adds a `BlGaussianShadowEffect color: (Color lightGray alpha: 0.4) width: 2 offset: 0 @ 0` and uses `extent:`. |
 | `BlSortLettersExample>>#initializeDropEvent` (section "Going beyond") | Not present. |
 
-#### API changes
-
-| Line | Book | Current code | Fix |
-| --- | --- | --- | --- |
-| 327 | `size: 30 @ 30` | `BlElement>>#size:` is deprecated (Bloc issue 802). | `extent: 30 @ 30` |
-
 #### Errors in the book code
 
 | Line | Problem | Fix |

@@ -33,14 +33,11 @@ the `BlUniverse`, providing a clear overview of your active spaces.
 ```smalltalk
 blueRectangle := BlElement new
 	geometry: BlRectangleGeometry  new;
-	size: 200 @ 100;
+	extent: 200 @ 100;
 	background: Color blue;
 	yourself.
 blueRectangle openInNewSpace
 ```
-
-> [!note] Diff with Code
-> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent: 200 @ 100`. This applies to every `size:` (and `size` getter) of this chapter.
 
 
 ![Creating a basic element.](figures/basicElement.png width=40)
@@ -66,14 +63,11 @@ To compose tree of elements, we select a root element and we add children.
 ```smalltalk
 redRectangle := BlElement new
 	geometry: BlRectangleGeometry  new;
-	size: 50 @ 50;
+	extent: 50 @ 50;
 	background: Color red; 
 	yourself.
 blueRectangle addChild: redRectangle
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent: 50 @ 50`.
 
 
 1. **Start with a root element of your choice:** in our example, we reuse the `blueRectangle` element.
@@ -202,7 +196,7 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	border := BlBorder paint: Color lightGray width: 2.
 	annulus := BlElement new
 		           background: Color lightGreen;
-		           size: 100 asPoint;
+		           extent: 100 asPoint;
 		           geometry: (BlAnnulusSectorGeometry new
 				            startAngle: 45;
 				            endAngle: 135;
@@ -224,7 +218,7 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	arrow transformDo: [ :t | t rotateBy: 45 ].
 
 
-	container := BlElement new size: 100 asPoint.
+	container := BlElement new extent: 100 asPoint.
 
 	container addChild: annulus.
 	container addChild: arrow.
@@ -235,9 +229,6 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	container openInSpace.
 	^ container
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent:`.
 
 
 ### Element border
@@ -294,12 +285,9 @@ around a shape; either along the inside, outside or centre of the shape.
 
 Let's look at the different possible bounds of your element.
 
-**Layout bounds** can be defined explicitly using `size:` method or dynamically
+**Layout bounds** can be defined explicitly using `extent:` method or dynamically
 Layout bounds are considered by layout algorithms to define mutual locations
 for all considered elements. You'll know more about layout later.
-
-> [!note] Diff with Code
-> Layout bounds are set with `extent:`; `size:` is deprecated.
 
 
 **Geometry bounds** area is defined by minimum and maximum values of polygon
@@ -325,7 +313,7 @@ geometry bounds to take border width into its calculation.
 #### need to define outskirts to have round cap/join border 
 
 ```st
-elt := BlElement new background: Color lightGray; size: 100 asPoint; position: 50 asPoint.
+elt := BlElement new background: Color lightGray; extent: 100 asPoint; position: 50 asPoint.
 	
 elt geometry: BlTriangleGeometry new.
 	
@@ -335,9 +323,6 @@ elt outskirts: BlOutskirts centered.
 
 elt openInSpace
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent:`.
 
 
 In this example the border does not have cap/join round if the `outskirts:` message is commented.
@@ -404,13 +389,10 @@ the size of your element, from the size of its geometry. Like:
 aGeometry := BlPolygonGeometry vertices: {(100 @ 0). (200 @ 0). (300 @ 100). (0 @ 100) }.
 
 BlElement new geometry: aGeometry;
-            size: aGeometry geometryBounds extent;
+            extent: aGeometry geometryBounds extent;
             background: (BlLinearGradientPaint vertical from: Color black to: Color white); border: (BlBorder paint: Color red width: 3);
             yourself
 ```
-
-> [!note] Diff with Code
-> `size: aGeometry geometryBounds extent` uses the deprecated `size:`: use `extent:`.
 
 
 This will render as expected:
@@ -425,7 +407,7 @@ This snippet shows how to deal with extent constraints when having a form as a b
 aForm := Smalltalk ui icons iconNamed: #pharoBig.
 image := BlElement new
     background: aForm;
-    size: aForm extent;
+    extent: aForm extent;
     yourself.
 imageWrapper := BlElement new
     addChild: image;
@@ -444,9 +426,6 @@ imageWrapper := BlElement new
 
 imageWrapper openInSpace
 ```
-
-> [!note] Diff with Code
-> `size: aForm extent` uses the deprecated `size:`: use `extent:`.
 
 
 "What could be interesting is look if we can apply this transformation directly to the background instead of adding a child with the image."
@@ -479,7 +458,7 @@ You can get the list of all the effects available by executing: `BlElementEffect
 
 ```origin=BlocExamples>>shadow
 BlElement new
-	size: 200 @ 100;
+	extent: 200 @ 100;
 	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 	background: (Color red alpha: 0.2);
 	border: (BlBorder paint: Color yellow width: 1);
@@ -489,7 +468,7 @@ BlElement new
 ```
 
 > [!note] Diff with Code
-> The fence argument `origin=BlocExamples>>shadow` refers to a class `BlocExamples` that does not exist in the current Bloc. `size:` is deprecated: use `extent:`.
+> The fence argument `origin=BlocExamples>>shadow` refers to a class `BlocExamples` that does not exist in the current Bloc.
 
 
 ![Simple shadow.](figures/simpleshadow.png width=80)
@@ -507,15 +486,12 @@ The following produces the result shown in Figure *@fig:gaussian@*.
 
 ```smalltalk
 BlElement new
-	size: 300 @ 150;
+	extent: 300 @ 150;
 	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 	background: (Color blue alpha: 0.5);
 	border: (BlBorder paint: Color red width: 10);
 	effect: (BlGaussianShadowEffect color: Color yellow offset: 10@20 width: 5)
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent:`.
 
 
 ![Gaussian shadow.](figures/gaussianshadow.png label=fig:gaussian width=80)
@@ -590,7 +566,7 @@ node := BlElement new
 	constraintsDo: [ :c |
 		c frame horizontal alignCenter.
 		c frame vertical alignBottom ];
-	size: 20 @ 20.
+	extent: 20 @ 20.
 
 aContainer transformDo: [ :t |
 	t
@@ -601,9 +577,6 @@ aContainer transformDo: [ :t |
 aContainer addChild: node.
 aContainer forceLayout.
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent:`.
 
 
 ![Transform example.](figures/transformexample.png width=40&label=fig:transform)
@@ -629,15 +602,12 @@ child position: 100@100.
 child  transformDo: [ :t | t translateBy: -25 asPoint ].
 
 parent := BlElement new 
-	size: 200 asPoint; 
+	extent: 200 asPoint; 
 	addChild: child;
 	background: Color lightRed.
 
 parent openInSpace.
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent:`.
 
 
 **Important.**
@@ -652,10 +622,10 @@ child := BlElement new
 	yourself.
  
 child position: 100@100.
-child transformDo: [ :t | t translateBy: child size negated / 2 ];
+child transformDo: [ :t | t translateBy: child extent negated / 2 ];
 
 parent := BlElement new 
-	size: 200 asPoint; 
+	extent: 200 asPoint; 
 	addChild: child;
 	background: Color lightRed.
 
@@ -663,7 +633,7 @@ parent openInSpace.
 ```
 
 > [!note] Diff with Code
-> The line `child transformDo: [ ... ];` ends with `;` instead of `.`, so the script does not compile. `child size` and `size:` are deprecated: use `extent` and `extent:`.
+> The line `child transformDo: [ ... ];` ends with `;` instead of `.`, so the script does not compile.
 
 
 ```
@@ -676,18 +646,15 @@ child := BlElement new
 child position: 100@100.
 
 parent := BlElement new 
-	size: 200 asPoint; 
+	extent: 200 asPoint; 
 	addChild: child;
 	background: Color lightRed.
 
 parent whenLayoutedDoOnce: [ 
-	child  transformDo: [ :t | t translateBy: (child size negated / 2) ]  ].
+	child  transformDo: [ :t | t translateBy: (child extent negated / 2) ]  ].
 
 parent openInSpace.
 ```
-
-> [!note] Diff with Code
-> `child size` and `size:` are deprecated: use `child extent` and `extent:`.
 
 
 #### Show trajectories of corner with rotation animation 
@@ -697,14 +664,14 @@ This snippet was written to prove the rotation animation didn't have the right f
 This might be an issue with the calcutation of the transform matrix when the rotation is applied
 
 ```smalltalk
-container := BlElement new background: Color veryVeryLightGray; size: 500 asPoint.
+container := BlElement new background: Color veryVeryLightGray; extent: 500 asPoint.
 
-parent := BlElement new background: Color veryLightGray; size: 100 asPoint; position: 200 asPoint.
+parent := BlElement new background: Color veryLightGray; extent: 100 asPoint; position: 200 asPoint.
 
-elt1 := BlElement new background: Color red; size: 1 asPoint.
-elt2 := BlElement new background: Color blue; size: 1 asPoint; position: 99 @ 0.
-elt3 := BlElement new background: Color green; size: 1 asPoint; position: 0 @ 99.
-elt4 := BlElement new background: Color yellow; size: 1 asPoint; position: 99 @ 99.
+elt1 := BlElement new background: Color red; extent: 1 asPoint.
+elt2 := BlElement new background: Color blue; extent: 1 asPoint; position: 99 @ 0.
+elt3 := BlElement new background: Color green; extent: 1 asPoint; position: 0 @ 99.
+elt4 := BlElement new background: Color yellow; extent: 1 asPoint; position: 99 @ 99.
 
 parent addChildren: { elt1. elt2. elt3. elt4 }.
 
@@ -732,9 +699,6 @@ elt4TrajectoryElt := BlElement new background: Color transparent; geometry: (BlP
 
 container addChildren: { elt1TrajectoryElt. elt2TrajectoryElt.elt3TrajectoryElt.elt4TrajectoryElt.}.
 ```
-
-> [!note] Diff with Code
-> `size:` is deprecated: use `extent:`.
 
 
 

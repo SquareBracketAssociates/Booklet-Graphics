@@ -44,6 +44,10 @@ When defining layout, two parts must be combined to play together: *parent* and 
 - Parents define which layout strategy to apply to their children.
 - Children specify which constraints they will follow, which could impact their position and size.
 
+child never places itself. The parent's layout reads the child's constraints
+and decides the child's size and position. `layout` looks down to
+the children, and `constraints` looks up to the parent. 
+
 Layouts are defined by their *type* and their *constraints*. Types are usually
 defined at the parent level with the `layout` method, while you can specify
 constraints to your child element using the `constraintsDo:` message, which
@@ -266,8 +270,13 @@ and follow *BlBasicLayout* instead, meaning you can place your element at
 arbitrary position within your parent element.
 
 ```smalltalk
-	constraintsDo: [ :c | c ignoreByLayout ].
+child constraintsDo: [ :c | c ignoreByLayout ].    "back to normal: c accountByLayout"
 ```
+
+The child is still a normal child. It is drawn, it receives eventsand it
+is still measured and laid out. But the parent's strategy (linear,
+frame, flow, grid) acts as if the child did not exist. The child is
+sized and placed in a separate step that runs **after** the strategy.
 
 You can also interact with parent layout constraint using `flow`, `frame`,
 `grid`, `linear`, or `relative` messages. 

@@ -1,22 +1,32 @@
-# Letters Sorter Drag Example
+## Letters Sorter Drag Example
 
-Let's create a complete example of a Letters Sorter where you drag letters elements and drop them on the right containers depending if the letter is a consonant or a vowel.
+Let's create a complete Letters Sorter example where you drag letter elements and drop them into the right container depending on whether the letter is a consonant or a vowel.
+
+
+![A letter sorter application.%width=80](figures/DD-blocLetter.png)
 
 This code can also be found in the `Bloc-Demo` package 
 
-We can start by creating a class for our main element, it will inherit from BlElement :
+> [!note] Diff with Code
+> In `Bloc-Demo` the classes have other names: `BlDragSortLettersExample` (here `BlSortLettersExample`), `BlDragLetterContainer` (here `BlLetterContainer`) and `BlDragLetter` (here `BlLetter`).
+
+
+We can start by creating a class for our main element; it will inherit from `BlElement`:
 
 ```st
 BlElement << #BlSortLettersExample
 	slots: {};
-	tag: '';
 	package: 'LetterSorter'
 ```
 
-we can then define its initialization method with constraints to take the whole space and a linear layout that will help us position our letters containers.
+> [!note] Diff with Code
+> The class is defined with `slots: {}`, but its methods use `lettersContainer`, `vowelsContainer` and `consonantsContainer`. In `Bloc-Demo`, `BlDragSortLettersExample` declares `slots: { #lettersContainer . #consonantsContainer . #vowelsContainer }`.
+
+
+We define its initialization method with constraints to take the whole space and a linear layout that will help us position our letter containers.
 
 ```st
-BlSortLettersExample>>initialize
+BlSortLettersExample >> initialize
 
 	super initialize.
 	self constraintsDo: [ :c |
@@ -28,27 +38,27 @@ BlSortLettersExample>>initialize
     self initializeContainers.
 ```
 
-We can the add the two methods to initialize the containers and the letters with it.
+We add the two following methods to initialize the containers (method `initializeContainers`) and the letters with it (method `initializeLettersContainer`).
 
-## Containers
+### Containers
 
-We define 3 containers :
-- the Letters container, where all letters will be at the initialization
+We define 3 containers:
+- the Letters container, where all letters are at the initialization
 - the Vowels container, where we can sort the vowels
 - the Consonants container, where we can sort the consonants
 
 ```st
-BlSortLettersExample>>initializeContainers 
+BlSortLettersExample >> initializeContainers 
 
 	self initializeLettersContainer.
 	self initializeVowelsContainer.
-	self initializeConsonantsContainer.
+	self initializeConsonantsContainer
 ``` 
 
-Here is how we define the first container for the letters, that we define as an instance variable of BlSortLettersExample :
+Here is how we define the first container for the letters. We keep a reference to it as an instance variable of `BlSortLettersExample`:
 
 ```st
-BlSortLettersExample>>initializeLettersContainer
+BlSortLettersExample >> initializeLettersContainer
 
 	lettersContainer := BlLetterContainer new border:
 		                    (BlBorderBuilder new
@@ -62,17 +72,20 @@ You can see that we use a class named BlLetterContainer that we will define righ
 
 ### Classic container
 
+We define 
+
 ```st
 BlElement << #BlLetterContainer
 	slots: { #dropAcceptBehavior . #dropRejectBehavior . #dragEnterAcceptBehavior . #dragEnterRejectBehavior . #dragLeaveBehavior . #dropAcceptCondition };
 	tag: '';
 	package: 'LetterSorter'
 ```
-For this example we want to express specific behaviors to containers for when an element is dragged above it or dropped in it.
 
-In this class we define instance variables for block closures that will hold our different behaviors.
+For this example, we want to express specific behaviors to containers for when an element is dragged above it or dropped in it.
 
-These behaviors are as listed : What happens when an element is...
+In this class, we define instance variables for block closures that will hold our different behaviors.
+
+These behaviors are as listed: What happens when an element is...
 - dropped and accepted ?
 - dropped and rejected ?
 - entering and accepted ?
@@ -81,7 +94,7 @@ These behaviors are as listed : What happens when an element is...
 
 And these all depend on what we call the `dropAcceptCondition` which we can define to tell if a an element is accepted or not in a container.
 
-For now, let's focus on initializing a container :
+For now, let's focus on initializing a container:
 
 ```st
 BlLetterContainer>>initialize
@@ -97,7 +110,7 @@ BlLetterContainer>>initialize
 ```
 
 as a BlElement, we give it a FlowLayout to display the letters depending on their sizes.
-We can then initialize the `dropAcceptCondition` (returning True by default) and the default behaviors as well as the eventHandlers to react and use defined behaviors.
+We can then initialize the `dropAcceptCondition` (returning true by default) and the default behaviors as well as the eventHandlers to react and use defined behaviors.
 
 ```st
 BlLetterContainer>>initialize
@@ -142,6 +155,10 @@ BlLetterContainer>>initializeDropEvent
 						self dropRejectBehavior value: element.]]
 ```
 
+> [!note] Diff with Code
+> The methods use `self dropAcceptCondition`, `self dropAcceptBehavior`, ... but the chapter never asks for the getters and setters of `BlLetterContainer`; `BlDragLetterContainer` in `Bloc-Demo` defines them all. Also, `BlDragLetterContainer>>#initializeDropEvent` does not use the behaviour blocks: it moves the element itself, and on reject it also sends `allowMeAndChildrenMouseEvents`.
+
+
 ```st
 BlLetterContainer>>initializeDragEnterEvent
 
@@ -164,7 +181,7 @@ BlLetterContainer>>initializeDragLeaveEvent
 			self dragLeaveBehavior value: element ]
 ```
 
-We see that during drag and drop events, we follow a certain behavior depending on the dropAcceptCondition.
+We see that during drag and drop events, we follow a certain behavior depending on the `dropAcceptCondition`.
 
 ### Vowels and Consonants
 
@@ -184,23 +201,22 @@ BlSortLettersExample>>initializeLettersContainer
 			lettersContainer addChild: element ].
 ```
 
-Here for the letters container we simply accept any letter and add them to this container when dropped.
+Here for the 'Letters' container, we simply accept any letter and add them to this container when dropped.
 
 ```st
 BlSortLettersExample>>initializeVowelsContainer
 
-	vowelsContainer := BlLetterContainer new background:
-		                   Color lightBlue.
+	vowelsContainer := BlLetterContainer new background: Color lightBlue.
 
 	vowelsContainer dropAcceptCondition: [ :element | element isVowel ].
 	vowelsContainer dropAcceptBehavior: [ :element |
 			element removeFromParent.
 			vowelsContainer addChild: element ].
 	vowelsContainer dropRejectBehavior: [ :element |
-			element
-				removeFromParent;
-				allowMeAndChildrenMouseEvents.
-			element defaultContainer addChild: element ].
+		element
+			removeFromParent;
+			allowMeAndChildrenMouseEvents.
+		element defaultContainer addChild: element ].
 
 	vowelsContainer dragEnterAcceptBehavior: [ :element |
 		element background: Color lightGreen ].
@@ -221,11 +237,11 @@ BlSortLettersExample>>initializeConsonantsContainer
 	consonantsContainer dropAcceptCondition: [ :element |
 		element isVowel not ].
 	consonantsContainer dropAcceptBehavior: [ :element |
-			element removeFromParent.
-			consonantsContainer addChild: element ].
+		element removeFromParent.
+		consonantsContainer addChild: element ].
 	consonantsContainer dropRejectBehavior: [ :element |
-			element removeFromParent.
-			element defaultContainer addChild: element ].
+		element removeFromParent.
+		element defaultContainer addChild: element ].
 
 	consonantsContainer dragEnterAcceptBehavior: [ :element |
 		element background: Color lightGreen ].
@@ -239,21 +255,21 @@ Similar to the vowels container, the consonant container add a letter to its chi
 
 Now that our containers are defined, let's display them before adding letters.
 
-Here we define a small method to help us display the containers with a bit of text above it :
+Here we define a small method to help us display the containers with a bit of text above it:
 
 ```st
 BlSortLettersExample>>labelContainer: anElement with: aText
 
 	^ BlElement new
-		  layout: (BlLinearLayout vertical alignTopCenter cellSpacing: 10);
-		  constraintsDo: [ :c |
-				  c horizontal matchParent.
-				  c vertical matchParent ];
-		  addChild: (BlTextElement new text: aText asRopedText);
-		  addChild: anElement
+		layout: (BlLinearLayout vertical alignTopCenter cellSpacing: 10);
+		constraintsDo: [ :c |
+			c horizontal matchParent.
+			c vertical matchParent ];
+		addChild: (BlTextElement new text: aText asRopedText);
+		addChild: anElement
 ```
 
-this method can be used in the `initializeContainers` method
+This method can be used in the `initializeContainers` method
 
 ```st
 BlSortLettersExample>>initializeContainers
@@ -270,14 +286,14 @@ BlSortLettersExample>>initializeContainers
 		(self labelContainer: consonantsContainer with: 'Consonant letters')
 ```
 
-Don't forget to create the accessors for our instance variables !
+Don't forget to create the accessors for our instance variables!
 
 Let's also define a `run` method to launch our example 
 
 ```st
 BlSortLettersExample>>run
-
 	<script: 'self new openInSpace'>
+	
 ```
 
 Defining this method with the script pragma adds a small button next to the method's name in our browser.
@@ -285,7 +301,7 @@ If you hit this button, the code should run and give you this visual
 
 ![Containers of the Letters Sorter Example](figures/LettersSorterContainers.png)
 
-## Letters
+### Adding Letters
 
 The containers are ready to welcome the letters so let's define those.
 
@@ -296,14 +312,18 @@ BlSortLettersExample>>initializeLetters
 
 	lettersContainer addChildren:
 		({ $a. $c. $Q. $o. $j. $E. $y. $Z. $U. $B. $p. $i } collect: [ :each |
-				 BlLetter new
-					 character: each;
-					 defaultContainer: lettersContainer ])
+			 BlLetter new
+				 character: each;
+				 defaultContainer: lettersContainer ])
 ```
 
-We take a bunch of random letters and create a `BlLetter` element for each assigning it the letter and the lettersContainer as its defaultContainer, i.e the container it will be sent if rejected.
+> [!note] Diff with Code
+> `defaultContainer:` is sent here, but the chapter only shows `BlLetter>>#character:`; the accessors `defaultContainer` and `defaultContainer:` must be defined too (they exist in `BlDragLetter`).
 
-The class `BlLetter` is defined like such :
+
+We take a some random letters and create a `BlLetter` element for each assigning it the letter and the lettersContainer as its defaultContainer, i.e., the container it will be sent if rejected.
+
+				 The class `BlLetter` is defined like such:
 
 ```st
 BlElement << #BlLetter
@@ -311,15 +331,20 @@ BlElement << #BlLetter
 	tag: '';
 	package: 'LetterSorter'
 ```
-It is a BlElement that will hold a TextElement with the character assigned as a Text.
+It is a `BlElement` that will hold a `TextElement` with the character assigned as a Text.
+
+> [!note] Diff with Code
+> There is no `TextElement` class: it is `BlTextElement`.
+
+	
 
 ```st
-BlLetter>>initialize
+BlLetter >> initialize
 
 	super initialize.
 	self
 		layout: BlLinearLayout horizontal alignCenter;
-		size: 30 @ 30;
+		extent: 30 @ 30;
 		margin: (BlInsets all: 5);
 		background: Color veryVeryLightGray;
 		border: (BlBorder paint: Color veryLightGray width: 1);
@@ -327,13 +352,19 @@ BlLetter>>initialize
 	self initializeEvents
 ```
 
-We can initialize the events for this element to allow us to drag it 
+> [!note] Diff with Code
+> `BlDragLetter>>#initialize` in `Bloc-Demo` also adds a `BlGaussianShadowEffect`.
+
+
+We can initialize the events for this element to allow us to drag it. 
 
 ```st
-BlLetter>>initializeEvents
+BlLetter >> initializeEvents
 
 	| space offset |
-	self addEventHandlerOn: BlDragStartEvent do: [ :event |
+	self 
+		addEventHandlerOn: BlDragStartEvent 
+		do: [ :event |
 			event consumed: true.
 			space := self space.
 			offset := self positionInSpace - event position.
@@ -341,12 +372,16 @@ BlLetter>>initializeEvents
 			space root addChild: self.
 			self preventMeAndChildrenMouseEvents ].
 
-	self addEventHandlerOn: BlDragEndEvent do: [ :event |
+	self 
+		addEventHandlerOn: BlDragEndEvent 
+		do: [ :event |
 			event consumed: true.
 			self background: Color veryVeryLightGray.
 			self allowMeAndChildrenMouseEvents ].
 
-	self addEventHandlerOn: BlDragEvent do: [ :event |
+	self 
+		addEventHandlerOn: BlDragEvent 
+		do: [ :event |
 			event consumed: true.
 			self position: event position + offset ].
 ```
@@ -356,7 +391,7 @@ So when dragging the element we remove it from its parent and add it to the root
 Then we can create the message `isVowel` that will return a boolean depending on the character of our Letter element.
 
 ```st
-BlLetter>>isVowel
+BlLetter >> isVowel
 
 	^ character isVowel
 ```
@@ -364,10 +399,9 @@ BlLetter>>isVowel
 Finally, we create accessors for our instance variables `defaultContainer` and `character` with a small particularity on the character setter as we will create a TextElement with this character.
 
 ```st
-BlLetter>>character: aCharacter
+BlLetter >> character: aCharacter
 
 	character := aCharacter.
-
 	self addChild: (BlTextElement new
 			 labelMeasurement;
 			 text: aCharacter asString asRopedText)
@@ -389,7 +423,7 @@ BlSortLettersExample>>initialize
     self initializeLetters.
 ```
 
-## Testing our code
+### Testing our code
 
 Everything is now ready to be executed, we can hit `run` to try our example.
 
@@ -400,7 +434,7 @@ You should see the letters in their container and you can drag them above the co
 
 You now have a good first application where you defined some drag and drop behaviours with containers accepting or rejecting an element depending on a specific condition.
 
-## Going beyond this example
+### Going beyond this example
 
 You might however come across the case where you drop a letter out of any container and the letter stays on the space root but we would like the letter to go back at least in a container even if dropped outside. 
 
@@ -432,3 +466,8 @@ BlSortLettersExample>>initializeDropEvent
 					element removeFromParent.
 					element defaultContainer addChild: element ] ]
 ```
+
+> [!note] Diff with Code
+> `BlSortLettersExample>>#initializeDropEvent` has no counterpart in `Bloc-Demo`: `BlDragSortLettersExample>>#initialize` does not install a drop handler on the parent.
+
+

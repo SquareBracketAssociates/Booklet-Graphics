@@ -33,6 +33,10 @@ Toplo will add 2 new phases to this list, between the Drawing Validation and Lay
 
 These two phases are added to a space when an element requests the installation of a new skin for the first time.
 
+> [!note] Diff with Code
+> There is no idle phase in `BlSpaceFrame>>#initializePhases` (see the Bloc architecture chapter). Toplo adds three phases, not two: `ToSpaceConfigurationPhase`, `ToSpaceSkinInstallerPhase` and `ToSpaceSkinStateApplicationPhase`.
+
+
 
 ### How StyleSheets in a nutshell
 
@@ -59,6 +63,10 @@ Each graphic element stores its tokens and stamps in a *store* (`ToStyleStore`).
 
 * When a graphic element is asked if it contains a token (using its key), it will look for it in its own store. If its store doesn't contain the token, it will ask its parent's store (and so on, all the way back to the root element). If it doesn't found it, it will raised an exception. When a graphical element is asked if it contains a stamp, it will only look in its own store.
 * A stamp, unlike a token, can be used as a selector by a theme's style rules.
+
+
+> [!note] Diff with Code
+> There is no `ToStyleStore` class. Tokens are reached through the element API (`addTokenNamed:withValue:`, `updateTokenNamed:withValue:`, `removeTokenNamed:`, `valueOfTokenNamed:`, `lookupTokenPropertyValueNamed:`).
 
 
 ### How theme works?
@@ -98,6 +106,10 @@ Writers are `ToSkinEventListeners`. They respond to skin events. Writers modify 
 * `#when:write:with:animation:` - Modifies an editable property with the given value and associated animation for a given skin event.
 * `#supplement:with:` - Forces the modification of an editable property with the given value.
 * `#when:supplement:with:` - Forces the modification of an editable property with the given value for a given skin event.
+
+> [!note] Diff with Code
+> There is no `ToSkinEventListeners` class: writers are instances of `ToSkinEventListener`. The scripter method is `write:withAll:` (not `write:whitAll:`); `TToStyleRuleScripter` and the other seven methods exist.
+
 
 
 ### Core elements
@@ -140,6 +152,10 @@ anElt
 	setTokenNamed: #'color-primary-pressed' 
 	value: Color random twiceDarker
 ```
+
+> [!note] Diff with Code
+> `setToken:` and `setTokenNamed:value:` no longer exist: use `anElt addTokenNamed: #'color-primary' withValue: Color random` (or `updateTokenNamed:withValue:`).
+
 
 ### Feature and Pseudo properties
 
@@ -193,6 +209,10 @@ self
 		with: [ :e | e tokenValueNamed: #'background-color' ] ]
 ```
 
+> [!note] Diff with Code
+> `tokenValueNamed:` no longer exists: use `e valueOfTokenNamed: #'background-color'`. This applies to every `tokenValueNamed:` of this chapter.
+
+
  is linked with the feature property `#background`
 
  ```
@@ -219,6 +239,10 @@ ToButton asTypeSelector
  	]
 ```
 
+> [!note] Diff with Code
+> Selectors do not understand `style:`, and the style block takes no argument: write `self select: ToButton asTypeSelector style: [ self when: ToInstallSkinEvent write: ... with: ... ]`. Use `valueOfTokenNamed:` instead of `tokenValueNamed:`.
+
+
 is linked with the pseudo property
 
 ```smalltalk
@@ -239,6 +263,10 @@ ToTokenProperty
 	name: #'color-bg-container-disabled' 
 	value: (Color black alpha: 0.04)
 ```
+
+> [!note] Diff with Code
+> These are two expressions; without a period between them they parse as a single message `name:value:name:value:` that `ToTokenProperty` does not understand. Add a period (or put them in an array).
+
 
 
 Finally 
@@ -262,6 +290,10 @@ self
 					lineSpacing: (e tokenValueNamed: #'line-height-H1');
 					yourself ] ].
 ```
+
+> [!note] Diff with Code
+> `tokenValueNamed:` no longer exists: use `valueOfTokenNamed:`.
+
 
 ### Another example of property definition
 
@@ -421,6 +453,10 @@ style: [
                 width: (e tokenValueNamed: #'line-width') ].
 ]
 ```
+
+> [!note] Diff with Code
+> The skin event is `ToLeftSkinEvent`; `ToLeavedSkinEvent` does not exist. Use `valueOfTokenNamed:` instead of `tokenValueNamed:`. `buttonSelector` is not defined in `ToStyleSheetTheme`.
+
 
 ### Selection example
 

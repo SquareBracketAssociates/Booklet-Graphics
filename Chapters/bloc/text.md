@@ -248,24 +248,25 @@ BlElement new
     addChildren: {
         "top row"
         (BlTextElement new text: '5,0' asRopedText).
-        (BlElement new size: 0@0).
+        (BlElement new extent: 0@0).
         (BlTextElement new text: '13,0' asRopedText).
         
         "middle row"
-        (BlElement new size: 0@0).
+        (BlElement new extent: 0@0).
         (BlElement new
             constraintsDo: [ :c |
                 c horizontal matchParent.
                 c vertical matchParent ];
             border: (BlBorder paint: Color gray width: 1)).
-        (BlElement new size: 0@0).
+        (BlElement new extent: 0@0).
         
         "bottom row"
         (BlTextElement new text: '5,25' asRopedText).
-        (BlElement new size: 0@0).
+        (BlElement new extent: 0@0).
         (BlTextElement new text: '13,25' asRopedText). }.
 
 ```
+
 
 whose result is shown in Figure *@rect@*.
 
@@ -327,7 +328,7 @@ container geometry: (BlRoundedRectangleGeometry cornerRadius: 50);
 		c vertical matchParent  ].
 
 container addEventHandlerOn: BlElementExtentChangedEvent do: [ :evt | | newText fontSize| 
-	fontSize:= evt currentTarget size x // 2.
+	fontSize:= evt currentTarget extent x // 2.
 	newText := BlTextElement new.
 	newText text: textElement text.
 	newText text fontSize: fontSize.
@@ -338,6 +339,10 @@ container addChild: textElement as: 'text'.
 
 container openInNewSpace 
 ```
+
+> [!note] Diff with Code
+> `BlElement` has no `removeChildNamed:`: a child added with `addChild:as:` gets that id, and is removed with `removeChildWithId: 'text'`.
+
 
 **Improvement**
 
@@ -402,14 +407,19 @@ space := handle openInNewSpace.
 space root layout: BlFrameLayout new.
 
 label forceLayout.
-textSize := label size.
+textSize := label extent.
 
 label transformDo: [ :t |
 	t translateBy: 0 @ textSize y negated.
 	t topLeftOrigin.
 	t rotateBy: 90 ].
 
-label size: label transformedBounds extent.
+label extent: label transformedBounds extent.
 ```
 
+
 In this snippet we rotate the element containing the text (but not the textElement) using `TBlTransformable>>tranformDo:` but for that we need to force its layout and just like in the earlier example, the transformation didn't change the position nor the bounds hence the last line.
+
+> [!note] Diff with Code
+> The method is `transformDo:` (defined in `BlElement`); `tranformDo:` does not exist.
+

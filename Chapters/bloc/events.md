@@ -30,11 +30,12 @@ enter or leave the element.
 BlElement new 
   background: Color white; 
   border: (BlBorder paint: Color black width: 2); 
-  size: 300 @ 200;
+  extent: 300 @ 200;
   addEventHandlerOn: BlMouseEnterEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color veryVeryLightGray];
   addEventHandlerOn: BlMouseLeaveEvent do: [ :anEvent | anEvent consumed: true. anEvent currentTarget background: Color white ]; 
   openInNewSpace 
 ```
+
 
 ### About event bubbling
 
@@ -70,17 +71,18 @@ forbid mouse events for an element. You just send *#preventMouseEvent* to it.
 In the example below, *child2* will not capture mouse events.
 
 ```smalltalk
-container := BlElement new size: 500 asPoint; border: (BlBorder paint: Color red width: 2).
+container := BlElement new extent: 500 asPoint; border: (BlBorder paint: Color red width: 2).
 
-child1 := BlElement new size: 300 asPoint; background: Color lightGreen; position: 100 asPoint; addEventHandlerOn: BlClickEvent do: [ self inform: '1' ]; yourself .
+child1 := BlElement new extent: 300 asPoint; background: Color lightGreen; position: 100 asPoint; addEventHandlerOn: BlClickEvent do: [ self inform: '1' ]; yourself .
 
-child2 := BlElement new size: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.
+child2 := BlElement new extent: 200 asPoint; position: 200 asPoint; border: (BlBorder paint: Color blue width: 2);preventMouseEvents.
 
 container addChild: child1.
 container addChild: child2.
 
 container openInSpace.
 ```
+
 
 You can also prevent element and its children to capture event, with *#preventMeAndChildrenMouseEvents*
 message, or apply it only to its children with *#preventChildrenMouseEvents*
@@ -148,9 +150,10 @@ removed on the first key pressed on the element
 	handler := (BlEventHandler on: BlKeyDownEvent
 				   do: [ :anEvent | self inform: 'Key down: ' , anEvent key asString.
 						anEvent currentTarget removeEventHandler:handler. ]).
-  BlElement new size: 200 @ 200; background: Color red; addEventHandler: handler;
+  BlElement new extent: 200 @ 200; background: Color red; addEventHandler: handler;
 		  requestFocus; openInNewSpace
 ```
+
 
 If you create a new custom handler class that deals with multiple events and add it dynamically
 to your element, you can go back to the original state later by removing the new 'dynamically-added event' by simply using its reference. You can check if your element has a specific event handler with `#hasEventHandler:`. You can also avoid adding twice the same event handler with `#addEventHandlerIfNotPresent:`. There is no way to disable an event handling temporary.
@@ -289,6 +292,10 @@ key: Key rightShift;
 yourself
 ```
 
+> [!note] Diff with Code
+> There is no `Key` class any more: use `KeyboardKey`. The selectors changed too: `KeyboardKey shiftLeft` and `KeyboardKey shiftRight` (not `leftShift` / `rightShift`).
+
+
 Unified meta (cmd):
 
 ```smalltalk
@@ -297,6 +304,10 @@ with: (BlSingleKeyCombination key: Key leftMeta);
 with: (BlSingleKeyCombination key: Key rightMeta);
 yourself
 ```
+
+> [!note] Diff with Code
+> Use `KeyboardKey metaLeft` and `KeyboardKey metaRight` (there is no `Key` class nor `leftMeta` / `rightMeta`).
+
 
 You also have *BlCompulsoryCombination* which represent a compulsory "AND" combination of multiple distinct keys. (conjunction). It's useful when there is a need to create a key combination that should be matched when all subcombinations are matching.
 
@@ -309,6 +320,10 @@ key: Key w;
 yourself
 ```
 
+> [!note] Diff with Code
+> Use `KeyboardKey left` and `KeyboardKey W` (there is no `Key` class, and no `arrowLeft` / `w` selectors).
+
+
 Unified meta (cmd):
 
 ```smalltalk
@@ -317,6 +332,10 @@ with: (BlSingleKeyCombination key: Key arrowLeft);
 with: (BlSingleKeyCombination key: Key w);
 yourself
 ```
+
+> [!note] Diff with Code
+> Use `KeyboardKey left` and `KeyboardKey W` instead of `Key arrowLeft` and `Key w`.
+
 
 You can of course specify key management using low level event. It should be obvious
 to the reader it's not the prefered way, and we should prefer proper object to handle
@@ -370,9 +389,9 @@ Full drag&drop example
 ```smalltalk
 | source1 source2 target space offset |
 space := BlSpace new.
-source1 := BlElement new size: 100 @ 100; background: Color red; border: (BlBorder paint: Color gray width: 2); position: 0@0.
-source2 := BlElement new size: 100 @ 100; background: Color purple; border: (BlBorder paint: Color gray width: 2); position: 150@0.
-target := BlElement new size: 100 @ 100; background: Color blue; border: (BlBorder paint: Color gray width: 2); position: 500 @ 500.
+source1 := BlElement new extent: 100 @ 100; background: Color red; border: (BlBorder paint: Color gray width: 2); position: 0@0.
+source2 := BlElement new extent: 100 @ 100; background: Color purple; border: (BlBorder paint: Color gray width: 2); position: 150@0.
+target := BlElement new extent: 100 @ 100; background: Color blue; border: (BlBorder paint: Color gray width: 2); position: 500 @ 500.
 
 space root addChildren: { source1. source2. target. }.
 
@@ -404,6 +423,7 @@ target addEventHandlerOn: BlDragLeaveEvent do: [ :event | event consumed: true. 
 space show
 ```
 
+
 You can catch the modifier while dragging your element. This will catch the 'Alt' key
 during a drag event.
 
@@ -417,14 +437,15 @@ If you just need to drag an element around, use `BlPullHandler` which is
 a specialized event handler.
 
 ```smalltalk
-parent := BlElement new background: Color lightGreen; size: 600 asPoint.
-elt := BlElement new background: Color red; size: 100 asPoint.
+parent := BlElement new background: Color lightGreen; extent: 600 asPoint.
+elt := BlElement new background: Color red; extent: 100 asPoint.
 parent addChild: elt.
 
 elt addEventHandler: BlPullHandler new disallowOutOfBounds.
 
 parent openInSpace.
 ```
+
 
 You can even select the behavior to keep the child inside its parent's bounds with `BlPullHandler>>disallowOutOfBounds`
 

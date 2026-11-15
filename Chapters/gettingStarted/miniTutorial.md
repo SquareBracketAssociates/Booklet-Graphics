@@ -39,6 +39,10 @@ elt addEventHandlerOn: BlMouseDownEvent do: [ :anEvent |
 elt openInNewSpace.
 ```
 
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated (Bloc issue 802): use `extent: 150 @ 150`.
+
+
 ### Element instantiation
 
 ```smalltalk
@@ -59,6 +63,10 @@ elt := BlElement new
             border: (BlBorder paint: Color black width: 1).
 elt openInNewSpace.
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#size:` is deprecated: use `extent: 150 @ 150`.
+
 
 ### Event reaction
 

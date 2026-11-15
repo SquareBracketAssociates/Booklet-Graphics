@@ -15,6 +15,10 @@ The phases are:
 6. **Layout:** Computes the layout of the various elements.
 7. **Drawing:** Orders the renderer to draw the various elements.
 
+> [!note] Diff with Code
+> There is no idle phase: `BlSpaceFrame>>#initializePhases` installs six phases, `BlSpaceFrameHostValidationPhase`, `BlSpaceFrameTaskPhase`, `BlSpaceFrameEventPhase`, `BlSpaceFrameDrawingValidationPhase`, `BlSpaceFrameLayoutPhase` and `BlSpaceFrameDrawingPhase`. Toplo adds its own phases to Toplo spaces (`ToSpaceConfigurationPhase`, `ToSpaceSkinInstallerPhase`, `ToSpaceSkinStateApplicationPhase`).
+
+
 ### BlElement basic
 
 ### Space explanation
@@ -22,6 +26,10 @@ The phases are:
 BlUniverse contain multiple BlSpace.
 We call `BlElement openInNewSpace`
 This will open a new OS Windows, with our scene
+
+> [!note] Diff with Code
+> There is no `BlUniverse` class any more: spaces are managed by `BlParallelUniverse`, owned by the in-image loop host `BlPulseLoopHost`.
+
 
 BlSpace is your main entry point to your application. It'll connect you to 
 OS window, manage which element needs drawing and the rendering of your scene.
@@ -43,6 +51,10 @@ All these BlHost are then accessible through BlUniverse.
  As of this writing, it can be Morphic or an OS Window,
 using OSWindow and SDL2 backend. 
 
+> [!note] Diff with Code
+> `BlUniverse` no longer exists (see `BlParallelUniverse`). The concrete hosts are `BlOSWindowSDL2Host` / `BlSDLHost`, `BlMorphicHost` / `BlMorphicWindowHost` and `BlHeadlessHost`; `#pulsePeriod` is implemented by `BlPulseLoopHost` and `BlHostPulseLoop`.
+
+
 
 
 We begin with `BlElement >> openInNewSpace`
@@ -58,6 +70,10 @@ BlElement >> openInNewSpace
 	aSpace show.
 	^ aSpace
 ```
+
+> [!note] Diff with Code
+> `BlElement>>#openInNewSpace` is now just `^ self openInSpace`, and `BlElement>>#openInSpace` does the work: `sp := self inSpace. sp show. ^ sp`.
+
 
 ### Space extent following its child extent 
 
@@ -76,10 +92,14 @@ space addChild: rootUniqueChild.
 
 "Gradually expand element in a background process"
 [ 	50 to: 400 by: 50 do: [ :sideLength |
-		rootUniqueChild size: (sideLength*2) @ sideLength.
+		rootUniqueChild extent: (sideLength*2) @ sideLength.
 		500 milliSeconds wait ].
 	space close ] fork
 ```
+
+> [!note] Diff with Code
+> `BlSpace` does not understand `addChild:`: use `space root addChild: rootUniqueChild`.
+
 
 Here, space extent is redefined whenever the extent of its child changes using a basic eventHandler
 
@@ -127,7 +147,7 @@ a := BlElement new.
 aSpace := BlSpace new.
 aSpace root addChild: a.
 aSpace root background: Color blue.
-aSpace root size: 100 asPoint.
+aSpace root extent: 100 asPoint.
 aSpace extent: 150 asPoint; show.
 	
 wheel := Color wheel: 20.
@@ -136,6 +156,7 @@ wheel := Color wheel: 20.
 		a position: (a position + 5 asPoint).
 		a background: eachColor ] ] fork.
 ```
+
 
 "When you set an exact root size, only a portion of the space might be cleared between frames"
 

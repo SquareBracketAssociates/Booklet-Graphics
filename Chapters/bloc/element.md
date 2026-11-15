@@ -24,16 +24,21 @@ distinct operating system window where your Pharo application unfolds. If you
 have multiple windows open simultaneously, they'll be neatly organized within
 the `BlUniverse`, providing a clear overview of your active spaces.
 
+> [!note] Diff with Code
+> There is no `BlUniverse` class any more: spaces are managed by `BlParallelUniverse`, coordinated by an in-image loop host (`BlPulseLoopHost`).
+
+
 #### Ready to Build: Creating Your First Bloc Component
 
 ```smalltalk
 blueRectangle := BlElement new
 	geometry: BlRectangleGeometry  new;
-	size: 200 @ 100;
+	extent: 200 @ 100;
 	background: Color blue;
 	yourself.
 blueRectangle openInNewSpace
 ```
+
 
 ![Creating a basic element.](figures/basicElement.png width=40)
 
@@ -58,11 +63,12 @@ To compose tree of elements, we select a root element and we add children.
 ```smalltalk
 redRectangle := BlElement new
 	geometry: BlRectangleGeometry  new;
-	size: 50 @ 50;
+	extent: 50 @ 50;
 	background: Color red; 
 	yourself.
 blueRectangle addChild: redRectangle
 ```
+
 
 1. **Start with a root element of your choice:** in our example, we reuse the `blueRectangle` element.
 2. **Define the new element:** This is done like any other element, such as the `blueRectangle` element.
@@ -137,6 +143,10 @@ While the Alexandrie canvas provides a foundational set of building drawing prim
 * **Square**: `BlSquareGeometry new matchExtent: 70 @ 70`
 * **Triangle**: `BlTriangleGeometry new matchExtent: 50 @ 100; beLeft`
 
+> [!note] Diff with Code
+> Two expressions have an extra closing parenthesis: the Annulus one ends with `outerRadius: 0.9);` and the Ellipse one with `matchExtent: 100 @ 50)`.
+
+
 #### Star shape using Bloc Geometry
 
 Here, we can make a star with N branches using this code
@@ -167,6 +177,10 @@ space root addChild: starElement.
 space show.
 ```
 
+> [!note] Diff with Code
+> `numberOfPoints := N` is a placeholder: replace `N` with a number (for example 5) for the script to run.
+
+
 ### Example of curved arrow
 
 This arrow is created using an annulus sector and a polyline geometry. This polyline geometry is used (instead of a polygon geometry) to give the impression of a single element when applying a border.
@@ -182,7 +196,7 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	border := BlBorder paint: Color lightGray width: 2.
 	annulus := BlElement new
 		           background: Color lightGreen;
-		           size: 100 asPoint;
+		           extent: 100 asPoint;
 		           geometry: (BlAnnulusSectorGeometry new
 				            startAngle: 45;
 				            endAngle: 135;
@@ -204,7 +218,7 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	arrow transformDo: [ :t | t rotateBy: 45 ].
 
 
-	container := BlElement new size: 100 asPoint.
+	container := BlElement new extent: 100 asPoint.
 
 	container addChild: annulus.
 	container addChild: arrow.
@@ -215,6 +229,7 @@ Note that you can flip the arrow by applying `flipX` and `flipY` to the containe
 	container openInSpace.
 	^ container
 ```
+
 
 ### Element border
 
@@ -270,9 +285,10 @@ around a shape; either along the inside, outside or centre of the shape.
 
 Let's look at the different possible bounds of your element.
 
-**Layout bounds** can be defined explicitly using `size:` method or dynamically
+**Layout bounds** can be defined explicitly using `extent:` method or dynamically
 Layout bounds are considered by layout algorithms to define mutual locations
 for all considered elements. You'll know more about layout later.
+
 
 **Geometry bounds** area is defined by minimum and maximum values of polygon
 vertices. This does not take in account the border width
@@ -297,7 +313,7 @@ geometry bounds to take border width into its calculation.
 #### need to define outskirts to have round cap/join border 
 
 ```st
-elt := BlElement new background: Color lightGray; size: 100 asPoint; position: 50 asPoint.
+elt := BlElement new background: Color lightGray; extent: 100 asPoint; position: 50 asPoint.
 	
 elt geometry: BlTriangleGeometry new.
 	
@@ -307,6 +323,7 @@ elt outskirts: BlOutskirts centered.
 
 elt openInSpace
 ```
+
 
 In this example the border does not have cap/join round if the `outskirts:` message is commented.
 
@@ -372,10 +389,11 @@ the size of your element, from the size of its geometry. Like:
 aGeometry := BlPolygonGeometry vertices: {(100 @ 0). (200 @ 0). (300 @ 100). (0 @ 100) }.
 
 BlElement new geometry: aGeometry;
-            size: aGeometry geometryBounds extent;
+            extent: aGeometry geometryBounds extent;
             background: (BlLinearGradientPaint vertical from: Color black to: Color white); border: (BlBorder paint: Color red width: 3);
             yourself
 ```
+
 
 This will render as expected:
 
@@ -389,7 +407,7 @@ This snippet shows how to deal with extent constraints when having a form as a b
 aForm := Smalltalk ui icons iconNamed: #pharoBig.
 image := BlElement new
     background: aForm;
-    size: aForm extent;
+    extent: aForm extent;
     yourself.
 imageWrapper := BlElement new
     addChild: image;
@@ -408,6 +426,7 @@ imageWrapper := BlElement new
 
 imageWrapper openInSpace
 ```
+
 
 "What could be interesting is look if we can apply this transformation directly to the background instead of adding a child with the image."
 
@@ -439,7 +458,7 @@ You can get the list of all the effects available by executing: `BlElementEffect
 
 ```origin=BlocExamples>>shadow
 BlElement new
-	size: 200 @ 100;
+	extent: 200 @ 100;
 	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 	background: (Color red alpha: 0.2);
 	border: (BlBorder paint: Color yellow width: 1);
@@ -447,6 +466,10 @@ BlElement new
 	effect:
 	    (BlSimpleShadowEffect color: Color orange offset: -10 @ -20)
 ```
+
+> [!note] Diff with Code
+> The fence argument `origin=BlocExamples>>shadow` refers to a class `BlocExamples` that does not exist in the current Bloc.
+
 
 ![Simple shadow.](figures/simpleshadow.png width=80)
 
@@ -463,12 +486,13 @@ The following produces the result shown in Figure *@fig:gaussian@*.
 
 ```smalltalk
 BlElement new
-	size: 300 @ 150;
+	extent: 300 @ 150;
 	geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 	background: (Color blue alpha: 0.5);
 	border: (BlBorder paint: Color red width: 10);
 	effect: (BlGaussianShadowEffect color: Color yellow offset: 10@20 width: 5)
 ```
+
 
 ![Gaussian shadow.](figures/gaussianshadow.png label=fig:gaussian width=80)
 
@@ -542,7 +566,7 @@ node := BlElement new
 	constraintsDo: [ :c |
 		c frame horizontal alignCenter.
 		c frame vertical alignBottom ];
-	size: 20 @ 20.
+	extent: 20 @ 20.
 
 aContainer transformDo: [ :t |
 	t
@@ -553,6 +577,7 @@ aContainer transformDo: [ :t |
 aContainer addChild: node.
 aContainer forceLayout.
 ```
+
 
 ![Transform example.](figures/transformexample.png width=40&label=fig:transform)
 
@@ -577,12 +602,13 @@ child position: 100@100.
 child  transformDo: [ :t | t translateBy: -25 asPoint ].
 
 parent := BlElement new 
-	size: 200 asPoint; 
+	extent: 200 asPoint; 
 	addChild: child;
 	background: Color lightRed.
 
 parent openInSpace.
 ```
+
 
 **Important.**
 if you want to use dynamic layout properties (such as `size`) with `transformDo:`, you need to wait for layout phase to be completed using `whenLayoutedDoOnce:`.
@@ -596,15 +622,19 @@ child := BlElement new
 	yourself.
  
 child position: 100@100.
-child transformDo: [ :t | t translateBy: child size negated / 2 ];
+child transformDo: [ :t | t translateBy: child extent negated / 2 ];
 
 parent := BlElement new 
-	size: 200 asPoint; 
+	extent: 200 asPoint; 
 	addChild: child;
 	background: Color lightRed.
 
 parent openInSpace.
 ```
+
+> [!note] Diff with Code
+> The line `child transformDo: [ ... ];` ends with `;` instead of `.`, so the script does not compile.
+
 
 ```
 | child parent |
@@ -616,15 +646,16 @@ child := BlElement new
 child position: 100@100.
 
 parent := BlElement new 
-	size: 200 asPoint; 
+	extent: 200 asPoint; 
 	addChild: child;
 	background: Color lightRed.
 
 parent whenLayoutedDoOnce: [ 
-	child  transformDo: [ :t | t translateBy: (child size negated / 2) ]  ].
+	child  transformDo: [ :t | t translateBy: (child extent negated / 2) ]  ].
 
 parent openInSpace.
 ```
+
 
 #### Show trajectories of corner with rotation animation 
 
@@ -633,14 +664,14 @@ This snippet was written to prove the rotation animation didn't have the right f
 This might be an issue with the calcutation of the transform matrix when the rotation is applied
 
 ```smalltalk
-container := BlElement new background: Color veryVeryLightGray; size: 500 asPoint.
+container := BlElement new background: Color veryVeryLightGray; extent: 500 asPoint.
 
-parent := BlElement new background: Color veryLightGray; size: 100 asPoint; position: 200 asPoint.
+parent := BlElement new background: Color veryLightGray; extent: 100 asPoint; position: 200 asPoint.
 
-elt1 := BlElement new background: Color red; size: 1 asPoint.
-elt2 := BlElement new background: Color blue; size: 1 asPoint; position: 99 @ 0.
-elt3 := BlElement new background: Color green; size: 1 asPoint; position: 0 @ 99.
-elt4 := BlElement new background: Color yellow; size: 1 asPoint; position: 99 @ 99.
+elt1 := BlElement new background: Color red; extent: 1 asPoint.
+elt2 := BlElement new background: Color blue; extent: 1 asPoint; position: 99 @ 0.
+elt3 := BlElement new background: Color green; extent: 1 asPoint; position: 0 @ 99.
+elt4 := BlElement new background: Color yellow; extent: 1 asPoint; position: 99 @ 99.
 
 parent addChildren: { elt1. elt2. elt3. elt4 }.
 
@@ -668,6 +699,7 @@ elt4TrajectoryElt := BlElement new background: Color transparent; geometry: (BlP
 
 container addChildren: { elt1TrajectoryElt. elt2TrajectoryElt.elt3TrajectoryElt.elt4TrajectoryElt.}.
 ```
+
 
 
 #### Reset a transformation
@@ -717,6 +749,10 @@ by the method `BARenderer (BlHostRenderer) >> render: aHostSpace` which displays
 
 AeCanvas, not to confused with AlexandrieCanvas, is a specific canvas for Bloc,
 designed to render geometrical figures on a Cairo surface.
+
+> [!note] Diff with Code
+> There is no `AlexandrieCanvas` class; the Alexandrie canvas is `AeCanvas`.
+
 
 Drawing is done through method 'xxx', which receives an Alexandrie
 (vector) canvas (`AeCanvas`) as an argument.
@@ -798,6 +834,10 @@ You'll find the usual path verb to draw line, bezier curve, arc, and absolute
 or relative move. Take a look at **AeCaireContext** class in the *API - Path* 
 protocol for all possibilities.
 
+> [!note] Diff with Code
+> The class is `AeCairoContext` (not `AeCaireContext`); its path protocol is named `API - path`.
+
+
  
 2. set up background
 
@@ -810,6 +850,10 @@ protocol for all possibilities.
 (0 -> Color red). (1 -> Color black) }
 innerCenter: 50 @ 50 innerRadius: 500
 outerCenter: 480 @ 480 outerRadius:  30 ]`
+
+> [!note] Diff with Code
+> `AeCanvas` has no `setBackgroundWithForm:`; use `setBackgroundWithForm: form alpha: 1.0`.
+
 
 
 1. set up border and outskirts
@@ -836,6 +880,10 @@ definiton of the border path with `borderPathFactory:` canvas method by overwrit
 `aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth` 
 and `aeApplyWithInsideBorderTo: aeCanvas element: aBlElement borderWidth: aWidth`
 to specify the border path of your element.
+
+> [!note] Diff with Code
+> The selector must start with a lowercase letter: `pathFactory:`, not `PathFactory:`. The two overridden methods are `aeApplyWithInsideBorderTo:element:borderWidth:` and `aeApplyWithOutsideBorderTo:element:borderWidth:`; the text names the first one twice.
+
 
 1. send a variant of drawFigure*
 
@@ -1043,6 +1091,10 @@ aeCanvas
 
 ^ aeCanvas asForm
 ```
+
+> [!note] Diff with Code
+> `anAlexandrieCanvasExperiment := self new` only works inside a class: in a playground `self` is `nil`. Use `self inform:` from a class, or replace `anAlexandrieCanvasExperiment inform:` with `UIManager default inform:`.
+
 ### Exercise: lights wall
 Transform your color grid from Figure*@fig:colorWall@* to a wall of lights such as in Figure *@fig:lightsWall@*:
 - compose elements to add circles to the squares

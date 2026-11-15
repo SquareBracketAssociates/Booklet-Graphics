@@ -1,6 +1,7 @@
-## Little widget with Layout
+## Little widget with Drag and Drop
 
 ### Sorting letters?
+
 
 ![event propagation](figures/letters_drag_drop.png)
 
